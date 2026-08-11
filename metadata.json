@@ -1,0 +1,6 @@
+{
+  "name": "Vamos Store",
+  "description": "Modern full-featured online storefront for Vamos with product discovery, cart, quick view, categories, deals, customer reviews, and checkout workflow.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

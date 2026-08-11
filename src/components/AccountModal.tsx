@@ -42,7 +42,7 @@ export const AccountModal: React.FC = () => {
             <User className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-slate-900 font-serif">Customer Portal & Order Tracker</h3>
+            <h3 className="text-xl font-bold text-slate-900 font-serif">Account & Order Tracker</h3>
             <p className="text-xs text-slate-500">Track shipments, view order history, and account status</p>
           </div>
         </div>

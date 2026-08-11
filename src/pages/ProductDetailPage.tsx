@@ -266,35 +266,35 @@ export const ProductDetailPage: React.FC = () => {
       <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-6">
         
         {/* ====================================================================
-           1. TOP SECTION — PRODUCT + ACTION (TWO COLUMNS ON PC)
+           1. MAIN PRODUCT SECTION (GALLERY + DETAILS)
            ==================================================================== */}
-        <section className="bg-white rounded-3xl p-5 sm:p-8 border border-slate-200/90 shadow-sm grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+        <section className="bg-white rounded-3xl p-5 sm:p-7 border border-slate-200/90 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
           
-          {/* Left Column: Image Gallery */}
-          <div className="flex flex-col">
+          {/* Left Column: Image Gallery (3:2 Ratio - 7 Cols) */}
+          <div className="lg:col-span-7 flex flex-col">
             {/* Main Product Display Image */}
-            <div className="aspect-square bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 relative shadow-inner">
+            <div className="aspect-square max-h-[500px] bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 relative shadow-inner">
               <img
                 src={PRODUCT_PAGE_CONFIG.images[selectedImageIdx]}
                 alt={PRODUCT_PAGE_CONFIG.name}
                 className="w-full h-full object-cover transition-all duration-300"
               />
               {PRODUCT_PAGE_CONFIG.discountPercentage && (
-                <span className="absolute top-4 left-4 bg-rose-600 text-white font-extrabold text-xs px-3 py-1.5 rounded-xl shadow-lg uppercase tracking-wider">
+                <span className="absolute top-3.5 left-3.5 bg-rose-600 text-white font-extrabold text-xs px-3 py-1 rounded-xl shadow-md uppercase tracking-wider">
                   {PRODUCT_PAGE_CONFIG.discountPercentage} OFF
                 </span>
               )}
             </div>
 
-            {/* Thumbnails row below - clean alignment, proper mt-4 vertical gap, no overlap */}
-            <div className="flex flex-row items-center gap-3 overflow-x-auto pt-4 pb-1.5 px-0.5">
+            {/* Thumbnails row below - clean alignment, proper mt-3 vertical gap */}
+            <div className="flex flex-row items-center gap-2.5 overflow-x-auto pt-3 pb-1 px-0.5">
               {PRODUCT_PAGE_CONFIG.images.map((imgUrl, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelectedImageIdx(idx)}
-                  className={`w-20 h-20 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
+                  className={`w-16 h-16 sm:w-18 sm:h-18 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
                     selectedImageIdx === idx
-                      ? 'border-[#2B080C] ring-2 ring-[#2B080C]/40 shadow-sm opacity-100'
+                      ? 'border-[#2B080C] ring-2 ring-[#2B080C]/40 shadow-xs opacity-100'
                       : 'border-slate-200 opacity-70 hover:opacity-100'
                   }`}
                 >
@@ -304,20 +304,20 @@ export const ProductDetailPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Actions & Meta in exact required order */}
-          <div className="space-y-5">
+          {/* Right Column: Actions & Meta (3:2 Ratio - 5 Cols, Compact Density) */}
+          <div className="lg:col-span-5 space-y-2.5">
             {/* Product Name */}
             <div>
-              <h1 className="text-2xl sm:text-3xl font-black text-[#111827] leading-tight">
+              <h1 className="text-xl sm:text-2xl font-black text-[#111827] leading-tight mb-0.5">
                 {PRODUCT_PAGE_CONFIG.name}
               </h1>
-              <p className="text-xs text-[#6B7280] mt-1">{PRODUCT_PAGE_CONFIG.subtitle}</p>
+              <p className="text-xs text-[#6B7280] mb-1">{PRODUCT_PAGE_CONFIG.subtitle}</p>
             </div>
 
             {/* Review Summary */}
-            <div className="flex items-center gap-2 text-sm">
-              <div className="flex items-center gap-1 text-amber-500 font-bold bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200/80">
-                <Star className="w-4 h-4 fill-current" />
+            <div className="flex items-center gap-2 text-xs">
+              <div className="flex items-center gap-1 text-amber-500 font-bold bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200/80">
+                <Star className="w-3.5 h-3.5 fill-current" />
                 <span>⭐ {PRODUCT_PAGE_CONFIG.rating}</span>
               </div>
               <span className="text-[#6B7280] text-xs font-semibold">
@@ -326,46 +326,48 @@ export const ProductDetailPage: React.FC = () => {
             </div>
 
             {/* Pricing Section */}
-            <div className="p-4 bg-[#F9FAFB] rounded-2xl border border-[#E5E7EB] flex items-center justify-between gap-4">
+            <div className="py-2 px-3 bg-[#F9FAFB] rounded-xl border border-[#E5E7EB] flex items-center justify-between gap-3">
               <div>
-                <span className="text-xs text-[#6B7280] block font-semibold">স্পেশাল অফার মূল্য:</span>
-                <div className="flex items-baseline gap-3">
-                  <span className="text-3xl font-black text-[#2B080C] font-mono">
+                <span className="text-[11px] text-[#6B7280] block font-semibold leading-none mb-0.5">
+                  স্পেশাল অফার মূল্য:
+                </span>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-2xl font-black text-[#2B080C] font-mono leading-none">
                     ৳{PRODUCT_PAGE_CONFIG.offerPrice.toFixed(2)}
                   </span>
-                  <span className="text-lg text-[#6B7280] line-through font-mono">
+                  <span className="text-sm text-[#6B7280] line-through font-mono">
                     ৳{PRODUCT_PAGE_CONFIG.regularPrice.toFixed(2)}
                   </span>
                 </div>
               </div>
-              <span className="bg-[#2B080C] text-white text-xs font-extrabold px-3 py-1.5 rounded-full border border-[#2B080C]">
+              <span className="bg-[#2B080C] text-white text-xs font-extrabold px-2.5 py-1 rounded-full border border-[#2B080C]">
                 {PRODUCT_PAGE_CONFIG.discountPercentage} ছাড়
               </span>
             </div>
 
             {/* Countdown Timer */}
             {PRODUCT_PAGE_CONFIG.offerTimer.enabled && (
-              <div className="bg-amber-50/90 border border-amber-300 p-3.5 rounded-2xl space-y-2">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900">
-                  <Clock className="w-4 h-4 text-amber-600 animate-pulse" />
+              <div className="bg-amber-50/90 border border-amber-300 py-1.5 px-3 rounded-xl space-y-1">
+                <div className="flex items-center gap-1.5 text-[11px] font-bold text-amber-900">
+                  <Clock className="w-3.5 h-3.5 text-amber-600 animate-pulse" />
                   <span>{PRODUCT_PAGE_CONFIG.offerTimer.title}</span>
                 </div>
-                <div className="grid grid-cols-4 gap-2 text-center font-mono">
-                  <div className="bg-white p-2 rounded-xl border border-amber-200 shadow-xs">
-                    <span className="block text-base font-black text-[#111827]">{timer.days}</span>
-                    <span className="text-[10px] text-[#6B7280] uppercase font-sans">Days</span>
+                <div className="grid grid-cols-4 gap-1.5 text-center font-mono">
+                  <div className="bg-white py-1 px-1 rounded-lg border border-amber-200 shadow-2xs">
+                    <span className="block text-sm font-black text-[#111827] leading-none">{timer.days}</span>
+                    <span className="text-[9px] text-[#6B7280] uppercase font-sans">Days</span>
                   </div>
-                  <div className="bg-white p-2 rounded-xl border border-amber-200 shadow-xs">
-                    <span className="block text-base font-black text-[#111827]">{timer.hours}</span>
-                    <span className="text-[10px] text-[#6B7280] uppercase font-sans">Hours</span>
+                  <div className="bg-white py-1 px-1 rounded-lg border border-amber-200 shadow-2xs">
+                    <span className="block text-sm font-black text-[#111827] leading-none">{timer.hours}</span>
+                    <span className="text-[9px] text-[#6B7280] uppercase font-sans">Hours</span>
                   </div>
-                  <div className="bg-white p-2 rounded-xl border border-amber-200 shadow-xs">
-                    <span className="block text-base font-black text-[#111827]">{timer.mins}</span>
-                    <span className="text-[10px] text-[#6B7280] uppercase font-sans">Mins</span>
+                  <div className="bg-white py-1 px-1 rounded-lg border border-amber-200 shadow-2xs">
+                    <span className="block text-sm font-black text-[#111827] leading-none">{timer.mins}</span>
+                    <span className="text-[9px] text-[#6B7280] uppercase font-sans">Mins</span>
                   </div>
-                  <div className="bg-white p-2 rounded-xl border border-amber-200 shadow-xs">
-                    <span className="block text-base font-black font-semibold text-[#2B080C]">{timer.secs}</span>
-                    <span className="text-[10px] text-[#6B7280] uppercase font-sans">Secs</span>
+                  <div className="bg-white py-1 px-1 rounded-lg border border-amber-200 shadow-2xs">
+                    <span className="block text-sm font-black text-[#2B080C] leading-none">{timer.secs}</span>
+                    <span className="text-[9px] text-[#6B7280] uppercase font-sans">Secs</span>
                   </div>
                 </div>
               </div>
@@ -374,12 +376,12 @@ export const ProductDetailPage: React.FC = () => {
             {/* Stock Status */}
             <div>
               {!PRODUCT_PAGE_CONFIG.isOutOfStock ? (
-                <span className="inline-flex items-center gap-1.5 bg-[#2B080C]/10 text-[#2B080C] text-xs font-bold px-3 py-1 rounded-full border border-[#2B080C]/20">
-                  <span className="w-2 h-2 rounded-full bg-[#2B080C] animate-ping" />
+                <span className="inline-flex items-center gap-1.5 bg-[#2B080C]/10 text-[#2B080C] text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-[#2B080C]/20">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#2B080C] animate-ping" />
                   ✓ স্টকে আছে ({PRODUCT_PAGE_CONFIG.stockCount} টি পিস অবশিষ্ট আছে)
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1.5 bg-rose-100 text-rose-900 text-xs font-bold px-3 py-1 rounded-full border border-rose-300">
+                <span className="inline-flex items-center gap-1.5 bg-rose-100 text-rose-900 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-rose-300">
                   ✕ স্টক আউট (Sold Out)
                 </span>
               )}
@@ -387,22 +389,22 @@ export const ProductDetailPage: React.FC = () => {
 
             {/* Variables / Options */}
             {PRODUCT_PAGE_CONFIG.colors && (
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
+              <div className="space-y-1 mb-5">
+                <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block">
                   কালার অপশন (Select Color):
                 </label>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5">
                   {PRODUCT_PAGE_CONFIG.colors.map((col) => (
                     <button
                       key={col.name}
                       onClick={() => setSelectedColor(col.name)}
-                      className={`px-3 py-1.5 rounded-xl border text-xs font-bold flex items-center gap-2 transition-all ${
+                      className={`px-2.5 py-1 rounded-lg border text-xs font-bold flex items-center gap-1.5 transition-all ${
                         selectedColor === col.name
-                          ? 'bg-[#0B0E14] text-white border-[#0B0E14] shadow-sm'
+                          ? 'bg-[#0B0E14] text-white border-[#0B0E14] shadow-2xs'
                           : 'bg-white text-[#111827] border-[#E5E7EB] hover:border-slate-400'
                       }`}
                     >
-                      <span className="w-3.5 h-3.5 rounded-full border border-white/20" style={{ backgroundColor: col.hex }} />
+                      <span className="w-3 h-3 rounded-full border border-white/20" style={{ backgroundColor: col.hex }} />
                       <span>{col.name}</span>
                     </button>
                   ))}
@@ -411,18 +413,18 @@ export const ProductDetailPage: React.FC = () => {
             )}
 
             {PRODUCT_PAGE_CONFIG.sizes && (
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
+              <div className="space-y-1 mb-5">
+                <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block">
                   সাইজ ভ্যারিয়েন্ট (Select Size):
                 </label>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5">
                   {PRODUCT_PAGE_CONFIG.sizes.map((sz) => (
                     <button
                       key={sz}
                       onClick={() => setSelectedSize(sz)}
-                      className={`px-3.5 py-1.5 rounded-xl border text-xs font-bold transition-all ${
+                      className={`px-3 py-1 rounded-lg border text-xs font-bold transition-all ${
                         selectedSize === sz
-                          ? 'bg-[#0B0E14] text-white border-[#0B0E14] shadow-sm'
+                          ? 'bg-[#0B0E14] text-white border-[#0B0E14] shadow-2xs'
                           : 'bg-white text-[#111827] border-[#E5E7EB] hover:border-slate-400'
                       }`}
                     >
@@ -434,35 +436,35 @@ export const ProductDetailPage: React.FC = () => {
             )}
 
             {/* Quantity Selector */}
-            <div className="space-y-1.5 pt-1">
-              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
+            <div className="space-y-1 mb-7">
+              <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block">
                 পরিমাণ (Quantity):
               </label>
-              <div className="inline-flex items-center bg-[#F9FAFB] border border-[#E5E7EB] rounded-xl p-1">
+              <div className="inline-flex items-center bg-[#F9FAFB] border border-[#E5E7EB] rounded-lg p-0.5">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="p-2 text-[#6B7280] hover:text-[#111827]"
+                  className="p-1.5 text-[#6B7280] hover:text-[#111827]"
                 >
-                  <Minus className="w-4 h-4" />
+                  <Minus className="w-3.5 h-3.5" />
                 </button>
-                <span className="w-12 text-center text-sm font-extrabold font-mono text-[#111827]">{quantity}</span>
+                <span className="w-10 text-center text-xs font-extrabold font-mono text-[#111827]">{quantity}</span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
-                  className="p-2 text-[#6B7280] hover:text-[#111827]"
+                  className="p-1.5 text-[#6B7280] hover:text-[#111827]"
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
 
             {/* Action Buttons: Add to Cart & Buy Now */}
-            <div ref={mainCtaRef} className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <div ref={mainCtaRef} className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 mt-2">
               <button
                 onClick={handleAddToCartAction}
-                className={`py-3.5 px-6 rounded-2xl font-extrabold text-sm border-2 transition-all flex items-center justify-center gap-2 ${
+                className={`py-2.5 px-5 rounded-xl font-extrabold text-xs sm:text-sm border-2 transition-all flex items-center justify-center gap-2 ${
                   isAddedToCart
                     ? 'bg-[#0B0E14] text-white border-[#0B0E14]'
-                    : 'bg-[#2B080C] hover:bg-[#380B0F] text-white border-[#2B080C] shadow-md'
+                    : 'bg-[#2B080C] hover:bg-[#380B0F] text-white border-[#2B080C] shadow-sm'
                 }`}
               >
                 <ShoppingBag className="w-4 h-4 text-white" />
@@ -471,7 +473,7 @@ export const ProductDetailPage: React.FC = () => {
 
               <button
                 onClick={handleBuyNowAction}
-                className="py-3.5 px-6 bg-white border-2 border-[#111827] hover:bg-[#111827] text-[#111827] hover:text-white font-extrabold text-sm rounded-2xl shadow-sm transition-all flex items-center justify-center"
+                className="py-2.5 px-5 bg-white border-2 border-[#111827] hover:bg-[#111827] text-[#111827] hover:text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-2xs transition-all flex items-center justify-center"
               >
                 <span>Buy Now</span>
               </button>

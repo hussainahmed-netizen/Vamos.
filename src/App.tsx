@@ -18,6 +18,7 @@ import { CartPage } from './pages/CartPage';
 import { CheckoutPage } from './pages/CheckoutPage';
 import { OrderSuccessPage } from './pages/OrderSuccessPage';
 import { WishlistPage } from './pages/WishlistPage';
+import { AccountPage } from './pages/AccountPage';
 
 const StoreContent: React.FC = () => {
   const { view } = useStore();
@@ -42,6 +43,7 @@ const StoreContent: React.FC = () => {
         {view === 'checkout' && <CheckoutPage />}
         {view === 'order-success' && <OrderSuccessPage />}
         {view === 'wishlist' && <WishlistPage />}
+        {view === 'account' && <AccountPage />}
       </main>
 
       {/* Drawers & Modals */}

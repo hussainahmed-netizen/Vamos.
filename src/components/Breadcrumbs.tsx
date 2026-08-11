@@ -153,6 +153,12 @@ export const Breadcrumbs: React.FC = () => {
       label: 'My Wishlist',
       isCurrent: true
     });
+  } else if (view === 'account') {
+    items.push({
+      id: 'account',
+      label: 'My Account',
+      isCurrent: true
+    });
   }
 
   return (

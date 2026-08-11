@@ -2,7 +2,9 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Product, CartItem, Order, CategoryId, Review, PaymentMethod } from '../types';
 import { PRODUCTS, REVIEWS, COUPONS } from '../data/mockData';
 
-type ViewMode = 'home' | 'shop' | 'product' | 'cart' | 'checkout' | 'order-success' | 'wishlist';
+type ViewMode = 'home' | 'shop' | 'product' | 'cart' | 'checkout' | 'order-success' | 'wishlist' | 'account';
+
+type AccountTab = 'overview' | 'orders' | 'reviews' | 'returns';
 
 interface Toast {
   id: string;
@@ -13,6 +15,7 @@ interface Toast {
 interface StoreContextType {
   view: ViewMode;
   setView: (view: ViewMode) => void;
+  pathname: string;
   selectedProductId: string | null;
   setSelectedProductId: (id: string | null) => void;
   selectedCategory: CategoryId;
@@ -72,6 +75,11 @@ interface StoreContextType {
   freeShippingThreshold: number;
   total: number;
   
+  // Account
+  accountTab: AccountTab;
+  setAccountTab: (tab: AccountTab) => void;
+  navigateToAccount: (tab?: AccountTab) => void;
+  
   // Navigation helper
   navigateToProduct: (productId: string) => void;
   navigateToCategory: (category: CategoryId) => void;
@@ -81,15 +89,79 @@ const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [view, setViewState] = useState<ViewMode>('home');
+  const [pathname, setPathname] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return window.location.pathname;
+    }
+    return '/';
+  });
   const [selectedProductId, setSelectedProductId] = useState<string | null>('p1');
   const [selectedCategoryState, setSelectedCategoryState] = useState<CategoryId>('all');
   const [selectedSubCategoryState, setSelectedSubCategoryState] = useState<string | null>(null);
+  const [accountTab, setAccountTab] = useState<AccountTab>('overview');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  // Handle URL detection for category and subcategory params
+  const getPathForView = (v: ViewMode, prodId?: string | null, tab?: AccountTab): string => {
+    switch (v) {
+      case 'home':
+        return '/';
+      case 'shop':
+        return '/catalog';
+      case 'product':
+        return prodId ? `/product/${prodId}` : '/product';
+      case 'cart':
+        return '/cart';
+      case 'checkout':
+        return '/checkout';
+      case 'wishlist':
+        return '/wishlist';
+      case 'account':
+        return tab && tab !== 'overview' ? `/account/${tab}` : '/account';
+      case 'order-success':
+        return '/order-success';
+      default:
+        return '/';
+    }
+  };
+
+  const navigateToAccount = (tab: AccountTab = 'overview') => {
+    setAccountTab(tab);
+    setViewState('account');
+    const path = tab === 'overview' ? '/account' : `/account/${tab}`;
+    setPathname(path);
+    if (typeof window !== 'undefined' && window.location.pathname !== path) {
+      try {
+        window.history.pushState({}, '', path);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
+  // Handle URL detection for routes, categories and subcategory params
   useEffect(() => {
     const syncFromUrl = () => {
       try {
+        if (typeof window === 'undefined') return;
+        const currentP = window.location.pathname;
+        setPathname(currentP);
+
+        if (currentP.startsWith('/account') || currentP.startsWith('/user-portal')) {
+          setViewState('account');
+        } else if (currentP.startsWith('/product') || currentP.startsWith('/p/')) {
+          setViewState('product');
+        } else if (currentP === '/checkout') {
+          setViewState('checkout');
+        } else if (currentP === '/cart') {
+          setViewState('cart');
+        } else if (currentP === '/wishlist') {
+          setViewState('wishlist');
+        } else if (currentP === '/order-success') {
+          setViewState('order-success');
+        } else if (currentP === '/catalog' || currentP === '/shop') {
+          setViewState('shop');
+        }
+
         const params = new URLSearchParams(window.location.search);
         const cat = params.get('category');
         const sub = params.get('subcategory') || params.get('sub');
@@ -204,12 +276,31 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const setView = (newView: ViewMode) => {
     setViewState(newView);
+    const newPath = getPathForView(newView, selectedProductId, accountTab);
+    setPathname(newPath);
+    if (typeof window !== 'undefined' && window.location.pathname !== newPath) {
+      try {
+        window.history.pushState({}, '', newPath);
+      } catch (e) {
+        console.error(e);
+      }
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const navigateToProduct = (productId: string) => {
     setSelectedProductId(productId);
-    setView('product');
+    setViewState('product');
+    const path = `/product/${productId}`;
+    setPathname(path);
+    if (typeof window !== 'undefined' && window.location.pathname !== path) {
+      try {
+        window.history.pushState({}, '', path);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const addToCart = (product: Product, quantity = 1, color?: string, size?: string) => {
@@ -362,6 +453,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       value={{
         view,
         setView,
+        pathname,
         selectedProductId,
         setSelectedProductId,
         selectedCategory: selectedCategoryState,
@@ -404,6 +496,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         shippingFee,
         freeShippingThreshold,
         total,
+        accountTab,
+        setAccountTab,
+        navigateToAccount,
         navigateToProduct,
         navigateToCategory
       }}

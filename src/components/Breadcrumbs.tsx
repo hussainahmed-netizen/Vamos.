@@ -192,7 +192,7 @@ export const Breadcrumbs: React.FC = () => {
   }
 
   return (
-    <div className="bg-white/80 border-b border-slate-200/80 backdrop-blur-xs py-1.5 px-4 sm:px-6 lg:px-8 transition-all">
+    <div className={`bg-white/80 border-b border-slate-200/80 backdrop-blur-xs py-1.5 px-4 sm:px-6 lg:px-8 transition-all ${view === 'cart' ? 'hidden md:block' : ''}`}>
       <div className="max-w-[1536px] mx-auto">
         <nav aria-label="Breadcrumb" className="flex items-center flex-wrap gap-1.5 text-xs text-slate-500 font-medium">
           {items.map((item, index) => {

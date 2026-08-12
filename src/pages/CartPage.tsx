@@ -55,7 +55,7 @@ export const CartPage: React.FC = () => {
           <ShoppingBag className="w-10 h-10" />
         </div>
         <div className="space-y-2">
-          <h1 className="text-3xl font-extrabold text-slate-900 font-serif">Your Cart is Currently Empty</h1>
+          <h1 className="text-xl sm:text-3xl font-extrabold text-slate-900">Your Cart is Currently Empty</h1>
           <p className="text-sm text-slate-500 max-w-md mx-auto">
             You haven't added any products to your shopping bag yet. Check out our latest noise-cancelling headphones, smartwatches, and leather goods.
           </p>
@@ -71,9 +71,9 @@ export const CartPage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-in fade-in duration-300">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-4 sm:space-y-8 animate-in fade-in duration-300">
       {/* Page Title & Free Shipping Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 sm:pb-6 border-b border-slate-200">
         <div>
           <button
             onClick={() => setView('shop')}
@@ -81,7 +81,7 @@ export const CartPage: React.FC = () => {
           >
             <ArrowLeft className="w-3.5 h-3.5" /> Continue Shopping
           </button>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 font-serif">
+          <h1 className="text-xl sm:text-3xl font-extrabold text-slate-900 truncate">
             Shopping Cart ({cart.reduce((a, c) => a + c.quantity, 0)} Items)
           </h1>
         </div>
@@ -105,7 +105,7 @@ export const CartPage: React.FC = () => {
       </div>
 
       {/* Main Grid: Items Table & Summary Sidebar */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-8">
         {/* Cart Item Cards */}
         <div className="lg:col-span-2 space-y-4">
           {cart.map((item) => (

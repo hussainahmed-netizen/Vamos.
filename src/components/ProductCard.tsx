@@ -122,28 +122,28 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       <div className="p-3 sm:p-3.5 flex-1 flex flex-col justify-between gap-2">
         <div className="flex flex-col">
           {/* Category & Ratings */}
-          <div className="flex items-center justify-between text-[11px] mb-1">
-            <span className="text-slate-500 font-medium truncate max-w-[100px]">{product.categoryName}</span>
+          <div className="flex items-center justify-between text-[11px] lg:text-xs mb-1">
+            <span className="text-slate-500 font-medium truncate max-w-[100px] lg:max-w-[130px]">{product.categoryName}</span>
             <div className="flex items-center gap-1 text-amber-500 font-bold shrink-0">
-              <Star className="w-3 h-3 fill-current" />
-              <span>{product.rating}</span>
-              <span className="text-slate-400 font-normal">({product.reviewCount})</span>
+              <Star className="w-3 h-3 lg:w-3.5 lg:h-3.5 fill-current" />
+              <span className="lg:text-xs">{product.rating}</span>
+              <span className="text-slate-400 font-normal lg:text-xs">({product.reviewCount})</span>
             </div>
           </div>
 
           {/* Product Title */}
-          <h3 className="text-xs sm:text-sm font-bold text-[#2C3539] group-hover:text-[#2B080C] transition-colors line-clamp-1 h-5 leading-5">
+          <h3 className="text-xs sm:text-sm lg:text-base font-bold text-[#2C3539] group-hover:text-[#2B080C] transition-colors line-clamp-1 h-5 lg:h-6 leading-5 lg:leading-6">
             {product.name}
           </h3>
 
           {/* Subtitle / Reserve Slot */}
-          <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5 h-4 leading-4">
+          <p className="text-[11px] lg:text-xs text-slate-500 line-clamp-1 mt-0.5 h-4 lg:h-5 leading-4 lg:leading-5">
             {product.subtitle || '\u00A0'}
           </p>
 
           {/* Color Swatches or Variant Slot Reserve */}
           {product.colors && product.colors.length > 0 ? (
-            <div className="flex items-center gap-1 h-5 mt-2">
+            <div className="flex items-center gap-1 h-5 lg:h-6 mt-2">
               {product.colors.map((color) => (
                 <button
                   key={color.name}
@@ -151,7 +151,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     e.stopPropagation();
                     setSelectedColor(color.name);
                   }}
-                  className={`w-3.5 h-3.5 rounded-full border transition-all ${
+                  className={`w-3.5 h-3.5 lg:w-4 lg:h-4 rounded-full border transition-all ${
                     selectedColor === color.name
                       ? 'ring-2 ring-slate-900 ring-offset-1 border-white scale-110'
                       : 'border-slate-300 hover:scale-105'
@@ -160,12 +160,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                   title={color.name}
                 />
               ))}
-              <span className="text-[10px] text-slate-400 font-medium ml-1">
+              <span className="text-[10px] lg:text-xs text-slate-400 font-medium ml-1">
                 {product.colors.length} colors
               </span>
             </div>
           ) : (
-            <div className="h-5 mt-2" aria-hidden="true" />
+            <div className="h-5 lg:h-6 mt-2" aria-hidden="true" />
           )}
         </div>
 
@@ -173,21 +173,21 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-1 sm:gap-1.5 mt-auto">
           <div className="flex flex-col justify-center min-h-[32px] min-w-0">
             <div className="flex items-baseline gap-0.5 sm:gap-1 flex-wrap">
-              <span className="text-[11px] sm:text-base font-extrabold text-[#2C3539] font-mono truncate">
+              <span className="text-[11px] sm:text-base lg:text-lg font-extrabold text-[#2C3539] font-mono truncate">
                 ৳{product.price.toFixed(2)}
               </span>
               {product.originalPrice && (
-                <span className="text-[9px] sm:text-[10px] text-slate-400 line-through font-mono truncate">
+                <span className="text-[9px] sm:text-[10px] lg:text-xs text-slate-400 line-through font-mono truncate">
                   ৳{product.originalPrice.toFixed(2)}
                 </span>
               )}
             </div>
             {product.stock <= 10 ? (
-              <span className="text-[9px] text-amber-600 font-semibold block leading-tight">
+              <span className="text-[9px] lg:text-xs text-amber-600 font-semibold block leading-tight">
                 ⚡ Only {product.stock} left
               </span>
             ) : (
-              <span className="text-[9px] text-emerald-600 font-semibold block leading-tight">
+              <span className="text-[9px] lg:text-xs text-emerald-600 font-semibold block leading-tight">
                 ✓ In Stock
               </span>
             )}
@@ -195,7 +195,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
           <button
             onClick={handleAddToCart}
-            className={`w-8 h-8 sm:w-auto sm:h-auto sm:min-h-0 p-0 sm:px-2.5 sm:py-1.5 rounded-lg sm:rounded-xl text-sm sm:text-xs font-bold transition-all flex items-center justify-center gap-1 shrink-0 ${
+            className={`w-8 h-8 sm:w-auto sm:h-auto sm:min-h-0 p-0 sm:px-2.5 sm:py-1.5 lg:px-3 lg:py-2 rounded-lg sm:rounded-xl text-sm sm:text-xs lg:text-sm font-bold transition-all flex items-center justify-center gap-1 shrink-0 ${
               isAdded
                 ? 'bg-[#0B0E14] text-white shadow-md'
                 : 'bg-[#2B080C] hover:bg-[#380B0F] text-white shadow-xs hover:shadow-md'
@@ -203,11 +203,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           >
             {isAdded ? (
               <>
-                <Check className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-white" /> <span className="hidden sm:inline">Added</span>
+                <Check className="w-4 h-4 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4 text-white" /> <span className="hidden sm:inline">Added</span>
               </>
             ) : (
               <>
-                <ShoppingBag className="w-4 h-4 sm:w-3.5 sm:h-3.5" /> <span className="hidden sm:inline">Add</span>
+                <ShoppingBag className="w-4 h-4 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4" /> <span className="hidden sm:inline">Add</span>
               </>
             )}
           </button>

@@ -4,20 +4,28 @@ import { useStore } from '../context/StoreContext';
 import { supabase } from '../lib/supabase';
 
 export const AuthModal: React.FC = () => {
-  const { isAuthModalOpen, setIsAuthModalOpen, signInWithGoogle, showToast } = useStore();
+  const { isAuthModalOpen, setIsAuthModalOpen, signInWithGoogle, showToast, navigateToAccount } = useStore();
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [shippingAddress, setShippingAddress] = useState('');
   const [loading, setLoading] = useState(false);
 
   if (!isAuthModalOpen) return null;
+
+  const handleAutoFill = () => {
+    setEmail('test@example.com');
+    setPassword('password123');
+  };
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
       if (mode === 'signup') {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
         });
@@ -27,21 +35,33 @@ export const AuthModal: React.FC = () => {
           }
           throw error;
         }
-        showToast('Account created successfully! You are now signed in.', 'success');
+        
+        if (data.user) {
+          await supabase.from('profiles').upsert({
+            id: data.user.id,
+            full_name: fullName,
+            email: email,
+            phone_number: phone,
+            shipping_address: shippingAddress,
+            city_district: 'N/A',
+            updated_at: new Date().toISOString()
+          });
+        }
+
+        showToast('Account created successfully! Logging you in...', 'success');
         setIsAuthModalOpen(false);
+        navigateToAccount('overview');
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
         if (error) {
-          if (error.message.includes('Invalid login credentials')) {
-            throw new Error("This account was created using Google Sign-In. Please click 'Continue with Google' to log in.");
-          }
-          throw error;
+          throw new Error("Invalid email or password. Please try again.");
         }
         showToast('Signed in successfully', 'success');
         setIsAuthModalOpen(false);
+        navigateToAccount('overview');
       }
     } catch (err: any) {
       showToast(err.message, 'error');
@@ -52,15 +72,16 @@ export const AuthModal: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in">
-      <div className="bg-white rounded-3xl max-w-md w-full shadow-2xl p-6 sm:p-8 relative border border-slate-200">
+      <div className="bg-white rounded-3xl max-w-md w-full shadow-2xl relative border border-slate-200 max-h-[90vh] flex flex-col">
         <button
           onClick={() => setIsAuthModalOpen(false)}
-          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors"
+          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors z-10"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="mb-6 text-center">
+        <div className="p-6 sm:p-8 overflow-y-auto">
+          <div className="mb-6 text-center">
           <h3 className="text-2xl font-bold text-slate-900 font-serif">
             {mode === 'signin' ? 'Welcome Back' : 'Create Account'}
           </h3>
@@ -91,6 +112,50 @@ export const AuthModal: React.FC = () => {
         </div>
 
         <form onSubmit={handleEmailAuth} className="space-y-4">
+          {mode === 'signup' && (
+            <>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-700">Full Name</label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    required
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    placeholder="John Doe"
+                  />
+                </div>
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-700">Phone Number</label>
+                <div className="relative">
+                  <input
+                    type="tel"
+                    required
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    placeholder="+8801..."
+                  />
+                </div>
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-700">Shipping Address</label>
+                <div className="relative">
+                  <textarea
+                    required
+                    rows={2}
+                    value={shippingAddress}
+                    onChange={(e) => setShippingAddress(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+                    placeholder="House, Road, Area..."
+                  />
+                </div>
+              </div>
+            </>
+          )}
+
           <div className="space-y-1">
             <label className="text-xs font-bold text-slate-700">Email Address</label>
             <div className="relative">
@@ -129,16 +194,32 @@ export const AuthModal: React.FC = () => {
             {loading ? 'Processing...' : mode === 'signin' ? 'Sign In' : 'Sign Up'}
             {!loading && <ArrowRight className="w-4 h-4" />}
           </button>
+          
+          <button 
+            type="button" 
+            onClick={handleAutoFill} 
+            className="w-full text-center text-xs text-slate-400 underline hover:text-slate-600 mt-2"
+          >
+            Auto-fill Test Credentials
+          </button>
         </form>
 
-        <div className="mt-6 text-center text-xs text-slate-500">
+        <div className="mt-6 text-center text-xs text-slate-500 pb-2">
           {mode === 'signin' ? "Don't have an account? " : 'Already have an account? '}
           <button
-            onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
+            onClick={() => {
+              setMode(mode === 'signin' ? 'signup' : 'signin');
+              setEmail('');
+              setPassword('');
+              setFullName('');
+              setPhone('');
+              setShippingAddress('');
+            }}
             className="font-bold text-emerald-600 hover:text-emerald-700 underline"
           >
             {mode === 'signin' ? 'Sign Up' : 'Sign In'}
           </button>
+        </div>
         </div>
       </div>
     </div>

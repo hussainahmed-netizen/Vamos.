@@ -65,6 +65,8 @@ interface StoreContextType {
   setIsAccountModalOpen: (open: boolean) => void;
   isReviewModalOpen: boolean;
   setIsReviewModalOpen: (open: boolean) => void;
+  isMobileSearchOpen: boolean;
+  setIsMobileSearchOpen: (open: boolean) => void;
   
   // Orders
   currentOrder: Order | null;
@@ -583,6 +585,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [activePolicyModal, setActivePolicyModal] = useState<string | null>(null);
   const [isAccountModalOpen, setIsAccountModalOpen] = useState<boolean>(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState<boolean>(false);
   const [currentOrder, setCurrentOrder] = useState<Order | null>(null);
   const [ordersHistory, setOrdersHistory] = useState<Order[]>(() => {
     try {
@@ -902,6 +905,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setIsAccountModalOpen,
         isReviewModalOpen,
         setIsReviewModalOpen,
+        isMobileSearchOpen,
+        setIsMobileSearchOpen,
         currentOrder,
         setCurrentOrder,
         ordersHistory,

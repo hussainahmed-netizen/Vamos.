@@ -820,7 +820,7 @@ export const ProductDetailPage: React.FC = () => {
           <h2 className="text-xl font-extrabold text-slate-900 font-serif">
             সম্পর্কিত অন্যান্য পণ্য (Related Products)
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {relatedItems.map((relItem) => (
               <ProductCard key={relItem.id} product={relItem} />
             ))}
@@ -833,7 +833,7 @@ export const ProductDetailPage: React.FC = () => {
          8. STICKY BAR (FLOATING AT BOTTOM ON SCROLL)
          ==================================================================== */}
       <div
-        className={`fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-2xl p-3 sm:p-4 transition-all duration-300 ease-in-out ${
+        className={`fixed bottom-16 md:bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-2xl p-3 sm:p-4 transition-all duration-300 ease-in-out ${
           isStickyVisible
             ? 'translate-y-0 opacity-100 pointer-events-auto'
             : 'translate-y-full opacity-0 pointer-events-none'

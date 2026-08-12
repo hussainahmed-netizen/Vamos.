@@ -108,40 +108,43 @@ export const ShopPage: React.FC = () => {
   return (
     <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in duration-300">
       {/* Page Header */}
-      <div className="mb-8">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#E5E7EB]">
+      <div className="mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E5E7EB]">
           <div>
             <span className="text-xs font-bold text-[#2B080C] uppercase tracking-widest font-mono">
               {brandConfig.brandName} Catalog
             </span>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#111827] font-serif">
+            <h1 className="text-2xl sm:text-4xl font-extrabold text-[#111827] font-serif">
               {selectedCategory === 'all'
                 ? 'All Products Catalog'
                 : categories.find((c) => c.id === selectedCategory)?.name || 'Product Listing'}
             </h1>
-            <p className="text-xs sm:text-sm text-[#6B7280] mt-1">
+            <p className="text-xs text-[#6B7280] mt-0.5">
               Showing {filteredProducts.length} items with instant availability & Cash on Delivery support
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* Mobile Filter Toggle */}
+          {/* Dual Action Pills for Mobile & Desktop */}
+          <div className="flex items-center gap-2">
+            {/* Filter Pill */}
             <button
-              onClick={() => setShowMobileFilters(!showMobileFilters)}
-              className="lg:hidden px-4 py-2 bg-[#2B080C] text-white font-bold text-xs rounded-xl flex items-center gap-2"
+              onClick={() => setShowMobileFilters(true)}
+              className="lg:hidden flex-1 sm:flex-none px-4 py-2.5 bg-[#0B0E14] text-white font-bold text-xs rounded-2xl flex items-center justify-center gap-2 shadow-sm"
             >
-              <SlidersHorizontal className="w-4 h-4" /> Filters ({filteredProducts.length})
+              <SlidersHorizontal className="w-3.5 h-3.5 text-slate-300" />
+              <span>Filter ({filteredProducts.length})</span>
             </button>
 
-            {/* Sort Dropdown */}
-            <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700">
-              <span className="text-slate-400">Sort by:</span>
+            {/* Sort Pill */}
+            <div className="flex-1 sm:flex-none flex items-center gap-1.5 bg-slate-100 border border-slate-200 rounded-2xl px-3 py-2 text-xs font-bold text-slate-800">
+              <span className="text-slate-400 font-normal hidden sm:inline">Sort:</span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="bg-transparent font-bold text-slate-900 focus:outline-none cursor-pointer"
+                className="bg-transparent font-bold text-slate-900 focus:outline-none cursor-pointer w-full"
               >
-                <option value="featured">Featured / Best Sellers</option>
+                <option value="featured">Sort</option>
+                <option value="featured">Featured</option>
                 <option value="price-low">Price: Low to High</option>
                 <option value="price-high">Price: High to Low</option>
                 <option value="rating">Highest Rated</option>
@@ -153,22 +156,24 @@ export const ShopPage: React.FC = () => {
 
       {/* Main Catalog Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* Sidebar Filters */}
-        <aside
-          className={`lg:block ${
-            showMobileFilters ? 'block' : 'hidden'
-          } bg-[#F9FAFB] border border-[#E5E7EB] p-6 rounded-3xl space-y-6 h-fit sticky top-24`}
-        >
+        {/* Desktop Sidebar Filters */}
+        <aside className="hidden lg:block bg-[#F9FAFB] border border-[#E5E7EB] p-6 rounded-3xl space-y-6 h-fit sticky top-24">
           <div className="flex items-center justify-between pb-4 border-b border-[#E5E7EB]">
             <h3 className="font-bold text-[#111827] text-base flex items-center gap-2">
               <SlidersHorizontal className="w-4 h-4 text-[#2B080C]" /> Filter Catalog
             </h3>
+            {hasActiveFilters && (
+              <button
+                onClick={clearFilters}
+                className="text-xs text-[#2B080C] hover:underline font-bold flex items-center gap-1"
+              >
+                <RotateCcw className="w-3 h-3" /> Reset
+              </button>
+            )}
           </div>
 
-          {/* Reusable Contextual Dynamic Category & Sub-Category Sidebar */}
           <CategorySidebar />
 
-          {/* Price Range Slider */}
           <div className="space-y-2 pt-4 border-t border-slate-200">
             <div className="flex justify-between text-xs font-bold text-slate-900">
               <span>Max Price:</span>
@@ -181,42 +186,112 @@ export const ShopPage: React.FC = () => {
               step="10"
               value={priceRange}
               onChange={(e) => setPriceRange(Number(e.target.value))}
-              className="w-full accent-emerald-600 cursor-pointer"
+              className="w-full accent-[#2B080C] cursor-pointer"
             />
             <div className="flex justify-between text-[10px] text-slate-400 font-mono">
               <span>৳20</span>
               <span>৳250</span>
             </div>
           </div>
-
-          {/* Rating Filter */}
-          <div className="space-y-2 pt-4 border-t border-slate-200">
-            <label className="block text-xs font-bold text-slate-900 uppercase tracking-wider">
-              Minimum Rating
-            </label>
-            <div className="space-y-1">
-              {[4.8, 4.5, 4.0].map((r) => (
-                <button
-                  key={r}
-                  onClick={() => setMinRating(minRating === r ? 0 : r)}
-                  className={`w-full px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between border ${
-                    minRating === r
-                      ? 'bg-amber-50 text-amber-900 border-amber-300 font-bold'
-                      : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-100'
-                  }`}
-                >
-                  <div className="flex items-center gap-1 text-amber-500">
-                    <Star className="w-3.5 h-3.5 fill-current" />
-                    <span>{r}+ Stars</span>
-                  </div>
-                  {minRating === r && <span className="text-[10px] font-bold text-amber-700">Active</span>}
-                </button>
-              ))}
-            </div>
-          </div>
         </aside>
 
-        {/* Product Cards Grid */}
+        {/* Mobile Slide-Up Bottom Sheet Filter Drawer Overlay */}
+        {showMobileFilters && (
+          <div className="fixed inset-0 z-50 lg:hidden bg-slate-900/60 backdrop-blur-xs flex flex-col justify-end animate-in fade-in">
+            <div className="bg-white rounded-t-3xl max-h-[85vh] overflow-y-auto p-5 space-y-6 shadow-2xl border-t border-slate-200 animate-in slide-in-from-bottom duration-300">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-200 sticky top-0 bg-white z-10 pt-1">
+                <div className="flex items-center gap-2">
+                  <SlidersHorizontal className="w-4 h-4 text-[#2B080C]" />
+                  <h3 className="font-extrabold text-slate-900 text-lg font-serif">Filter Products</h3>
+                </div>
+                <button
+                  onClick={() => setShowMobileFilters(false)}
+                  className="p-1.5 text-slate-400 hover:text-slate-800 rounded-full hover:bg-slate-100"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Category Options */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider">Categories</h4>
+                <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                  <label
+                    onClick={() => setSelectedCategory('all', null)}
+                    className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 cursor-pointer text-sm font-semibold text-slate-800"
+                  >
+                    <input
+                      type="radio"
+                      name="catFilter"
+                      checked={selectedCategory === 'all'}
+                      onChange={() => setSelectedCategory('all', null)}
+                      className="accent-[#2B080C]"
+                    />
+                    <span>All Categories</span>
+                  </label>
+                  {categories.map((cat) => (
+                    <label
+                      key={cat.id}
+                      onClick={() => setSelectedCategory(cat.id as CategoryId, null)}
+                      className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 cursor-pointer text-sm font-semibold text-slate-800"
+                    >
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="radio"
+                          name="catFilter"
+                          checked={selectedCategory === cat.id}
+                          onChange={() => setSelectedCategory(cat.id as CategoryId, null)}
+                          className="accent-[#2B080C]"
+                        />
+                        <span>{cat.name}</span>
+                      </div>
+                      <span className="text-xs text-slate-400 font-medium">{cat.itemCount}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Price Range Slider */}
+              <div className="space-y-3 pt-3 border-t border-slate-200">
+                <div className="flex justify-between text-xs font-bold text-slate-900">
+                  <span>Price Range</span>
+                  <span className="font-mono text-[#2B080C]">Up to ৳{priceRange}</span>
+                </div>
+                <input
+                  type="range"
+                  min="20"
+                  max="250"
+                  step="10"
+                  value={priceRange}
+                  onChange={(e) => setPriceRange(Number(e.target.value))}
+                  className="w-full accent-[#2B080C] cursor-pointer"
+                />
+                <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                  <span>৳20</span>
+                  <span>৳250</span>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="pt-3 border-t border-slate-200 flex gap-3">
+                <button
+                  onClick={clearFilters}
+                  className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition-colors"
+                >
+                  Reset
+                </button>
+                <button
+                  onClick={() => setShowMobileFilters(false)}
+                  className="flex-1 py-3 bg-[#2B080C] hover:bg-[#380B0F] text-white font-bold text-xs rounded-xl shadow-lg transition-colors"
+                >
+                  Apply Filters
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Product Cards Grid - 2 Column Grid on Mobile */}
         <div className="lg:col-span-3">
           {filteredProducts.length === 0 ? (
             <div className="bg-slate-50 border border-slate-200 rounded-3xl p-12 text-center space-y-4">
@@ -235,7 +310,7 @@ export const ShopPage: React.FC = () => {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-6">
               {filteredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}

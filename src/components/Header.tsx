@@ -48,6 +48,7 @@ export const Header: React.FC = () => {
     showToast,
     searchQuery,
     setSearchQuery,
+    setIsMobileSearchOpen,
     subtotal
   } = useStore();
 
@@ -409,21 +410,13 @@ export const Header: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile Search Input */}
-        <div className="md:hidden mt-3 relative">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search products & categories..."
-            className="w-full pl-9 pr-9 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          />
+        {/* Mobile Search Input Trigger */}
+        <div className="md:hidden mt-3 relative cursor-pointer" onClick={() => setIsMobileSearchOpen(true)}>
+          <div className="w-full pl-9 pr-4 py-2 bg-slate-100/90 border border-slate-200 rounded-xl text-xs text-slate-500 flex items-center justify-between">
+            <span>Search products, brands, categories...</span>
+            <Search className="w-4 h-4 text-slate-400" />
+          </div>
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-          {searchQuery && (
-            <button onClick={() => setSearchQuery('')} className="absolute right-3 top-2.5 text-slate-400">
-              <X className="w-4 h-4" />
-            </button>
-          )}
         </div>
 
         {/* Desktop Category Bar */}

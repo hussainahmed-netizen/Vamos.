@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useStore } from '../context/StoreContext';
 import { ProductCard } from '../components/ProductCard';
 import {
@@ -17,7 +18,10 @@ import {
   PackageCheck,
   Zap,
   MapPin,
-  CheckCircle2
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  Lock
 } from 'lucide-react';
 
 /* ==========================================================================
@@ -27,7 +31,7 @@ import {
    -------------------------------------------------------------------------- */
 const PRODUCT_PAGE_CONFIG = {
   // 1. Basic Product Details
-  name: 'Acoustic Pro Wireless Headphones (প্রিমিয়াম অন-ইয়ার হেডফোন)',
+  name: 'Acoustic Pro Wireless Headphones',
   subtitle: 'Hi-Fi Sound with Active Noise Cancellation & 40H Battery Life',
   regularPrice: 220,
   offerPrice: 175,
@@ -43,7 +47,7 @@ const PRODUCT_PAGE_CONFIG = {
   // Real-time offer countdown (Set duration in seconds or target date)
   offerTimer: {
     enabled: true,
-    title: 'অফার শেষ হতে বাকি (Offer ends in):',
+    title: 'Offer ends in:',
     initialSeconds: 86400, // 24 hours countdown
   },
 
@@ -67,7 +71,7 @@ const PRODUCT_PAGE_CONFIG = {
   description:
     'Experience studio-quality sound acoustics with hybrid active noise cancellation technology. Designed for audiophiles, gamers, and remote professionals, these ergonomic headphones feature memory foam earcups, Bluetooth 5.3 low-latency pairing, and a 40-hour battery life.',
   features: [
-    'Hybrid Active Noise Cancellation (ANC) up to -35dB (অ্যাডভান্সড নয়েজ ক্যানসেলেশন)',
+    'Hybrid Active Noise Cancellation (ANC) up to -35dB',
     '40-Hour Continuous Playback on a single 10-minute Type-C fast charge',
     'Custom 40mm Dynamic Drivers for crystal-clear acoustics and deep bass',
     'Ergonomic Foldable Design with ultra-soft memory foam cushion earcups',
@@ -80,7 +84,7 @@ const PRODUCT_PAGE_CONFIG = {
     'Charging Time': '1.5 Hours (Type-C Fast Charge)',
     'Driver Unit': '40mm Neodymium Magnet',
     'Weight': '235g Light Weight',
-    'Warranty': '1 Year Official Warranty (১ বছরের অফিসিয়াল ওয়ারেন্টি)',
+    'Warranty': '1 Year Official Warranty',
   },
 
   // 7. Size Chart Settings (Optional for Clothing/Apparel)
@@ -91,7 +95,7 @@ const PRODUCT_PAGE_CONFIG = {
   // --------------------------------------------------------------------------
   showSizeChart: true,
   sizeChart: {
-    title: 'Size Guide & Measurement Chart (সাইজ নির্দেশিকা)',
+    title: 'Size Guide & Measurement Chart',
     headers: ['Size', 'Ear Cup Diameter', 'Headband Span', 'Recommended Fit'],
     rows: [
       ['Standard', '75 mm', '28 - 34 cm', 'Universal Daily Fit'],
@@ -102,18 +106,18 @@ const PRODUCT_PAGE_CONFIG = {
 
   // 8. Delivery Details & COD Info
   delivery: {
-    insideDhaka: '৳৬০ (ঢাকায় ১-২ দিনের মধ্যে ডেলিভারি)',
-    outsideDhaka: '৳১২০ (ঢাকার বাইরে ২-৩ দিনের মধ্যে ডেলিভারি)',
-    timeframe: '১ থেকে ৩ কার্যদিবসের মধ্যে ডেলিভারি সম্পন্ন হয়',
+    insideDhaka: '৳60 (1-2 Days Delivery inside Dhaka)',
+    outsideDhaka: '৳120 (2-3 Days Delivery outside Dhaka)',
+    timeframe: '1 to 3 business days',
     codAvailable: true,
     codDescription:
-      'ক্যাশ অন ডেলিভারি সুবিধা আছে। পার্সেল ডেলিভারি ম্যানের সামনে খুলে দেখে চেক করে মূল্য পরিশোধ করুন।',
+      'Cash on delivery available. Open the package and verify before making payment.',
   },
 
   // 9. Combo Package Deal
   comboPackage: {
     enabled: true,
-    title: 'Special Value Combo Package (স্পেশাল কম্বো অফার)',
+    title: 'Special Value Combo Package',
     subtitle: 'Buy this Headphones set together with protection accessories & save ৳30 extra!',
     comboPrice: 199.0,
     originalPrice: 250.0,
@@ -134,32 +138,10 @@ export const ProductDetailPage: React.FC = () => {
     setView,
     setSelectedCategory,
     reviewsList,
+    ordersHistory,
     showToast,
     isLoading
   } = useStore();
-
-  if (isLoading) {
-    return (
-      <div className="max-w-[1536px] mx-auto px-4 py-8 animate-pulse">
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 pb-16 border-b border-slate-200">
-          <div className="w-full lg:w-1/2">
-            <div className="aspect-square bg-slate-200 rounded-3xl w-full mb-4"></div>
-            <div className="flex gap-4">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="aspect-square bg-slate-200 rounded-2xl w-24"></div>
-              ))}
-            </div>
-          </div>
-          <div className="w-full lg:w-1/2 space-y-6">
-            <div className="h-8 bg-slate-200 rounded-xl w-3/4"></div>
-            <div className="h-6 bg-slate-200 rounded-xl w-1/2"></div>
-            <div className="h-24 bg-slate-200 rounded-2xl w-full"></div>
-            <div className="h-12 bg-slate-200 rounded-2xl w-full"></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   // Selected state from CONFIG or active product
   const storeProduct = products.find((p) => p.id === selectedProductId) || products[0] || {} as any;
@@ -217,7 +199,8 @@ export const ProductDetailPage: React.FC = () => {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsStickyVisible(!entry.isIntersecting);
+        // Show sticky bar only if the target is out of view AND it is above the viewport
+        setIsStickyVisible(!entry.isIntersecting && entry.boundingClientRect.y < 0);
       },
       {
         root: null,
@@ -257,14 +240,20 @@ export const ProductDetailPage: React.FC = () => {
   const [newReviewAuthor, setNewReviewAuthor] = useState('');
   const [newReviewRating, setNewReviewRating] = useState(5);
   const [newReviewComment, setNewReviewComment] = useState('');
+
+  // Pagination state for reviews
+  const [reviewPage, setReviewPage] = useState(0);
+  const [reviewDirection, setReviewDirection] = useState<'next' | 'prev'>('next');
+  const REVIEWS_PER_PAGE = 5;
+
   const [localReviews, setLocalReviews] = useState([
     {
       id: 'r-101',
-      author: 'Tanvir Hossain (তানভীর হোসেন)',
+      author: 'Tanvir Hossain',
       rating: 5,
       date: 'Yesterday',
       comment:
-        'অসাধারণ হেডফোন! সাউন্ড কোয়ালিটি এবং বেস খুব জোস। ক্যাশ অন ডেলিভারিতে ১ দিনেই হাতে পেয়েছি। ধন্যবাদ!',
+        'Outstanding headphones! Sound quality and bass are fantastic. Received in 1 day via Cash on Delivery. Thank you!',
     },
     {
       id: 'r-102',
@@ -281,10 +270,104 @@ export const ProductDetailPage: React.FC = () => {
       date: '1 week ago',
       comment: 'Very comfortable ear cushions. Product original and packaging was safe.',
     },
+    {
+      id: 'r-104',
+      author: 'Mahfuz Hasan',
+      rating: 5,
+      date: '1 week ago',
+      comment: 'Crystal clear audio during gaming and online meetings. Best purchase!',
+    },
+    {
+      id: 'r-105',
+      author: 'Sadia Afrin',
+      rating: 5,
+      date: '2 weeks ago',
+      comment: 'Fast delivery and authentic product. Highly recommended.',
+    },
+    {
+      id: 'r-106',
+      author: 'Farhan Ahmed',
+      rating: 4,
+      date: '2 weeks ago',
+      comment: 'Build quality is premium. Noise cancellation is very effective.',
+    },
+    {
+      id: 'r-107',
+      author: 'Nusrat Jahan',
+      rating: 5,
+      date: '3 weeks ago',
+      comment: 'Super bass and long battery life. Worth every penny!',
+    },
+    {
+      id: 'r-108',
+      author: 'Kazi Imran',
+      rating: 5,
+      date: '1 month ago',
+      comment: 'Seamless Bluetooth connection with my laptop and phone.',
+    },
+    {
+      id: 'r-109',
+      author: 'Sumaiya Akter',
+      rating: 4,
+      date: '1 month ago',
+      comment: 'Lightweight design and soft ear cups. Great for long study sessions.',
+    },
+    {
+      id: 'r-110',
+      author: 'Tareq Rahman',
+      rating: 5,
+      date: '1 month ago',
+      comment: 'Delivery within 24 hours in Dhaka. Top notch service!',
+    },
+    {
+      id: 'r-111',
+      author: 'Bilkis Khanom',
+      rating: 5,
+      date: '2 months ago',
+      comment: 'Premium packaging, comes with Type-C fast charging cable.',
+    },
+    {
+      id: 'r-112',
+      author: 'Shakil Chowdhury',
+      rating: 4,
+      date: '2 months ago',
+      comment: 'Excellent sound stage and active noise cancellation.',
+    },
   ]);
+
+  const totalReviewPages = Math.ceil(localReviews.length / REVIEWS_PER_PAGE);
+  const currentReviews = localReviews.slice(
+    reviewPage * REVIEWS_PER_PAGE,
+    (reviewPage + 1) * REVIEWS_PER_PAGE
+  );
+
+  // User review quota per product based on purchases
+  const [userReviewsCountMap, setUserReviewsCountMap] = useState<Record<string, number>>(() => {
+    try {
+      const saved = localStorage.getItem('vamos_user_product_reviews_submitted');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  const purchasedCount = (ordersHistory || []).reduce((total, order) => {
+    const matchingItems = (order.items || []).filter(
+      (item) => item.product && item.product.id === storeProduct.id
+    );
+    const count = matchingItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    return total + count;
+  }, 0);
+
+  const userSubmittedCount = userReviewsCountMap[storeProduct.id] || 0;
+  const remainingReviewsAllowed = Math.max(0, purchasedCount - userSubmittedCount);
 
   const handleAddReview = (e: React.FormEvent) => {
     e.preventDefault();
+    if (remainingReviewsAllowed <= 0) {
+      showToast('You must purchase this product to leave a review.', 'error');
+      return;
+    }
     if (!newReviewAuthor.trim() || !newReviewComment.trim()) {
       showToast('Please enter your name and review comment.', 'error');
       return;
@@ -297,10 +380,24 @@ export const ProductDetailPage: React.FC = () => {
       comment: newReviewComment,
     };
     setLocalReviews([newRev, ...localReviews]);
+    setReviewDirection('prev');
+    setReviewPage(0); // Jump to first page so user sees new review immediately
     setNewReviewAuthor('');
     setNewReviewComment('');
     setNewReviewRating(5);
-    showToast('ধন্যবাদ! আপনার রিভিউ সফলভাবে জমা হয়েছে। (Review submitted!)', 'success');
+
+    setUserReviewsCountMap((prev) => {
+      const current = prev[storeProduct.id] || 0;
+      const updated = { ...prev, [storeProduct.id]: current + 1 };
+      try {
+        localStorage.setItem('vamos_user_product_reviews_submitted', JSON.stringify(updated));
+      } catch (err) {
+        console.error(err);
+      }
+      return updated;
+    });
+
+    showToast('Thank you! Your verified review has been submitted.', 'success');
   };
 
   const handleAddToCartAction = () => {
@@ -315,6 +412,29 @@ export const ProductDetailPage: React.FC = () => {
   };
 
   const relatedItems = products.filter((p) => p.id !== storeProduct.id).slice(0, 4);
+
+  if (isLoading) {
+    return (
+      <div className="max-w-[1536px] mx-auto px-4 py-8 animate-pulse">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 pb-16 border-b border-slate-200">
+          <div className="w-full lg:w-1/2">
+            <div className="aspect-square bg-slate-200 rounded-3xl w-full mb-4"></div>
+            <div className="flex gap-4">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="aspect-square bg-slate-200 rounded-2xl w-24"></div>
+              ))}
+            </div>
+          </div>
+          <div className="w-full lg:w-1/2 space-y-6">
+            <div className="h-8 bg-slate-200 rounded-xl w-3/4"></div>
+            <div className="h-6 bg-slate-200 rounded-xl w-1/2"></div>
+            <div className="h-24 bg-slate-200 rounded-2xl w-full"></div>
+            <div className="h-12 bg-slate-200 rounded-2xl w-full"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="font-['Hind_Siliguri','Plus_Jakarta_Sans',sans-serif] bg-slate-50 text-[#2C3539] pb-28 sm:pb-24 animate-in fade-in duration-300">
@@ -375,10 +495,10 @@ export const ProductDetailPage: React.FC = () => {
             <div className="flex items-center gap-2 text-xs">
               <div className="flex items-center gap-1 text-amber-500 font-bold bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200/80">
                 <Star className="w-3.5 h-3.5 fill-current" />
-                <span>⭐ {displayRating}</span>
+                <span>{displayRating}</span>
               </div>
               <span className="text-[#6B7280] text-xs font-semibold">
-                | {displayReviews} Reviews (গ্রাহক রিভিউ)
+                | {displayReviews} Reviews
               </span>
             </div>
 
@@ -386,7 +506,7 @@ export const ProductDetailPage: React.FC = () => {
             <div className="py-2 px-3 bg-[#F9FAFB] rounded-xl border border-[#E5E7EB] flex items-center justify-between gap-3">
               <div>
                 <span className="text-[11px] text-[#6B7280] block font-semibold leading-none mb-0.5">
-                  স্পেশাল অফার মূল্য:
+                  Special Offer Price:
                 </span>
                 <div className="flex items-baseline gap-2">
                   <span className="text-2xl font-black text-[#2B080C] font-mono leading-none">
@@ -398,7 +518,7 @@ export const ProductDetailPage: React.FC = () => {
                 </div>
               </div>
               <span className="bg-[#2B080C] text-white text-xs font-extrabold px-2.5 py-1 rounded-full border border-[#2B080C]">
-                {PRODUCT_PAGE_CONFIG.discountPercentage} ছাড়
+                {PRODUCT_PAGE_CONFIG.discountPercentage} OFF
               </span>
             </div>
 
@@ -435,11 +555,11 @@ export const ProductDetailPage: React.FC = () => {
               {!PRODUCT_PAGE_CONFIG.isOutOfStock ? (
                 <span className="inline-flex items-center gap-1.5 bg-[#2B080C]/10 text-[#2B080C] text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-[#2B080C]/20">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#2B080C] animate-ping" />
-                  ✓ স্টকে আছে ({PRODUCT_PAGE_CONFIG.stockCount} টি পিস অবশিষ্ট আছে)
+                  ✓ In Stock ({PRODUCT_PAGE_CONFIG.stockCount} items left)
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1.5 bg-rose-100 text-rose-900 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-rose-300">
-                  ✕ স্টক আউট (Sold Out)
+                  ✕ Out of Stock
                 </span>
               )}
             </div>
@@ -448,7 +568,7 @@ export const ProductDetailPage: React.FC = () => {
             {PRODUCT_PAGE_CONFIG.colors && (
               <div className="space-y-1 mb-5">
                 <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block">
-                  কালার অপশন (Select Color):
+                  Select Color:
                 </label>
                 <div className="flex flex-wrap gap-1.5">
                   {PRODUCT_PAGE_CONFIG.colors.map((col) => (
@@ -472,7 +592,7 @@ export const ProductDetailPage: React.FC = () => {
             {PRODUCT_PAGE_CONFIG.sizes && (
               <div className="space-y-1 mb-5">
                 <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block">
-                  সাইজ ভ্যারিয়েন্ট (Select Size):
+                  Select Size:
                 </label>
                 <div className="flex flex-wrap gap-1.5">
                   {PRODUCT_PAGE_CONFIG.sizes.map((sz) => (
@@ -495,7 +615,7 @@ export const ProductDetailPage: React.FC = () => {
             {/* Quantity Selector */}
             <div className="space-y-1 mb-7">
               <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block">
-                পরিমাণ (Quantity):
+                Quantity:
               </label>
               <div className="inline-flex items-center bg-[#F9FAFB] border border-[#E5E7EB] rounded-lg p-0.5">
                 <button
@@ -515,22 +635,22 @@ export const ProductDetailPage: React.FC = () => {
             </div>
 
             {/* Action Buttons: Add to Cart & Buy Now */}
-            <div ref={mainCtaRef} className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 mt-2">
+            <div ref={mainCtaRef} className="grid grid-cols-2 gap-2 sm:gap-2.5 pt-1 mt-2">
               <button
                 onClick={handleAddToCartAction}
-                className={`py-2.5 px-5 rounded-xl font-extrabold text-xs sm:text-sm border-2 transition-all flex items-center justify-center gap-2 ${
+                className={`py-2.5 px-2 sm:px-5 rounded-xl font-extrabold text-[11px] sm:text-sm border-2 transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${
                   isAddedToCart
                     ? 'bg-[#0B0E14] text-white border-[#0B0E14]'
                     : 'bg-[#2B080C] hover:bg-[#380B0F] text-white border-[#2B080C] shadow-sm'
                 }`}
               >
-                <ShoppingBag className="w-4 h-4 text-white" />
-                <span>{isAddedToCart ? 'Added to Cart!' : 'Add to Cart'}</span>
+                <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white shrink-0" />
+                <span className="truncate">{isAddedToCart ? 'Added!' : 'Add to Cart'}</span>
               </button>
 
               <button
                 onClick={handleBuyNowAction}
-                className="py-2.5 px-5 bg-white border-2 border-[#111827] hover:bg-[#111827] text-[#2C3539] hover:text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-2xs transition-all flex items-center justify-center"
+                className="py-2.5 px-2 sm:px-5 bg-white border-2 border-[#111827] hover:bg-[#111827] text-[#2C3539] hover:text-white font-extrabold text-[11px] sm:text-sm rounded-xl shadow-2xs transition-all flex items-center justify-center truncate"
               >
                 <span>Buy Now</span>
               </button>
@@ -545,7 +665,7 @@ export const ProductDetailPage: React.FC = () => {
           <div className="border-b border-slate-100 pb-4">
             <h2 className="text-xl font-extrabold text-[#2C3539] font-serif flex items-center gap-2">
               <CheckCircle2 className="w-5 h-5 text-[#2B080C]" />
-              পণ্যের বিস্তারিত বিবরণ (Product Description & Specs)
+              Product Description & Specs
             </h2>
           </div>
 
@@ -555,7 +675,7 @@ export const ProductDetailPage: React.FC = () => {
 
           {/* Key features checklist */}
           <div className="space-y-3 pt-2">
-            <h3 className="text-sm font-extrabold text-[#2C3539]">মূল বৈশিষ্ট্যসমূহ (Key Features):</h3>
+            <h3 className="text-sm font-extrabold text-[#2C3539]">Key Features:</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
               {PRODUCT_PAGE_CONFIG.features.map((feat, idx) => (
                 <div key={idx} className="flex items-start gap-2.5 p-3 bg-[#F9FAFB] rounded-xl border border-[#E5E7EB] text-xs font-semibold text-[#2C3539]">
@@ -568,7 +688,7 @@ export const ProductDetailPage: React.FC = () => {
 
           {/* Specifications table */}
           <div className="space-y-3 pt-2">
-            <h3 className="text-sm font-extrabold text-[#2C3539]">প্রযুক্তিগত বৈশিষ্ট্য (Specifications):</h3>
+            <h3 className="text-sm font-extrabold text-[#2C3539]">Specifications:</h3>
             <div className="border border-slate-200 rounded-2xl overflow-hidden divide-y divide-slate-100 text-xs">
               {Object.entries(PRODUCT_PAGE_CONFIG.specifications).map(([key, val]) => (
                 <div key={key} className="flex p-3 bg-white even:bg-slate-50/60">
@@ -627,14 +747,14 @@ export const ProductDetailPage: React.FC = () => {
         <section className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E5E7EB] shadow-xs space-y-4">
           <h2 className="text-lg font-extrabold text-[#2C3539] font-serif flex items-center gap-2 border-b border-slate-100 pb-3">
             <Truck className="w-5 h-5 text-[#2B080C]" />
-            ডেলিভারি সংক্রান্ত তথ্য (Delivery Charges & Info)
+            Delivery Charges & Info
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div className="p-4 bg-[#F9FAFB] border border-[#E5E7EB] rounded-2xl space-y-1">
               <div className="flex items-center gap-2 font-bold text-[#2C3539]">
                 <MapPin className="w-4 h-4 text-[#2B080C]" />
-                <span>ঢাকার ভিতরে ডেলিভারি চার্জ:</span>
+                <span>Delivery Charge Inside Dhaka:</span>
               </div>
               <p className="font-mono text-[#2B080C] text-sm font-bold">
                 {PRODUCT_PAGE_CONFIG.delivery.insideDhaka}
@@ -644,7 +764,7 @@ export const ProductDetailPage: React.FC = () => {
             <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-1">
               <div className="flex items-center gap-2 font-bold text-[#2C3539]">
                 <Truck className="w-4 h-4 text-slate-600" />
-                <span>ঢাকার বাইরে ডেলিভারি চার্জ:</span>
+                <span>Delivery Charge Outside Dhaka:</span>
               </div>
               <p className="font-mono text-[#2C3539] text-sm font-bold">
                 {PRODUCT_PAGE_CONFIG.delivery.outsideDhaka}
@@ -655,11 +775,11 @@ export const ProductDetailPage: React.FC = () => {
           <div className="p-4 bg-amber-50/80 border border-amber-200 rounded-2xl space-y-2 text-xs text-amber-950">
             <div className="flex items-center gap-2 font-bold">
               <Banknote className="w-4 h-4 text-amber-700" />
-              <span>ক্যাশ অন ডেলিভারি (Cash on Delivery) সুবিধা:</span>
+              <span>Cash on Delivery Available:</span>
             </div>
             <p className="leading-relaxed">{PRODUCT_PAGE_CONFIG.delivery.codDescription}</p>
             <p className="font-semibold text-slate-700">
-              ডেলিভারির সময়সীমা: <strong>{PRODUCT_PAGE_CONFIG.delivery.timeframe}</strong>
+              Estimated Delivery Time: <strong>{PRODUCT_PAGE_CONFIG.delivery.timeframe}</strong>
             </p>
           </div>
         </section>
@@ -668,95 +788,207 @@ export const ProductDetailPage: React.FC = () => {
            5. REVIEWS SECTION (REVIEWS LIST + SUBMIT REVIEW FORM)
            ==================================================================== */}
         <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-            <h2 className="text-lg font-extrabold text-[#2C3539] font-serif">
-              গ্রাহক মূল্যায়ন ও রিভিউ ({localReviews.length})
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-2">
+            <h2 className="text-base sm:text-lg font-extrabold text-[#2C3539] font-serif truncate">
+              Customer Reviews ({localReviews.length})
             </h2>
-            <div className="flex items-center gap-1 text-amber-500 font-bold text-xs">
+            <div className="flex items-center gap-1.5 text-amber-500 font-bold text-xs shrink-0">
               <Star className="w-4 h-4 fill-current" />
-              <span>⭐ {PRODUCT_PAGE_CONFIG.rating} / 5.0</span>
+              <span>{PRODUCT_PAGE_CONFIG.rating} / 5.0</span>
             </div>
           </div>
 
-          {/* Existing Reviews */}
-          <div className="space-y-3">
-            {localReviews.map((rev) => (
-              <div key={rev.id} className="p-4 bg-slate-50 rounded-2xl border border-slate-200/70 space-y-2 text-xs">
-                <div className="flex justify-between items-center">
-                  <span className="font-extrabold text-[#2C3539]">{rev.author}</span>
-                  <span className="text-slate-400 font-mono text-[10px]">{rev.date}</span>
-                </div>
-                <div className="flex items-center gap-1 text-amber-500">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-3.5 h-3.5 ${i < rev.rating ? 'fill-current' : 'text-slate-200'}`}
-                    />
-                  ))}
-                </div>
-                <p className="text-slate-700 leading-relaxed font-medium">"{rev.comment}"</p>
+          {/* Existing Reviews (Paginated max 5 per page with smooth transition) */}
+          <div className="overflow-hidden min-h-[380px]">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={reviewPage}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.18, ease: 'easeOut' }}
+                className="space-y-3 w-full"
+              >
+                {currentReviews.map((rev) => (
+                  <div key={rev.id} className="p-4 bg-slate-50 rounded-2xl border border-slate-200/70 space-y-2 text-xs">
+                    <div className="flex justify-between items-center">
+                      <span className="font-extrabold text-[#2C3539]">{rev.author}</span>
+                      <span className="text-slate-400 font-mono text-[10px]">{rev.date}</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-amber-500">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-3.5 h-3.5 ${i < rev.rating ? 'fill-current' : 'text-slate-200'}`}
+                        />
+                      ))}
+                    </div>
+                    <p className="text-slate-700 leading-relaxed font-medium">"{rev.comment}"</p>
+                  </div>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Review Pagination Buttons (Above Leave a Review Section) */}
+          {localReviews.length > REVIEWS_PER_PAGE && (
+            <div className="flex items-center justify-between pt-3 border-t border-slate-100 gap-2 flex-wrap">
+              <span className="text-[11px] sm:text-xs font-semibold text-slate-500">
+                Page {reviewPage + 1} of {totalReviewPages} ({reviewPage * REVIEWS_PER_PAGE + 1} - {Math.min((reviewPage + 1) * REVIEWS_PER_PAGE, localReviews.length)} of {localReviews.length})
+              </span>
+
+              <div className="flex items-center gap-2 ml-auto">
+                {/* Back Button (Appears only after first click / when reviewPage > 0) */}
+                {reviewPage > 0 && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setReviewDirection('prev');
+                      setReviewPage((prev) => Math.max(0, prev - 1));
+                    }}
+                    className="py-1.5 px-3 bg-white border border-slate-300 hover:bg-slate-100 text-[#2C3539] text-xs font-extrabold rounded-xl shadow-2xs transition-all flex items-center gap-1 active:scale-95 cursor-pointer touch-manipulation"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5 text-[#2C3539]" />
+                    <span>Back</span>
+                  </button>
+                )}
+
+                {/* Next Button */}
+                <button
+                  type="button"
+                  disabled={reviewPage >= totalReviewPages - 1}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (reviewPage < totalReviewPages - 1) {
+                      setReviewDirection('next');
+                      setReviewPage((prev) => Math.min(totalReviewPages - 1, prev + 1));
+                    }
+                  }}
+                  className={`py-1.5 px-3.5 text-xs font-extrabold rounded-xl transition-all flex items-center gap-1 touch-manipulation ${
+                    reviewPage >= totalReviewPages - 1
+                      ? 'bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed opacity-60'
+                      : 'bg-[#2B080C] hover:bg-[#380B0F] text-white shadow-xs active:scale-95 cursor-pointer'
+                  }`}
+                >
+                  <span>Next</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
               </div>
-            ))}
-          </div>
-
-          {/* Write a Review Form */}
-          <div className="p-5 sm:p-6 bg-[#2B080C]/5 border border-[#2B080C]/15 text-[#2C3539] rounded-2xl space-y-4 pt-4 shadow-2xs">
-            <div className="border-b border-[#2B080C]/10 pb-2">
-              <h3 className="font-bold text-sm text-[#2C3539]">একটি নতুন রিভিউ প্রদান করুন (Leave a Review)</h3>
-              <p className="text-[11px] text-slate-500">
-                (Note: Only buyers who purchased this product can leave verified feedback)
-              </p>
             </div>
+          )}
 
-            <form onSubmit={handleAddReview} className="space-y-3 text-xs">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {/* Write a Review Form - Conditional based on Purchase History & Quota */}
+          {purchasedCount === 0 ? (
+            <div className="p-5 sm:p-6 bg-slate-50 border border-slate-200 text-[#2C3539] rounded-2xl space-y-3 pt-4 shadow-2xs">
+              <div className="flex items-start gap-3">
+                <div className="p-2.5 bg-amber-100 text-amber-800 rounded-xl shrink-0">
+                  <Lock className="w-5 h-5" />
+                </div>
+                <div className="space-y-1.5">
+                  <h3 className="font-bold text-sm text-[#2C3539]">Leave a Review (Verified Buyers Only)</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    You must purchase this product before leaving a review. Once ordered, you can submit verified feedback for each purchase!
+                  </p>
+                  <div className="pt-1">
+                    <button
+                      type="button"
+                      onClick={handleBuyNowAction}
+                      className="px-4 py-2 bg-[#2B080C] hover:bg-[#380B0F] text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 shadow-2xs active:scale-95 cursor-pointer"
+                    >
+                      <ShoppingBag className="w-3.5 h-3.5" />
+                      <span>Buy Now to Unlock Review</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : remainingReviewsAllowed === 0 ? (
+            <div className="p-5 sm:p-6 bg-emerald-50 border border-emerald-200 text-[#2C3539] rounded-2xl space-y-3 pt-4 shadow-2xs">
+              <div className="flex items-start gap-3">
+                <div className="p-2.5 bg-emerald-100 text-emerald-800 rounded-xl shrink-0">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-700" />
+                </div>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="font-bold text-sm text-emerald-950">Thank you for your feedback!</h3>
+                    <span className="px-2 py-0.5 bg-emerald-200 text-emerald-900 font-extrabold text-[10px] rounded-md">
+                      {userSubmittedCount}/{purchasedCount} Reviews Submitted
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    You have submitted feedback for all your purchases of this product. If you purchase this product again in the future, you will unlock another review attempt!
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="p-5 sm:p-6 bg-[#2B080C]/5 border border-[#2B080C]/15 text-[#2C3539] rounded-2xl space-y-4 pt-4 shadow-2xs">
+              <div className="border-b border-[#2B080C]/10 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
-                  <label className="block text-slate-700 mb-1 font-bold">আপনার নাম (Your Name)</label>
-                  <input
-                    type="text"
-                    value={newReviewAuthor}
-                    onChange={(e) => setNewReviewAuthor(e.target.value)}
-                    placeholder="e.g. Tanvir Hossain"
+                  <div className="flex items-center gap-1.5 text-emerald-700 font-bold text-xs mb-0.5">
+                    <CheckCircle2 className="w-4 h-4 fill-emerald-100 text-emerald-700" />
+                    <span>Verified Purchaser</span>
+                  </div>
+                  <h3 className="font-bold text-sm text-[#2C3539]">Leave a Review</h3>
+                </div>
+                <div className="px-3 py-1 bg-amber-100 border border-amber-300 text-amber-900 rounded-xl text-[11px] font-bold self-start sm:self-auto">
+                  Remaining Reviews: {remainingReviewsAllowed} of {purchasedCount} purchase(s)
+                </div>
+              </div>
+
+              <form onSubmit={handleAddReview} className="space-y-3 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-slate-700 mb-1 font-bold">Your Name</label>
+                    <input
+                      type="text"
+                      value={newReviewAuthor}
+                      onChange={(e) => setNewReviewAuthor(e.target.value)}
+                      placeholder="e.g. Tanvir Hossain"
+                      className="w-full p-2.5 bg-white border-2 border-slate-300 focus:border-[#2B080C] rounded-xl text-[#2C3539] outline-none font-medium transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-700 mb-1 font-bold">Rating</label>
+                    <select
+                      value={newReviewRating}
+                      onChange={(e) => setNewReviewRating(Number(e.target.value))}
+                      className="w-full p-2.5 bg-white border-2 border-slate-300 focus:border-[#2B080C] rounded-xl text-[#2C3539] outline-none font-medium cursor-pointer transition-all"
+                    >
+                      <option value={5}>⭐⭐⭐⭐⭐ 5 Stars - Excellent</option>
+                      <option value={4}>⭐⭐⭐⭐ 4 Stars - Very Good</option>
+                      <option value={3}>⭐⭐⭐ 3 Stars - Average</option>
+                      <option value={2}>⭐⭐ 2 Stars - Poor</option>
+                      <option value={1}>⭐ 1 Star - Very Bad</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-slate-700 mb-1 font-bold">Comment</label>
+                  <textarea
+                    rows={2}
+                    value={newReviewComment}
+                    onChange={(e) => setNewReviewComment(e.target.value)}
+                    placeholder="Write your feedback about the product..."
                     className="w-full p-2.5 bg-white border-2 border-slate-300 focus:border-[#2B080C] rounded-xl text-[#2C3539] outline-none font-medium transition-all"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-slate-700 mb-1 font-bold">রেটিং দিন (Rating)</label>
-                  <select
-                    value={newReviewRating}
-                    onChange={(e) => setNewReviewRating(Number(e.target.value))}
-                    className="w-full p-2.5 bg-white border-2 border-slate-300 focus:border-[#2B080C] rounded-xl text-[#2C3539] outline-none font-medium cursor-pointer transition-all"
-                  >
-                    <option value={5}>⭐⭐⭐⭐⭐ 5 Stars - Excellent</option>
-                    <option value={4}>⭐⭐⭐⭐ 4 Stars - Very Good</option>
-                    <option value={3}>⭐⭐⭐ 3 Stars - Average</option>
-                    <option value={2}>⭐⭐ 2 Stars - Poor</option>
-                    <option value={1}>⭐ 1 Star - Very Bad</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-slate-700 mb-1 font-bold">আপনার অভিজ্ঞতা বা বক্তব্য (Comment)</label>
-                <textarea
-                  rows={2}
-                  value={newReviewComment}
-                  onChange={(e) => setNewReviewComment(e.target.value)}
-                  placeholder="পণ্যটির মান ও অভিজ্ঞতা সম্পর্কে লিখুন..."
-                  className="w-full p-2.5 bg-white border-2 border-slate-300 focus:border-[#2B080C] rounded-xl text-[#2C3539] outline-none font-medium transition-all"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="px-6 py-2.5 bg-[#2B080C] hover:bg-[#380B0F] text-white font-extrabold rounded-xl transition-all flex items-center gap-2 shadow-sm"
-              >
-                <Send className="w-3.5 h-3.5" />
-                <span>রিভিউ জমা দিন (Submit Review)</span>
-              </button>
-            </form>
-          </div>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 bg-[#2B080C] hover:bg-[#380B0F] text-white font-extrabold rounded-xl transition-all flex items-center gap-2 shadow-sm cursor-pointer active:scale-95"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>Submit Review</span>
+                </button>
+              </form>
+            </div>
+          )}
         </section>
 
         {/* ====================================================================
@@ -778,7 +1010,7 @@ export const ProductDetailPage: React.FC = () => {
               </div>
 
               <div className="text-right">
-                <span className="text-xs text-emerald-400 block font-semibold">কম্বো প্যাকেজ মূল্য:</span>
+                <span className="text-xs text-emerald-400 block font-semibold">Combo Package Price:</span>
                 <div className="flex items-baseline gap-2">
                   <span className="text-2xl font-black text-amber-300 font-mono">
                     ৳{PRODUCT_PAGE_CONFIG.comboPackage.comboPrice.toFixed(2)}
@@ -818,7 +1050,7 @@ export const ProductDetailPage: React.FC = () => {
            ==================================================================== */}
         <section className="space-y-4 pt-2">
           <h2 className="text-xl font-extrabold text-[#2C3539] font-serif">
-            সম্পর্কিত অন্যান্য পণ্য (Related Products)
+            Related Products
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {relatedItems.map((relItem) => (

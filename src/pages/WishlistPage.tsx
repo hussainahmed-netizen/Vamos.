@@ -79,7 +79,7 @@ export const WishlistPage: React.FC = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3.5 sm:gap-4 lg:gap-5">
             {favoritedProducts.map((product, index) => (
               <div
-                key={product.id}
+                key={`${product.id}-${index}`}
                 className="animate-fade-in-up opacity-0"
                 style={{
                   animationDelay: `${index * 60}ms`,

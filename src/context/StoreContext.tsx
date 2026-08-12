@@ -106,7 +106,9 @@ interface StoreContextType {
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [products, setProducts] = useState<Product[]>(MOCK_PRODUCTS);
+  const [products, setProducts] = useState<Product[]>(() => 
+    Array.from(new Map(MOCK_PRODUCTS.map((p) => [p.id, p])).values())
+  );
   const [categories, setCategories] = useState<CategoryItem[]>(MOCK_CATEGORIES);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -280,7 +282,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             isDeal: p.is_deal,
             dealEndsInHours: p.deal_ends_in_hours
           }));
-          setProducts(mappedProds);
+          const uniqueProds = Array.from(new Map(mappedProds.map(p => [p.id, p])).values());
+          setProducts(uniqueProds);
         }
 
       } catch (err: any) {

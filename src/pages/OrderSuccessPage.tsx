@@ -91,8 +91,8 @@ export const OrderSuccessPage: React.FC = () => {
         <div className="space-y-3 pt-2">
           <h3 className="font-bold text-[#2C3539] text-sm">Order Items</h3>
           <div className="divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden">
-            {currentOrder.items.map((item) => (
-              <div key={item.product.id} className="p-4 flex items-center justify-between gap-4 text-xs bg-white">
+            {currentOrder.items.map((item, index) => (
+              <div key={`${item.product.id}-${index}`} className="p-4 flex items-center justify-between gap-4 text-xs bg-white">
                 <div className="flex items-center gap-3">
                   <img
                     src={item.product.images[0]}

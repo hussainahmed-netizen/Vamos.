@@ -66,13 +66,13 @@ export const CheckoutPage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-in fade-in duration-300">
+    <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 pt-3 pb-8 sm:py-8 space-y-5 sm:space-y-8 animate-in fade-in duration-300">
       {/* Header & Stepper */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-8 bg-[#2B080C]/5 border border-[#2B080C]/15 rounded-3xl shadow-2xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 p-3.5 sm:p-8 bg-[#2B080C]/5 border border-[#2B080C]/15 rounded-2xl sm:rounded-3xl shadow-2xs">
         <div>
           <button
             onClick={() => setView('cart')}
-            className="text-xs font-bold text-[#2B080C] hover:underline flex items-center gap-1 mb-2"
+            className="text-xs font-bold text-[#2B080C] hover:underline flex items-center gap-1 mb-1 sm:mb-2"
           >
             <ArrowLeft className="w-3.5 h-3.5" /> Back to Shopping Cart
           </button>
@@ -80,33 +80,33 @@ export const CheckoutPage: React.FC = () => {
         </div>
 
         {/* Stepper indicator */}
-        <div className="flex items-center gap-3 text-xs font-bold">
+        <div className="hidden sm:flex items-center justify-between sm:justify-start gap-1 sm:gap-3 text-[10px] sm:text-xs font-bold w-full sm:w-auto py-1">
           <div
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-full transition-all ${
+            className={`flex-1 sm:flex-none flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3.5 py-1.5 sm:py-2 rounded-full transition-all text-center ${
               step === 1 ? 'bg-[#2B080C] text-white shadow-xs' : 'bg-[#2B080C]/10 text-[#2B080C] border border-[#2B080C]/20'
             }`}
           >
-            <span className={`w-5 h-5 rounded-full flex items-center justify-center font-mono text-[10px] ${
+            <span className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center font-mono text-[9px] sm:text-[10px] shrink-0 ${
               step === 1 ? 'bg-white text-[#2B080C] font-extrabold' : 'bg-[#2B080C] text-white'
             }`}>
               1
             </span>
-            <span>Shipping Address</span>
+            <span className="whitespace-nowrap text-[10px] sm:text-xs">Shipping Address</span>
           </div>
 
-          <span className="text-slate-400">→</span>
+          <span className="text-slate-400 shrink-0 text-xs">→</span>
 
           <div
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-full transition-all ${
+            className={`flex-1 sm:flex-none flex items-center justify-center gap-1 sm:gap-2 px-2 sm:px-3.5 py-1.5 sm:py-2 rounded-full transition-all text-center ${
               step === 2 ? 'bg-[#2B080C] text-white shadow-xs' : 'bg-slate-100 text-slate-500 border border-slate-200'
             }`}
           >
-            <span className={`w-5 h-5 rounded-full flex items-center justify-center font-mono text-[10px] ${
+            <span className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center font-mono text-[9px] sm:text-[10px] shrink-0 ${
               step === 2 ? 'bg-white text-[#2B080C] font-extrabold' : 'bg-slate-200 text-slate-700'
             }`}>
               2
             </span>
-            <span>Payment Method</span>
+            <span className="whitespace-nowrap text-[10px] sm:text-xs">Payment Method</span>
           </div>
         </div>
       </div>
@@ -377,8 +377,8 @@ export const CheckoutPage: React.FC = () => {
             </h3>
 
             <div className="space-y-3 max-h-60 overflow-y-auto pr-1">
-              {cart.map((item) => (
-                <div key={item.product.id} className="flex items-center gap-3 text-xs">
+              {cart.map((item, index) => (
+                <div key={`${item.product.id}-${item.selectedColor || ''}-${item.selectedSize || ''}-${index}`} className="flex items-center gap-3 text-xs">
                   <img
                     src={item.product.images[0]}
                     alt={item.product.name}

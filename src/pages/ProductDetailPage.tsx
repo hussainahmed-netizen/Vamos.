@@ -888,15 +888,15 @@ export const ProductDetailPage: React.FC = () => {
                   <Lock className="w-5 h-5 lg:w-6 lg:h-6" />
                 </div>
                 <div className="space-y-1.5">
-                  <h3 className="font-bold text-sm lg:text-lg text-[#2C3539]">Leave a Review (Verified Buyers Only)</h3>
-                  <p className="text-xs lg:text-sm text-slate-600 leading-relaxed">
+                  <h3 className="font-bold text-sm lg:text-xl text-[#2C3539]">Leave a Review (Verified Buyers Only)</h3>
+                  <p className="text-xs lg:text-base text-slate-600 leading-relaxed">
                     You must purchase this product before leaving a review. Once ordered, you can submit verified feedback for each purchase!
                   </p>
                   <div className="pt-1">
                     <button
                       type="button"
                       onClick={handleBuyNowAction}
-                      className="px-4 py-2 bg-[#2B080C] hover:bg-[#380B0F] text-white text-xs lg:text-sm font-bold rounded-xl transition-all flex items-center gap-1.5 shadow-2xs active:scale-95 cursor-pointer"
+                      className="px-4 py-2 bg-[#2B080C] hover:bg-[#380B0F] text-white text-xs lg:text-base font-bold rounded-xl transition-all flex items-center gap-1.5 shadow-2xs active:scale-95 cursor-pointer"
                     >
                       <ShoppingBag className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
                       <span>Buy Now to Unlock Review</span>
@@ -913,12 +913,12 @@ export const ProductDetailPage: React.FC = () => {
                 </div>
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="font-bold text-sm lg:text-lg text-emerald-950">Thank you for your feedback!</h3>
-                    <span className="px-2 py-0.5 bg-emerald-200 text-emerald-900 font-extrabold text-[10px] lg:text-xs rounded-md">
+                    <h3 className="font-bold text-sm lg:text-xl text-emerald-950">Thank you for your feedback!</h3>
+                    <span className="px-2 py-0.5 bg-emerald-200 text-emerald-900 font-extrabold text-[10px] lg:text-sm rounded-md">
                       {userSubmittedCount}/{purchasedCount} Reviews Submitted
                     </span>
                   </div>
-                  <p className="text-xs lg:text-sm text-slate-600 leading-relaxed">
+                  <p className="text-xs lg:text-base text-slate-600 leading-relaxed">
                     You have submitted feedback for all your purchases of this product. If you purchase this product again in the future, you will unlock another review attempt!
                   </p>
                 </div>
@@ -928,36 +928,36 @@ export const ProductDetailPage: React.FC = () => {
             <div className="p-5 sm:p-6 bg-[#2B080C]/5 border border-[#2B080C]/15 text-[#2C3539] rounded-2xl space-y-4 pt-4 shadow-2xs">
               <div className="border-b border-[#2B080C]/10 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
-                  <div className="flex items-center gap-1.5 text-emerald-700 font-bold text-xs lg:text-sm mb-0.5">
+                  <div className="flex items-center gap-1.5 text-emerald-700 font-bold text-xs lg:text-base mb-0.5">
                     <CheckCircle2 className="w-4 h-4 lg:w-5 lg:h-5 fill-emerald-100 text-emerald-700" />
                     <span>Verified Purchaser</span>
                   </div>
-                  <h3 className="font-bold text-sm lg:text-lg text-[#2C3539]">Leave a Review</h3>
+                  <h3 className="font-bold text-sm lg:text-xl text-[#2C3539]">Leave a Review</h3>
                 </div>
-                <div className="px-3 py-1 bg-amber-100 border border-amber-300 text-amber-900 rounded-xl text-[11px] lg:text-xs font-bold self-start sm:self-auto">
+                <div className="px-3 py-1 bg-amber-100 border border-amber-300 text-amber-900 rounded-xl text-[11px] lg:text-sm font-bold self-start sm:self-auto">
                   Remaining Reviews: {remainingReviewsAllowed} of {purchasedCount} purchase(s)
                 </div>
               </div>
 
-              <form onSubmit={handleAddReview} className="space-y-3 text-xs lg:text-sm">
+              <form onSubmit={handleAddReview} className="space-y-3 text-xs lg:text-base">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-slate-700 mb-1 font-bold">Your Name</label>
+                    <label className="block text-slate-700 mb-1 font-bold lg:text-base">Your Name</label>
                     <input
                       type="text"
                       value={newReviewAuthor}
                       onChange={(e) => setNewReviewAuthor(e.target.value)}
                       placeholder="e.g. Tanvir Hossain"
-                      className="w-full p-2.5 bg-white border-2 border-slate-300 focus:border-[#2B080C] rounded-xl text-[#2C3539] outline-none font-medium transition-all text-xs lg:text-sm"
+                      className="w-full p-2.5 bg-white border-2 border-slate-300 focus:border-[#2B080C] rounded-xl text-[#2C3539] outline-none font-medium transition-all text-xs lg:text-base"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-slate-700 mb-1 font-bold">Rating</label>
+                    <label className="block text-slate-700 mb-1 font-bold lg:text-base">Rating</label>
                     <select
                       value={newReviewRating}
                       onChange={(e) => setNewReviewRating(Number(e.target.value))}
-                      className="w-full p-2.5 bg-white border-2 border-slate-300 focus:border-[#2B080C] rounded-xl text-[#2C3539] outline-none font-medium cursor-pointer transition-all text-xs lg:text-sm"
+                      className="w-full p-2.5 bg-white border-2 border-slate-300 focus:border-[#2B080C] rounded-xl text-[#2C3539] outline-none font-medium cursor-pointer transition-all text-xs lg:text-base"
                     >
                       <option value={5}>⭐⭐⭐⭐⭐ 5 Stars - Excellent</option>
                       <option value={4}>⭐⭐⭐⭐ 4 Stars - Very Good</option>
@@ -969,19 +969,19 @@ export const ProductDetailPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-slate-700 mb-1 font-bold">Comment</label>
+                  <label className="block text-slate-700 mb-1 font-bold lg:text-base">Comment</label>
                   <textarea
                     rows={2}
                     value={newReviewComment}
                     onChange={(e) => setNewReviewComment(e.target.value)}
                     placeholder="Write your feedback about the product..."
-                    className="w-full p-2.5 bg-white border-2 border-slate-300 focus:border-[#2B080C] rounded-xl text-[#2C3539] outline-none font-medium transition-all text-xs lg:text-sm"
+                    className="w-full p-2.5 bg-white border-2 border-slate-300 focus:border-[#2B080C] rounded-xl text-[#2C3539] outline-none font-medium transition-all text-xs lg:text-base"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="px-6 py-2.5 bg-[#2B080C] hover:bg-[#380B0F] text-white font-extrabold rounded-xl transition-all flex items-center gap-2 shadow-sm cursor-pointer active:scale-95 text-xs lg:text-sm"
+                  className="px-6 py-2.5 bg-[#2B080C] hover:bg-[#380B0F] text-white font-extrabold rounded-xl transition-all flex items-center gap-2 shadow-sm cursor-pointer active:scale-95 text-xs lg:text-base"
                 >
                   <Send className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
                   <span>Submit Review</span>
@@ -998,24 +998,24 @@ export const ProductDetailPage: React.FC = () => {
           <section className="bg-emerald-950 text-white rounded-3xl p-6 sm:p-8 space-y-5 border border-emerald-800 shadow-xl relative overflow-hidden">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-emerald-800 pb-4">
               <div>
-                <span className="text-[10px] font-bold bg-amber-400 text-[#2C3539] px-2.5 py-1 rounded-full uppercase tracking-wider">
+                <span className="text-[10px] lg:text-xs font-bold bg-amber-400 text-[#2C3539] px-2.5 py-1 rounded-full uppercase tracking-wider">
                   🔥 Special Bundle Offer
                 </span>
-                <h2 className="text-xl font-extrabold text-white font-serif mt-1">
+                <h2 className="text-xl lg:text-2xl font-extrabold text-white font-serif mt-1">
                   {PRODUCT_PAGE_CONFIG.comboPackage.title}
                 </h2>
-                <p className="text-xs text-emerald-200 mt-0.5">
+                <p className="text-xs lg:text-sm text-emerald-200 mt-0.5">
                   {PRODUCT_PAGE_CONFIG.comboPackage.subtitle}
                 </p>
               </div>
 
               <div className="text-right">
-                <span className="text-xs text-emerald-400 block font-semibold">Combo Package Price:</span>
+                <span className="text-xs lg:text-sm text-emerald-400 block font-semibold">Combo Package Price:</span>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-black text-amber-300 font-mono">
+                  <span className="text-2xl lg:text-3xl font-black text-amber-300 font-mono">
                     ৳{PRODUCT_PAGE_CONFIG.comboPackage.comboPrice.toFixed(2)}
                   </span>
-                  <span className="text-sm text-emerald-400/80 line-through font-mono">
+                  <span className="text-sm lg:text-base text-emerald-400/80 line-through font-mono">
                     ৳{PRODUCT_PAGE_CONFIG.comboPackage.originalPrice.toFixed(2)}
                   </span>
                 </div>
@@ -1023,13 +1023,13 @@ export const ProductDetailPage: React.FC = () => {
             </div>
 
             {/* Bundle items list */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs lg:text-sm">
               {PRODUCT_PAGE_CONFIG.comboPackage.items.map((item, idx) => (
                 <div key={idx} className="p-3 bg-emerald-900/60 border border-emerald-700/60 rounded-2xl flex items-center gap-3">
-                  <Gift className="w-5 h-5 text-amber-400 shrink-0" />
+                  <Gift className="w-5 h-5 lg:w-6 lg:h-6 text-amber-400 shrink-0" />
                   <div>
-                    <p className="font-bold text-white">{item.name}</p>
-                    <span className="text-emerald-300 font-mono">{item.price}</span>
+                    <p className="font-bold text-white lg:text-base">{item.name}</p>
+                    <span className="text-emerald-300 font-mono lg:text-sm">{item.price}</span>
                   </div>
                 </div>
               ))}
@@ -1037,7 +1037,7 @@ export const ProductDetailPage: React.FC = () => {
 
             <button
               onClick={handleBuyNowAction}
-              className="w-full py-4 bg-amber-400 hover:bg-amber-300 text-[#2C3539] font-black text-sm rounded-2xl shadow-xl transition-all flex items-center justify-center gap-2"
+              className="w-full py-4 bg-amber-400 hover:bg-amber-300 text-[#2C3539] font-black text-sm lg:text-base rounded-2xl shadow-xl transition-all flex items-center justify-center gap-2"
             >
               <span>Buy Combo Package Now</span>
               <Zap className="w-4 h-4 fill-current text-[#2C3539]" />
@@ -1049,7 +1049,7 @@ export const ProductDetailPage: React.FC = () => {
            7. RELATED PRODUCTS SECTION
            ==================================================================== */}
         <section className="space-y-4 pt-2">
-          <h2 className="text-xl font-extrabold text-[#2C3539] font-serif">
+          <h2 className="text-xl lg:text-2xl font-extrabold text-[#2C3539] font-serif">
             Related Products
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">

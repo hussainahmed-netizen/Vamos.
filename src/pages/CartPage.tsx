@@ -55,7 +55,7 @@ export const CartPage: React.FC = () => {
           <ShoppingBag className="w-10 h-10" />
         </div>
         <div className="space-y-2">
-          <h1 className="text-xl sm:text-3xl font-extrabold text-slate-900">Your Cart is Currently Empty</h1>
+          <h1 className="text-xl sm:text-3xl font-extrabold text-[#2C3539]">Your Cart is Currently Empty</h1>
           <p className="text-sm text-slate-500 max-w-md mx-auto">
             You haven't added any products to your shopping bag yet. Check out our latest noise-cancelling headphones, smartwatches, and leather goods.
           </p>
@@ -81,7 +81,7 @@ export const CartPage: React.FC = () => {
           >
             <ArrowLeft className="w-3.5 h-3.5" /> Continue Shopping
           </button>
-          <h1 className="text-xl sm:text-3xl font-extrabold text-slate-900 truncate">
+          <h1 className="text-xl sm:text-3xl font-extrabold text-[#2C3539] truncate">
             Shopping Cart ({cart.reduce((a, c) => a + c.quantity, 0)} Items)
           </h1>
         </div>
@@ -124,12 +124,12 @@ export const CartPage: React.FC = () => {
                   <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wider bg-emerald-50 px-2 py-0.5 rounded">
                     {item.product.categoryName}
                   </span>
-                  <h3 className="text-sm font-bold text-slate-900">{item.product.name}</h3>
+                  <h3 className="text-sm font-bold text-[#2C3539]">{item.product.name}</h3>
                   <div className="flex items-center gap-3 text-xs text-slate-500">
                     {item.selectedColor && <span>Color: {item.selectedColor}</span>}
                     {item.selectedSize && <span>Size: {item.selectedSize}</span>}
                   </div>
-                  <div className="text-sm font-extrabold text-slate-900 font-mono">
+                  <div className="text-sm font-extrabold text-[#2C3539] font-mono">
                     ৳{item.product.price.toFixed(2)}
                   </div>
                 </div>
@@ -142,7 +142,7 @@ export const CartPage: React.FC = () => {
                     onClick={() =>
                       updateQuantity(item.product.id, item.quantity - 1, item.selectedColor, item.selectedSize)
                     }
-                    className="p-3 sm:p-1.5 min-w-[44px] sm:min-w-0 flex justify-center items-center text-slate-500 hover:text-slate-900"
+                    className="p-3 sm:p-1.5 min-w-[44px] sm:min-w-0 flex justify-center items-center text-slate-500 hover:text-[#2C3539]"
                   >
                     <Minus className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
                   </button>
@@ -151,13 +151,13 @@ export const CartPage: React.FC = () => {
                     onClick={() =>
                       updateQuantity(item.product.id, item.quantity + 1, item.selectedColor, item.selectedSize)
                     }
-                    className="p-3 sm:p-1.5 min-w-[44px] sm:min-w-0 flex justify-center items-center text-slate-500 hover:text-slate-900"
+                    className="p-3 sm:p-1.5 min-w-[44px] sm:min-w-0 flex justify-center items-center text-slate-500 hover:text-[#2C3539]"
                   >
                     <Plus className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
                   </button>
                 </div>
                 <div className="text-right">
-                  <div className="text-base font-black text-slate-900 font-mono">
+                  <div className="text-base font-black text-[#2C3539] font-mono">
                     ৳{(item.product.price * item.quantity).toFixed(2)}
                   </div>
                   <button
@@ -175,7 +175,7 @@ export const CartPage: React.FC = () => {
         {/* Order Summary Sidebar */}
         <div className="space-y-6">
           <div className="bg-slate-50 border border-slate-200 p-6 rounded-3xl space-y-5">
-            <h3 className="font-bold text-slate-900 text-lg border-b border-slate-200 pb-3">
+            <h3 className="font-bold text-[#2C3539] text-lg border-b border-slate-200 pb-3">
               Order Summary
             </h3>
 
@@ -190,7 +190,7 @@ export const CartPage: React.FC = () => {
                       value={couponInput}
                       onChange={(e) => setCouponInput(e.target.value)}
                       placeholder="e.g. WELCOME10"
-                      className="w-full pl-8 pr-3 py-2.5 bg-white border border-slate-200 rounded-xl text-xs uppercase text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      className="w-full pl-8 pr-3 py-2.5 bg-white border border-slate-200 rounded-xl text-xs uppercase text-[#2C3539] focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     />
                     <Tag className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-3" />
                   </div>
@@ -219,7 +219,7 @@ export const CartPage: React.FC = () => {
             <div className="space-y-2.5 text-xs text-slate-600 pt-2 border-t border-slate-200">
               <div className="flex justify-between">
                 <span>Items Subtotal</span>
-                <span className="font-mono font-bold text-slate-900">৳{subtotal.toFixed(2)}</span>
+                <span className="font-mono font-bold text-[#2C3539]">৳{subtotal.toFixed(2)}</span>
               </div>
 
               {discountAmount > 0 && (
@@ -231,17 +231,17 @@ export const CartPage: React.FC = () => {
 
               <div className="flex justify-between">
                 <span>Estimated Shipping</span>
-                <span className="font-mono text-slate-900">
+                <span className="font-mono text-[#2C3539]">
                   {shippingFee === 0 ? <strong className="text-emerald-600">FREE</strong> : `৳${shippingFee.toFixed(2)}`}
                 </span>
               </div>
 
               <div className="flex justify-between">
                 <span>Estimated Tax (5%)</span>
-                <span className="font-mono text-slate-900">৳{(subtotal * 0.05).toFixed(2)}</span>
+                <span className="font-mono text-[#2C3539]">৳{(subtotal * 0.05).toFixed(2)}</span>
               </div>
 
-              <div className="flex justify-between border-t border-slate-200 pt-3 text-base font-extrabold text-slate-900">
+              <div className="flex justify-between border-t border-slate-200 pt-3 text-base font-extrabold text-[#2C3539]">
                 <span>Total Amount</span>
                 <span className="font-mono text-emerald-700 text-xl">৳{total.toFixed(2)}</span>
               </div>
@@ -257,7 +257,7 @@ export const CartPage: React.FC = () => {
           </div>
 
           <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-2 text-xs text-slate-600">
-            <div className="flex items-center gap-2 font-bold text-slate-900">
+            <div className="flex items-center gap-2 font-bold text-[#2C3539]">
               <Banknote className="w-4 h-4 text-emerald-600" /> Cash on Delivery (COD) Available
             </div>
             <p>Pay in cash upon inspecting your package at your doorstep.</p>

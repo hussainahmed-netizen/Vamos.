@@ -13,7 +13,7 @@ export const BrandStory: React.FC = () => {
             Our Brand Philosophy
           </div>
 
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#111827] font-serif leading-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#2C3539] font-serif leading-tight">
             Crafting Uncompromising Quality for Modern Lifestyles
           </h2>
 
@@ -25,28 +25,28 @@ export const BrandStory: React.FC = () => {
             <div className="flex items-start gap-2.5">
               <CheckCircle2 className="w-5 h-5 text-[#2B080C] shrink-0 mt-0.5" />
               <div>
-                <h4 className="text-xs font-bold text-[#111827]">100% Authentic Quality</h4>
+                <h4 className="text-xs font-bold text-[#2C3539]">100% Authentic Quality</h4>
                 <p className="text-[11px] text-[#6B7280]">Directly from certified artisans & lab specs</p>
               </div>
             </div>
             <div className="flex items-start gap-2.5">
               <CheckCircle2 className="w-5 h-5 text-[#2B080C] shrink-0 mt-0.5" />
               <div>
-                <h4 className="text-xs font-bold text-[#111827]">Doorstep Cash on Delivery</h4>
+                <h4 className="text-xs font-bold text-[#2C3539]">Doorstep Cash on Delivery</h4>
                 <p className="text-[11px] text-[#6B7280]">Inspect before paying in cash</p>
               </div>
             </div>
             <div className="flex items-start gap-2.5">
               <CheckCircle2 className="w-5 h-5 text-[#2B080C] shrink-0 mt-0.5" />
               <div>
-                <h4 className="text-xs font-bold text-[#111827]">30-Day Guarantee</h4>
+                <h4 className="text-xs font-bold text-[#2C3539]">30-Day Guarantee</h4>
                 <p className="text-[11px] text-[#6B7280]">Zero-risk instant replacement or refund</p>
               </div>
             </div>
             <div className="flex items-start gap-2.5">
               <CheckCircle2 className="w-5 h-5 text-[#2B080C] shrink-0 mt-0.5" />
               <div>
-                <h4 className="text-xs font-bold text-[#111827]">24/7 Priority Support</h4>
+                <h4 className="text-xs font-bold text-[#2C3539]">24/7 Priority Support</h4>
                 <p className="text-[11px] text-[#6B7280]">Dedicated customer care desk</p>
               </div>
             </div>
@@ -55,7 +55,7 @@ export const BrandStory: React.FC = () => {
           {/* Stats Badges */}
           <div className="pt-6 border-t border-[#E5E7EB] grid grid-cols-3 gap-4 text-center">
             <div>
-              <div className="text-2xl font-black text-[#111827] font-mono">50K+</div>
+              <div className="text-2xl font-black text-[#2C3539] font-mono">50K+</div>
               <div className="text-[11px] font-semibold text-[#6B7280] uppercase tracking-wider">Happy Shoppers</div>
             </div>
             <div>
@@ -63,7 +63,7 @@ export const BrandStory: React.FC = () => {
               <div className="text-[11px] font-semibold text-[#6B7280] uppercase tracking-wider">On-time Delivery</div>
             </div>
             <div>
-              <div className="text-2xl font-black text-[#111827] font-mono">4.92★</div>
+              <div className="text-2xl font-black text-[#2C3539] font-mono">4.92★</div>
               <div className="text-[11px] font-semibold text-[#6B7280] uppercase tracking-wider">Product Rating</div>
             </div>
           </div>

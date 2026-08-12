@@ -159,13 +159,13 @@ export const HeroBanner: React.FC = () => {
               </p>
 
               {/* Mobile Carousel Indicators (Above buttons on mobile) */}
-              <div className="flex sm:hidden items-center justify-start gap-1.5 pt-2 pb-1">
+              <div className="flex sm:hidden items-center justify-start gap-1.5 pt-1">
                 {slides.map((_, index) => (
                   <button
                     key={`mob-indicator-${index}`}
                     onClick={() => setActiveSlide(index)}
-                    className={`h-1.5 rounded-full transition-all duration-500 shadow-sm ${
-                      activeSlide === index ? 'w-6 bg-white' : 'w-1.5 bg-white/50 hover:bg-white/80'
+                    className={`h-1 rounded-full transition-all duration-500 shadow-sm ${
+                      activeSlide === index ? 'w-4 bg-white' : 'w-1 bg-white/50 hover:bg-white/80'
                     }`}
                     aria-label={`Go to slide ${index + 1}`}
                   />
@@ -173,12 +173,12 @@ export const HeroBanner: React.FC = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-3 sm:pt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
+              <div className="pt-0.5 sm:pt-6 flex flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full sm:w-auto mt-0 sm:mt-0">
                 <button
                   onClick={slide.action}
-                  className="w-full sm:w-auto justify-center px-2.5 sm:px-5 py-2.5 sm:py-3 bg-[#2B080C] hover:bg-[#380B0F] text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg transition-all duration-300 hover:scale-105 flex items-center gap-1.5 sm:gap-2 group border border-white/10"
+                  className="flex-1 sm:flex-none justify-center px-1.5 sm:px-5 py-2.5 sm:py-3 bg-[#2B080C] hover:bg-[#380B0F] text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg transition-all duration-300 hover:scale-105 flex items-center gap-1 sm:gap-2 group border border-white/10 min-w-0"
                 >
-                  <span className="whitespace-nowrap">{slide.ctaText}</span>
+                  <span className="truncate">{slide.ctaText}</span>
                   <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button
@@ -186,9 +186,9 @@ export const HeroBanner: React.FC = () => {
                     setSelectedCategory('all');
                     setView('shop');
                   }}
-                  className="w-full sm:w-auto justify-center px-2.5 sm:px-5 py-2.5 sm:py-3 bg-white/20 hover:bg-white/30 text-white border border-white/30 font-bold text-xs sm:text-sm rounded-xl backdrop-blur-md transition-all flex items-center whitespace-nowrap shadow-sm"
+                  className="flex-1 sm:flex-none justify-center px-1.5 sm:px-5 py-2.5 sm:py-3 bg-white/20 hover:bg-white/30 text-white border border-white/30 font-bold text-xs sm:text-sm rounded-xl backdrop-blur-md transition-all flex items-center shadow-sm min-w-0"
                 >
-                  Browse All Products
+                  <span className="truncate">Browse All Products</span>
                 </button>
               </div>
             </div>

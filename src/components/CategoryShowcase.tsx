@@ -13,13 +13,13 @@ export const CategoryShowcase: React.FC = () => {
           <div className="flex items-center gap-2 text-[#2B080C] font-bold text-xs uppercase tracking-widest mb-1">
             <Layers className="w-4 h-4" /> Curated Collections
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111827] font-serif">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#2C3539] font-serif">
             Shop by Category
           </h2>
         </div>
         <button
           onClick={() => navigateToCategory('all')}
-          className="text-sm font-bold text-[#111827] hover:text-[#2B080C] flex items-center gap-1 group"
+          className="text-sm font-bold text-[#2C3539] hover:text-[#2B080C] flex items-center gap-1 group"
         >
           View All Categories <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </button>

@@ -114,7 +114,7 @@ export const ShopPage: React.FC = () => {
             <span className="text-xs font-bold text-[#2B080C] uppercase tracking-widest font-mono">
               {brandConfig.brandName} Catalog
             </span>
-            <h1 className="text-2xl sm:text-4xl font-extrabold text-[#111827] font-serif">
+            <h1 className="text-2xl sm:text-4xl font-extrabold text-[#2C3539] font-serif">
               {selectedCategory === 'all'
                 ? 'All Products Catalog'
                 : categories.find((c) => c.id === selectedCategory)?.name || 'Product Listing'}
@@ -141,7 +141,7 @@ export const ShopPage: React.FC = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="bg-transparent font-bold text-slate-900 focus:outline-none cursor-pointer w-full"
+                className="bg-transparent font-bold text-[#2C3539] focus:outline-none cursor-pointer w-full"
               >
                 <option value="featured">Sort</option>
                 <option value="featured">Featured</option>
@@ -159,7 +159,7 @@ export const ShopPage: React.FC = () => {
         {/* Desktop Sidebar Filters */}
         <aside className="hidden lg:block bg-[#F9FAFB] border border-[#E5E7EB] p-6 rounded-3xl space-y-6 h-fit sticky top-24">
           <div className="flex items-center justify-between pb-4 border-b border-[#E5E7EB]">
-            <h3 className="font-bold text-[#111827] text-base flex items-center gap-2">
+            <h3 className="font-bold text-[#2C3539] text-base flex items-center gap-2">
               <SlidersHorizontal className="w-4 h-4 text-[#2B080C]" /> Filter Catalog
             </h3>
             {hasActiveFilters && (
@@ -175,7 +175,7 @@ export const ShopPage: React.FC = () => {
           <CategorySidebar />
 
           <div className="space-y-2 pt-4 border-t border-slate-200">
-            <div className="flex justify-between text-xs font-bold text-slate-900">
+            <div className="flex justify-between text-xs font-bold text-[#2C3539]">
               <span>Max Price:</span>
               <span className="font-mono text-emerald-700">৳{priceRange}</span>
             </div>
@@ -202,7 +202,7 @@ export const ShopPage: React.FC = () => {
               <div className="flex items-center justify-between pb-3 border-b border-slate-200 sticky top-0 bg-white z-10 pt-1">
                 <div className="flex items-center gap-2">
                   <SlidersHorizontal className="w-4 h-4 text-[#2B080C]" />
-                  <h3 className="font-extrabold text-slate-900 text-lg font-serif">Filter Products</h3>
+                  <h3 className="font-extrabold text-[#2C3539] text-lg font-serif">Filter Products</h3>
                 </div>
                 <button
                   onClick={() => setShowMobileFilters(false)}
@@ -253,7 +253,7 @@ export const ShopPage: React.FC = () => {
 
               {/* Price Range Slider */}
               <div className="space-y-3 pt-3 border-t border-slate-200">
-                <div className="flex justify-between text-xs font-bold text-slate-900">
+                <div className="flex justify-between text-xs font-bold text-[#2C3539]">
                   <span>Price Range</span>
                   <span className="font-mono text-[#2B080C]">Up to ৳{priceRange}</span>
                 </div>
@@ -297,7 +297,7 @@ export const ShopPage: React.FC = () => {
             <div className="bg-slate-50 border border-slate-200 rounded-3xl p-12 text-center space-y-4">
               <Search className="w-12 h-12 text-slate-300 mx-auto" />
               <div className="space-y-1">
-                <h3 className="text-lg font-bold text-slate-900">No products matched your filter criteria</h3>
+                <h3 className="text-lg font-bold text-[#2C3539]">No products matched your filter criteria</h3>
                 <p className="text-xs text-slate-500">
                   Try adjusting the price slider or clear your search terms to see more options.
                 </p>

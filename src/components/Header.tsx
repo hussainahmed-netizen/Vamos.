@@ -202,7 +202,7 @@ export const Header: React.FC = () => {
           <div className="flex items-center gap-3 sm:gap-6">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 text-[#111827] hover:text-[#0B0E14] hover:bg-slate-100 rounded-lg"
+              className="lg:hidden p-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 rounded-lg"
               aria-label="Toggle mobile menu"
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -237,13 +237,13 @@ export const Header: React.FC = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsSearchFocused(true)}
                 placeholder="Search products, brands, categories (e.g. Headphones, Hoodies)..."
-                className="w-full pl-10 pr-10 py-2.5 bg-[#F9FAFB] border border-[#E5E7EB] rounded-full text-sm text-[#111827] placeholder-[#6B7280] focus:outline-none focus:ring-2 focus:ring-[#2B080C] focus:bg-white transition-all shadow-xs"
+                className="w-full pl-10 pr-10 py-2.5 bg-[#F9FAFB] border border-[#E5E7EB] rounded-full text-sm text-[#2C3539] placeholder-[#6B7280] focus:outline-none focus:ring-2 focus:ring-[#2B080C] focus:bg-white transition-all shadow-xs"
               />
               <Search className="w-4 h-4 text-[#6B7280] absolute left-3.5 top-3" />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-3 text-[#6B7280] hover:text-[#111827]"
+                  className="absolute right-3 top-3 text-[#6B7280] hover:text-[#2C3539]"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -273,10 +273,10 @@ export const Header: React.FC = () => {
                       className="w-10 h-10 object-cover rounded-lg border border-[#E5E7EB]"
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-[#111827] truncate">{product.name}</p>
+                      <p className="text-sm font-semibold text-[#2C3539] truncate">{product.name}</p>
                       <p className="text-xs text-[#6B7280]">{product.categoryName}</p>
                     </div>
-                    <span className="text-sm font-bold text-[#111827]">৳{product.price.toFixed(2)}</span>
+                    <span className="text-sm font-bold text-[#2C3539]">৳{product.price.toFixed(2)}</span>
                   </button>
                 ))}
                 <button
@@ -299,7 +299,7 @@ export const Header: React.FC = () => {
               onClick={() => {
                 setView('wishlist');
               }}
-              className={`hidden md:flex relative p-2.5 text-[#111827] hover:text-[#0B0E14] hover:bg-slate-100 rounded-full transition-colors ${
+              className={`hidden md:flex relative p-2.5 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 rounded-full transition-colors ${
                 view === 'wishlist' ? 'bg-slate-100 text-[#2B080C]' : ''
               }`}
               title="View Wishlist"
@@ -321,7 +321,7 @@ export const Header: React.FC = () => {
             >
               <button
                 onClick={handleAccountClick}
-                className={`flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#111827] hover:text-[#0B0E14] hover:bg-slate-100 rounded-full transition-colors ${
+                className={`flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 rounded-full transition-colors ${
                   isAccountDropdownOpen ? 'bg-slate-100 text-[#2B080C]' : ''
                 }`}
                 title="Account & Profile Menu"
@@ -350,9 +350,9 @@ export const Header: React.FC = () => {
                           closeAccountDropdown();
                           navigateToAccount('overview');
                         }}
-                        className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-100/80 rounded-xl transition-colors text-left group"
+                        className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-[#2C3539] hover:bg-slate-100/80 rounded-xl transition-colors text-left group"
                       >
-                        <Smile className="w-5 h-5 text-slate-500 group-hover:text-slate-900 stroke-[1.5] shrink-0" />
+                        <Smile className="w-5 h-5 text-slate-500 group-hover:text-[#2C3539] stroke-[1.5] shrink-0" />
                         <span>Manage My Account</span>
                       </button>
 
@@ -362,9 +362,9 @@ export const Header: React.FC = () => {
                           closeAccountDropdown();
                           navigateToAccount('orders');
                         }}
-                        className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-100/80 rounded-xl transition-colors text-left group"
+                        className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-[#2C3539] hover:bg-slate-100/80 rounded-xl transition-colors text-left group"
                       >
-                        <Package className="w-5 h-5 text-slate-500 group-hover:text-slate-900 stroke-[1.5] shrink-0" />
+                        <Package className="w-5 h-5 text-slate-500 group-hover:text-[#2C3539] stroke-[1.5] shrink-0" />
                         <span>My Orders</span>
                       </button>
 
@@ -374,7 +374,7 @@ export const Header: React.FC = () => {
                           closeAccountDropdown();
                           navigateToAccount('reviews');
                         }}
-                        className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-100/80 rounded-xl transition-colors text-left group"
+                        className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-[#2C3539] hover:bg-slate-100/80 rounded-xl transition-colors text-left group"
                       >
                         <Star className="w-5 h-5 text-slate-500 group-hover:text-amber-500 stroke-[1.5] shrink-0" />
                         <span>My Reviews</span>
@@ -386,9 +386,9 @@ export const Header: React.FC = () => {
                           closeAccountDropdown();
                           navigateToAccount('returns');
                         }}
-                        className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-100/80 rounded-xl transition-colors text-left group"
+                        className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-[#2C3539] hover:bg-slate-100/80 rounded-xl transition-colors text-left group"
                       >
-                        <XCircle className="w-5 h-5 text-slate-500 group-hover:text-slate-900 stroke-[1.5] shrink-0" />
+                        <XCircle className="w-5 h-5 text-slate-500 group-hover:text-[#2C3539] stroke-[1.5] shrink-0" />
                         <span>My Returns & Cancellations</span>
                       </button>
 
@@ -440,9 +440,9 @@ export const Header: React.FC = () => {
                   setSelectedCategory('all');
                   setView('home');
                 }}
-                className={`hover:text-slate-900 transition-colors pb-1 border-b-2 ${
+                className={`hover:text-[#2C3539] transition-colors pb-1 border-b-2 ${
                   view === 'home' && selectedCategory === 'all'
-                    ? 'border-slate-900 text-slate-900 font-semibold'
+                    ? 'border-slate-900 text-[#2C3539] font-semibold'
                     : 'border-transparent'
                 }`}
               >
@@ -454,7 +454,7 @@ export const Header: React.FC = () => {
                   setSelectedCategory('all');
                   setView('shop');
                 }}
-                className={`hover:text-[#111827] transition-colors pb-1 border-b-2 ${
+                className={`hover:text-[#2C3539] transition-colors pb-1 border-b-2 ${
                   view === 'shop' && selectedCategory === 'all'
                     ? 'border-[#2B080C] text-[#2B080C] font-semibold'
                     : 'border-transparent'
@@ -467,7 +467,7 @@ export const Header: React.FC = () => {
                 <div key={cat.id} className="relative group">
                   <button
                     onClick={() => handleCategoryClick(cat.id as CategoryId)}
-                    className={`hover:text-[#111827] transition-colors pb-1 border-b-2 flex items-center gap-1 py-1 ${
+                    className={`hover:text-[#2C3539] transition-colors pb-1 border-b-2 flex items-center gap-1 py-1 ${
                       view === 'shop' && selectedCategory === cat.id
                         ? 'border-[#2B080C] text-[#2B080C] font-semibold'
                         : 'border-transparent text-slate-700'
@@ -548,7 +548,7 @@ export const Header: React.FC = () => {
               />
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="p-1 text-slate-500 hover:text-slate-900"
+                className="p-1 text-slate-500 hover:text-[#2C3539]"
               >
                 <X className="w-6 h-6" />
               </button>

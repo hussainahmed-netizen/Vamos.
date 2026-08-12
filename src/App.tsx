@@ -34,7 +34,7 @@ const StoreContent: React.FC = () => {
   }, [view, user, setView, setIsAuthModalOpen]);
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] text-[#111827] flex flex-col font-sans selection:bg-[#2B080C] selection:text-white pb-16 md:pb-0">
+    <div className="min-h-screen bg-[#F9FAFB] text-[#2C3539] flex flex-col font-sans selection:bg-[#2B080C] selection:text-white pb-16 md:pb-0">
       {/* Toast Notifications */}
       <ToastContainer />
 

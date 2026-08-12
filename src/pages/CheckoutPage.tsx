@@ -53,7 +53,7 @@ export const CheckoutPage: React.FC = () => {
   if (cart.length === 0) {
     return (
       <div className="max-w-md mx-auto px-4 py-20 text-center space-y-4">
-        <h2 className="text-2xl font-bold text-slate-900">Your cart is empty</h2>
+        <h2 className="text-2xl font-bold text-[#2C3539]">Your cart is empty</h2>
         <p className="text-xs text-slate-500">Please add items to cart before proceeding to checkout.</p>
         <button
           onClick={() => setView('shop')}
@@ -76,7 +76,7 @@ export const CheckoutPage: React.FC = () => {
           >
             <ArrowLeft className="w-3.5 h-3.5" /> Back to Shopping Cart
           </button>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#111827] font-serif">Secure Express Checkout</h1>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#2C3539] font-serif">Secure Express Checkout</h1>
         </div>
 
         {/* Stepper indicator */}
@@ -116,7 +116,7 @@ export const CheckoutPage: React.FC = () => {
         <div className="lg:col-span-2 space-y-6">
           {step === 1 && (
             <div className="bg-white border border-slate-200 p-6 sm:p-8 rounded-3xl space-y-6 shadow-xs animate-in fade-in">
-              <div className="flex items-center gap-2 pb-4 border-b border-slate-100 font-bold text-slate-900">
+              <div className="flex items-center gap-2 pb-4 border-b border-slate-100 font-bold text-[#2C3539]">
                 <MapPin className="w-5 h-5 text-emerald-600" />
                 <span>Customer Contact & Shipping Address</span>
               </div>
@@ -129,7 +129,7 @@ export const CheckoutPage: React.FC = () => {
                     required
                     value={address.fullName}
                     onChange={(e) => setAddress({ ...address, fullName: e.target.value })}
-                    className="w-full p-3 bg-white border-2 border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 rounded-xl text-xs text-slate-900 font-medium outline-none transition-all shadow-2xs"
+                    className="w-full p-3 bg-white border-2 border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 rounded-xl text-xs text-[#2C3539] font-medium outline-none transition-all shadow-2xs"
                   />
                 </div>
 
@@ -140,7 +140,7 @@ export const CheckoutPage: React.FC = () => {
                     required
                     value={address.email}
                     onChange={(e) => setAddress({ ...address, email: e.target.value })}
-                    className="w-full p-3 bg-white border-2 border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 rounded-xl text-xs text-slate-900 font-medium outline-none transition-all shadow-2xs"
+                    className="w-full p-3 bg-white border-2 border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 rounded-xl text-xs text-[#2C3539] font-medium outline-none transition-all shadow-2xs"
                   />
                 </div>
 
@@ -151,7 +151,7 @@ export const CheckoutPage: React.FC = () => {
                     required
                     value={address.phone}
                     onChange={(e) => setAddress({ ...address, phone: e.target.value })}
-                    className="w-full p-3 bg-white border-2 border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 rounded-xl text-xs text-slate-900 font-medium outline-none transition-all shadow-2xs"
+                    className="w-full p-3 bg-white border-2 border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 rounded-xl text-xs text-[#2C3539] font-medium outline-none transition-all shadow-2xs"
                   />
                 </div>
 
@@ -162,7 +162,7 @@ export const CheckoutPage: React.FC = () => {
                     required
                     value={address.address}
                     onChange={(e) => setAddress({ ...address, address: e.target.value })}
-                    className="w-full p-3 bg-white border-2 border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 rounded-xl text-xs text-slate-900 font-medium outline-none transition-all shadow-2xs"
+                    className="w-full p-3 bg-white border-2 border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 rounded-xl text-xs text-[#2C3539] font-medium outline-none transition-all shadow-2xs"
                   />
                 </div>
 
@@ -173,7 +173,7 @@ export const CheckoutPage: React.FC = () => {
                     required
                     value={address.city}
                     onChange={(e) => setAddress({ ...address, city: e.target.value })}
-                    className="w-full p-3 bg-white border-2 border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 rounded-xl text-xs text-slate-900 font-medium outline-none transition-all shadow-2xs"
+                    className="w-full p-3 bg-white border-2 border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 rounded-xl text-xs text-[#2C3539] font-medium outline-none transition-all shadow-2xs"
                   />
                 </div>
 
@@ -184,7 +184,7 @@ export const CheckoutPage: React.FC = () => {
                     required
                     value={address.state}
                     onChange={(e) => setAddress({ ...address, state: e.target.value })}
-                    className="w-full p-3 bg-white border-2 border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 rounded-xl text-xs text-slate-900 font-medium outline-none transition-all shadow-2xs"
+                    className="w-full p-3 bg-white border-2 border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 rounded-xl text-xs text-[#2C3539] font-medium outline-none transition-all shadow-2xs"
                   />
                 </div>
 
@@ -195,7 +195,7 @@ export const CheckoutPage: React.FC = () => {
                     required
                     value={address.zipCode}
                     onChange={(e) => setAddress({ ...address, zipCode: e.target.value })}
-                    className="w-full p-3 bg-white border-2 border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 rounded-xl text-xs text-slate-900 font-medium outline-none transition-all shadow-2xs"
+                    className="w-full p-3 bg-white border-2 border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 rounded-xl text-xs text-[#2C3539] font-medium outline-none transition-all shadow-2xs"
                   />
                 </div>
 
@@ -206,7 +206,7 @@ export const CheckoutPage: React.FC = () => {
                     required
                     value={address.country}
                     onChange={(e) => setAddress({ ...address, country: e.target.value })}
-                    className="w-full p-3 bg-white border-2 border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 rounded-xl text-xs text-slate-900 font-medium outline-none transition-all shadow-2xs"
+                    className="w-full p-3 bg-white border-2 border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 rounded-xl text-xs text-[#2C3539] font-medium outline-none transition-all shadow-2xs"
                   />
                 </div>
               </div>
@@ -218,7 +218,7 @@ export const CheckoutPage: React.FC = () => {
                   value={address.notes}
                   onChange={(e) => setAddress({ ...address, notes: e.target.value })}
                   placeholder="Special courier instructions..."
-                  className="w-full p-3 bg-white border-2 border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 rounded-xl text-xs text-slate-900 font-medium outline-none transition-all shadow-2xs"
+                  className="w-full p-3 bg-white border-2 border-slate-300 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 rounded-xl text-xs text-[#2C3539] font-medium outline-none transition-all shadow-2xs"
                 />
               </div>
 
@@ -237,7 +237,7 @@ export const CheckoutPage: React.FC = () => {
 
           {step === 2 && (
             <div className="bg-white border border-slate-200 p-6 sm:p-8 rounded-3xl space-y-6 shadow-xs animate-in fade-in">
-              <div className="flex items-center justify-between pb-4 border-b border-slate-100 font-bold text-slate-900">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100 font-bold text-[#2C3539]">
                 <div className="flex items-center gap-2">
                   <Lock className="w-5 h-5 text-emerald-600" />
                   <span>Choose Payment Method</span>
@@ -372,7 +372,7 @@ export const CheckoutPage: React.FC = () => {
         {/* Order Summary Sidebar */}
         <div className="space-y-6">
           <div className="bg-slate-50 border border-slate-200 p-6 rounded-3xl space-y-4">
-            <h3 className="font-bold text-slate-900 text-base border-b border-slate-200 pb-3">
+            <h3 className="font-bold text-[#2C3539] text-base border-b border-slate-200 pb-3">
               Order Items ({cart.length})
             </h3>
 
@@ -385,10 +385,10 @@ export const CheckoutPage: React.FC = () => {
                     className="w-12 h-12 object-cover rounded-xl border border-slate-200"
                   />
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-slate-900 truncate">{item.product.name}</p>
+                    <p className="font-bold text-[#2C3539] truncate">{item.product.name}</p>
                     <p className="text-slate-500">Qty: {item.quantity}</p>
                   </div>
-                  <span className="font-bold font-mono text-slate-900">
+                  <span className="font-bold font-mono text-[#2C3539]">
                     ৳{(item.product.price * item.quantity).toFixed(2)}
                   </span>
                 </div>
@@ -412,7 +412,7 @@ export const CheckoutPage: React.FC = () => {
                   {shippingFee === 0 ? 'FREE' : `৳${shippingFee.toFixed(2)}`}
                 </span>
               </div>
-              <div className="flex justify-between border-t border-slate-200 pt-2 text-base font-extrabold text-slate-900">
+              <div className="flex justify-between border-t border-slate-200 pt-2 text-base font-extrabold text-[#2C3539]">
                 <span>Total Due</span>
                 <span className="font-mono text-emerald-700">৳{total.toFixed(2)}</span>
               </div>

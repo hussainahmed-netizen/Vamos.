@@ -109,7 +109,7 @@ export const AccountPage: React.FC = () => {
     <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 pt-3 sm:pt-4 pb-8 sm:pb-12 animate-in fade-in duration-300">
       {/* Page Title */}
       <div className="mb-8 border-b border-slate-200 pb-5">
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#2C3539] tracking-tight">
           My Account
         </h1>
         <p className="text-sm text-slate-500 mt-1">
@@ -131,7 +131,7 @@ export const AccountPage: React.FC = () => {
                   className={`w-full text-left px-4 py-3 rounded-xl font-semibold text-sm flex items-center justify-between transition-all duration-200 transform hover:translate-x-1 active:scale-[0.99] ${
                     isActive
                       ? 'bg-[#2B080C] text-white shadow-sm'
-                      : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900'
+                      : 'text-slate-700 hover:bg-slate-50 hover:text-[#2C3539]'
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -171,7 +171,7 @@ export const AccountPage: React.FC = () => {
                       )}
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-slate-900">
+                      <h3 className="text-lg font-bold text-[#2C3539]">
                         {user?.user_metadata?.full_name || (user?.email ? 'Authenticated User' : 'Guest User')}
                       </h3>
                       <p className="text-xs text-slate-500">
@@ -209,7 +209,7 @@ export const AccountPage: React.FC = () => {
                     <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
                       <Mail className="w-3.5 h-3.5 text-slate-400" /> Email Address
                     </div>
-                    <p className="text-sm font-semibold text-slate-900 truncate">
+                    <p className="text-sm font-semibold text-[#2C3539] truncate">
                       {user?.email || 'Not provided'}
                     </p>
                   </div>
@@ -218,7 +218,7 @@ export const AccountPage: React.FC = () => {
                     <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
                       <Phone className="w-3.5 h-3.5 text-slate-400" /> Phone Number
                     </div>
-                    <p className="text-sm font-semibold text-slate-900">
+                    <p className="text-sm font-semibold text-[#2C3539]">
                       {profile?.phone_number || 'Not provided'}
                     </p>
                   </div>
@@ -227,7 +227,7 @@ export const AccountPage: React.FC = () => {
                     <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
                       <MapPin className="w-3.5 h-3.5 text-slate-400" /> Default Shipping
                     </div>
-                    <p className="text-sm font-semibold text-slate-900 truncate">
+                    <p className="text-sm font-semibold text-[#2C3539] truncate">
                       {profile?.shipping_address ? `${profile.shipping_address}, ${profile.city_district}` : 'Not provided'}
                     </p>
                   </div>
@@ -239,7 +239,7 @@ export const AccountPage: React.FC = () => {
                 <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs flex items-center justify-between transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
                   <div>
                     <p className="text-xs font-bold text-slate-500 uppercase">Total Orders</p>
-                    <p className="text-2xl font-extrabold text-slate-900 mt-1">{ordersHistory.length}</p>
+                    <p className="text-2xl font-extrabold text-[#2C3539] mt-1">{ordersHistory.length}</p>
                   </div>
                   <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center text-slate-700">
                     <Package className="w-5 h-5" />
@@ -249,7 +249,7 @@ export const AccountPage: React.FC = () => {
                 <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs flex items-center justify-between transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
                   <div>
                     <p className="text-xs font-bold text-slate-500 uppercase">Saved Items</p>
-                    <p className="text-2xl font-extrabold text-slate-900 mt-1">{wishlist.length}</p>
+                    <p className="text-2xl font-extrabold text-[#2C3539] mt-1">{wishlist.length}</p>
                   </div>
                   <div className="w-10 h-10 bg-rose-50 text-rose-600 rounded-xl flex items-center justify-center">
                     <Heart className="w-5 h-5" />
@@ -259,7 +259,7 @@ export const AccountPage: React.FC = () => {
                 <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs flex items-center justify-between transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
                   <div>
                     <p className="text-xs font-bold text-slate-500 uppercase">Reviews Written</p>
-                    <p className="text-2xl font-extrabold text-slate-900 mt-1">{reviewsList.length}</p>
+                    <p className="text-2xl font-extrabold text-[#2C3539] mt-1">{reviewsList.length}</p>
                   </div>
                   <div className="w-10 h-10 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
                     <Star className="w-5 h-5" />
@@ -278,7 +278,7 @@ export const AccountPage: React.FC = () => {
                 <>
                   {/* Search / Track Order Form */}
                   <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs space-y-3">
-                    <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
+                    <h3 className="text-sm font-bold text-[#2C3539] uppercase tracking-wider">
                       Track Specific Shipment
                     </h3>
                     <form onSubmit={handleTrackSearch} className="flex gap-2">
@@ -288,7 +288,7 @@ export const AccountPage: React.FC = () => {
                           value={trackInput}
                           onChange={(e) => setTrackInput(e.target.value)}
                           placeholder="Enter Order ID (e.g. ORD-839210)"
-                          className="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono uppercase text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2B080C]"
+                          className="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono uppercase text-[#2C3539] focus:outline-none focus:ring-2 focus:ring-[#2B080C]"
                         />
                         <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
                       </div>
@@ -329,7 +329,7 @@ export const AccountPage: React.FC = () => {
 
                   {/* Order History Cards */}
                   <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
-                    <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                    <h3 className="text-base font-bold text-[#2C3539] flex items-center gap-2">
                       <Package className="w-5 h-5 text-[#2B080C]" /> Order History ({ordersHistory.length})
                     </h3>
 
@@ -408,7 +408,7 @@ export const AccountPage: React.FC = () => {
                                 )}
 
                                 <div className="min-w-0 flex-1">
-                                  <p className="font-bold text-slate-900 group-hover:text-[#2B080C] transition-colors truncate text-xs sm:text-sm">
+                                  <p className="font-bold text-[#2C3539] group-hover:text-[#2B080C] transition-colors truncate text-xs sm:text-sm">
                                     {firstProduct?.name || 'Order Package'}
                                   </p>
                                   {itemCount > 1 && (
@@ -421,8 +421,8 @@ export const AccountPage: React.FC = () => {
 
                               {/* Center Section: Order Info */}
                               <div className="space-y-1 md:w-4/12">
-                                <div className="flex items-center gap-2 font-bold text-slate-900">
-                                  <span className="font-mono text-sm tracking-tight text-slate-900">#{order.id}</span>
+                                <div className="flex items-center gap-2 font-bold text-[#2C3539]">
+                                  <span className="font-mono text-sm tracking-tight text-[#2C3539]">#{order.id}</span>
                                   <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2.5 py-0.5 rounded-full font-extrabold border border-emerald-300/60">
                                     {order.status}
                                   </span>
@@ -465,7 +465,7 @@ export const AccountPage: React.FC = () => {
           {/* TAB 3: MY REVIEWS */}
           {accountTab === 'reviews' && (
             <div className={`bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4 ${slideDirection === 'right' ? 'animate-tab-slide-right' : 'animate-tab-slide-left'}`}>
-              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <h3 className="text-base font-bold text-[#2C3539] flex items-center gap-2">
                 <Star className="w-5 h-5 text-amber-500 fill-amber-500" /> My Reviews ({reviewsList.length})
               </h3>
 
@@ -498,13 +498,13 @@ export const AccountPage: React.FC = () => {
           {/* TAB 4: RETURNS & CANCELLATIONS */}
           {accountTab === 'returns' && (
             <div className={`bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4 ${slideDirection === 'right' ? 'animate-tab-slide-right' : 'animate-tab-slide-left'}`}>
-              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <h3 className="text-base font-bold text-[#2C3539] flex items-center gap-2">
                 <XCircle className="w-5 h-5 text-slate-600" /> Returns & Cancellations
               </h3>
 
               <div className="p-5 bg-slate-50 border border-slate-200 rounded-xl text-center space-y-2">
                 <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto" />
-                <h4 className="text-sm font-bold text-slate-900">No Active Return Requests</h4>
+                <h4 className="text-sm font-bold text-[#2C3539]">No Active Return Requests</h4>
                 <p className="text-xs text-slate-500 max-w-md mx-auto">
                   You currently have no pending return or cancellation requests. We offer a hassle-free 7-day money-back guarantee on all authentic products.
                 </p>

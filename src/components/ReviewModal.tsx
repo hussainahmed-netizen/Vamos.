@@ -43,7 +43,7 @@ export const ReviewModal: React.FC = () => {
       <div className="bg-white rounded-3xl max-w-lg w-full shadow-2xl p-6 sm:p-8 relative border border-slate-200">
         <button
           onClick={() => setIsReviewModalOpen(false)}
-          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors"
+          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-[#2C3539] hover:bg-slate-100 rounded-full transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
@@ -53,7 +53,7 @@ export const ReviewModal: React.FC = () => {
             <MessageSquarePlus className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-slate-900 font-serif">Write a Verified Review</h3>
+            <h3 className="text-xl font-bold text-[#2C3539] font-serif">Write a Verified Review</h3>
             <p className="text-xs text-slate-500">Share your product experience with our community</p>
           </div>
         </div>
@@ -64,7 +64,7 @@ export const ReviewModal: React.FC = () => {
             <select
               value={productId}
               onChange={(e) => setProductId(e.target.value)}
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 font-medium"
+              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-[#2C3539] font-medium"
             >
               {products.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -106,7 +106,7 @@ export const ReviewModal: React.FC = () => {
               value={author}
               onChange={(e) => setAuthor(e.target.value)}
               placeholder="e.g. David Vance"
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900"
+              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-[#2C3539]"
             />
           </div>
 
@@ -117,7 +117,7 @@ export const ReviewModal: React.FC = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Exceptional Build & Rapid Delivery!"
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900"
+              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-[#2C3539]"
             />
           </div>
 
@@ -129,7 +129,7 @@ export const ReviewModal: React.FC = () => {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="Describe sound quality, fit, material quality, or Cash on Delivery convenience..."
-              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900"
+              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-[#2C3539]"
             />
           </div>
 

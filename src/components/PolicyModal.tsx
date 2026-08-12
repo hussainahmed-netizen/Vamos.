@@ -92,14 +92,14 @@ export const PolicyModal: React.FC = () => {
       <div className="bg-white rounded-3xl max-w-lg w-full shadow-2xl p-6 sm:p-8 relative border border-slate-200">
         <button
           onClick={() => setActivePolicyModal(null)}
-          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors"
+          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-[#2C3539] hover:bg-slate-100 rounded-full transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="flex items-center gap-3 mb-4">
           <div className="p-3 bg-slate-100 rounded-2xl">{content.icon}</div>
-          <h3 className="text-xl font-bold text-slate-900 font-serif">{content.title}</h3>
+          <h3 className="text-xl font-bold text-[#2C3539] font-serif">{content.title}</h3>
         </div>
 
         <div className="pt-2 border-t border-slate-100">{content.body}</div>

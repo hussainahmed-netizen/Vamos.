@@ -32,7 +32,7 @@ export const AccountModal: React.FC = () => {
       <div className="bg-white rounded-3xl max-w-2xl w-full shadow-2xl p-6 sm:p-8 relative border border-slate-200 max-h-[90vh] overflow-y-auto">
         <button
           onClick={() => setIsAccountModalOpen(false)}
-          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors"
+          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-[#2C3539] hover:bg-slate-100 rounded-full transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
@@ -46,7 +46,7 @@ export const AccountModal: React.FC = () => {
             )}
           </div>
           <div className="flex-1">
-            <h3 className="text-xl font-bold text-slate-900 font-serif">Account & Order Tracker</h3>
+            <h3 className="text-xl font-bold text-[#2C3539] font-serif">Account & Order Tracker</h3>
             <p className="text-xs text-slate-500">
               {user?.email ? `Signed in as ${user.email}` : 'Track shipments, view order history, and account status'}
             </p>
@@ -72,7 +72,7 @@ export const AccountModal: React.FC = () => {
 
         {/* Live Order Tracker Search Box */}
         <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 mb-6 space-y-3">
-          <label className="block text-xs font-bold text-slate-900 uppercase tracking-wider">
+          <label className="block text-xs font-bold text-[#2C3539] uppercase tracking-wider">
             Track Order Status
           </label>
           <form onSubmit={handleTrackSearch} className="flex gap-2">
@@ -82,7 +82,7 @@ export const AccountModal: React.FC = () => {
                 value={trackInput}
                 onChange={(e) => setTrackInput(e.target.value)}
                 placeholder="Enter Order ID (e.g. ORD-839210)"
-                className="w-full pl-9 pr-3 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-mono uppercase text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full pl-9 pr-3 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-mono uppercase text-[#2C3539] focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
             </div>
@@ -118,7 +118,7 @@ export const AccountModal: React.FC = () => {
 
         {/* Orders History List */}
         <div className="space-y-3">
-          <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+          <h4 className="text-sm font-bold text-[#2C3539] flex items-center gap-2">
             <Package className="w-4 h-4 text-emerald-600" /> Recent Session Orders ({ordersHistory.length})
           </h4>
 
@@ -135,7 +135,7 @@ export const AccountModal: React.FC = () => {
                   className="p-4 bg-white border border-slate-200 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
                 >
                   <div className="space-y-1">
-                    <div className="flex items-center gap-2 font-bold text-slate-900">
+                    <div className="flex items-center gap-2 font-bold text-[#2C3539]">
                       <span>#{order.id}</span>
                       <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded-full">
                         {order.status}
@@ -146,7 +146,7 @@ export const AccountModal: React.FC = () => {
                   </div>
 
                   <div className="sm:text-right border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-100">
-                    <div className="text-sm font-black text-slate-900 font-mono">
+                    <div className="text-sm font-black text-[#2C3539] font-mono">
                       ৳{order.total.toFixed(2)}
                     </div>
                     <div className="text-[10px] text-emerald-600 font-semibold mt-0.5">

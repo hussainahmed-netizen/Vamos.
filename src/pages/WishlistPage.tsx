@@ -35,7 +35,7 @@ export const WishlistPage: React.FC = () => {
               Saved Products
             </span>
           </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-[#111827] font-serif">
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-[#2C3539] font-serif">
             My Wishlist
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
@@ -99,7 +99,7 @@ export const WishlistPage: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900 font-serif">
+            <h2 className="text-xl sm:text-2xl font-bold text-[#2C3539] font-serif">
               Your wishlist is currently empty
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto leading-relaxed">

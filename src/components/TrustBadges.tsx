@@ -42,7 +42,7 @@ export const TrustBadges: React.FC = () => {
               {getIcon(badge.icon)}
             </div>
             <div>
-              <h4 className="text-[9px] sm:text-base font-bold text-[#111827] group-hover:text-[#2B080C] transition-colors leading-tight">
+              <h4 className="text-[9px] sm:text-base font-bold text-[#2C3539] group-hover:text-[#2B080C] transition-colors leading-tight">
                 {badge.title}
               </h4>
               <p className="hidden sm:block text-xs text-[#6B7280] mt-1 leading-relaxed">

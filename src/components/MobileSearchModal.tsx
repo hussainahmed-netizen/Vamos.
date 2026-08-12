@@ -65,7 +65,7 @@ export const MobileSearchModal: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search products, brands, categories..."
-            className="w-full pl-10 pr-9 py-2.5 bg-slate-100/80 border border-slate-200 rounded-2xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2B080C] focus:bg-white"
+            className="w-full pl-10 pr-9 py-2.5 bg-slate-100/80 border border-slate-200 rounded-2xl text-sm text-[#2C3539] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2B080C] focus:bg-white"
           />
           {searchQuery && (
             <button
@@ -78,7 +78,7 @@ export const MobileSearchModal: React.FC = () => {
         </div>
         <button
           onClick={() => setIsMobileSearchOpen(false)}
-          className="p-2.5 text-slate-600 hover:text-slate-900 font-bold text-sm"
+          className="p-2.5 text-slate-600 hover:text-[#2C3539] font-bold text-sm"
         >
           Close
         </button>
@@ -173,7 +173,7 @@ export const MobileSearchModal: React.FC = () => {
                       <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
                         {product.categoryName}
                       </p>
-                      <h4 className="text-sm font-bold text-slate-900 truncate">{product.name}</h4>
+                      <h4 className="text-sm font-bold text-[#2C3539] truncate">{product.name}</h4>
                       <div className="flex items-center gap-2 mt-0.5">
                         <span className="text-sm font-extrabold text-[#2B080C] font-mono">
                           ৳{product.price.toFixed(2)}

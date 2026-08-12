@@ -84,14 +84,14 @@ export const ProfileSetupModal: React.FC = () => {
         {isCancellable && (
           <button
             onClick={() => setIsProfileSetupRequired(false)}
-            className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors"
+            className="absolute top-4 right-4 p-2 text-slate-400 hover:text-[#2C3539] hover:bg-slate-100 rounded-full transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         )}
 
         <div className="mb-6 text-center">
-          <h3 className="text-2xl font-bold text-slate-900 font-serif">
+          <h3 className="text-2xl font-bold text-[#2C3539] font-serif">
             Complete Your Profile
           </h3>
           <p className="text-xs text-slate-500 mt-1">

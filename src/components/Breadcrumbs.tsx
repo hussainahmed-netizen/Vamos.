@@ -206,7 +206,7 @@ export const Breadcrumbs: React.FC = () => {
 
                 {item.isCurrent || isLast || !item.onClick ? (
                   <span
-                    className="text-slate-900 font-semibold truncate max-w-[160px] sm:max-w-[320px] md:max-w-[600px] shrink"
+                    className="text-[#2C3539] font-semibold truncate max-w-[160px] sm:max-w-[320px] md:max-w-[600px] shrink"
                     title={item.label}
                     aria-current={item.isCurrent ? 'page' : undefined}
                   >

@@ -75,7 +75,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           className={`absolute top-2.5 right-2.5 w-11 h-11 sm:w-8 sm:h-8 flex items-center justify-center rounded-full shadow-md backdrop-blur-md transition-all z-10 ${
             isWishlisted
               ? 'bg-[#2B080C] text-white'
-              : 'bg-white/90 text-[#111827] hover:bg-white hover:text-[#2B080C]'
+              : 'bg-white/90 text-[#2C3539] hover:bg-white hover:text-[#2B080C]'
           }`}
           title={isWishlisted ? 'Remove from wishlist' : 'Save to wishlist'}
         >
@@ -86,7 +86,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div className="absolute inset-x-0 bottom-3 px-2.5 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out flex items-center justify-center gap-2 z-10 pointer-events-none">
           <button
             onClick={handleQuickView}
-            className="pointer-events-auto min-h-[36px] sm:min-h-[32px] px-2.5 sm:px-3.5 py-1.5 bg-white/95 backdrop-blur-xs border border-slate-200 hover:border-[#2B080C] hover:bg-[#2B080C] text-[#111827] hover:text-white text-[10px] sm:text-xs font-semibold whitespace-nowrap rounded-full shadow-md flex items-center justify-center gap-1.5 transition-all transform active:scale-95"
+            className="pointer-events-auto min-h-[36px] sm:min-h-[32px] px-2.5 sm:px-3.5 py-1.5 bg-white/95 backdrop-blur-xs border border-slate-200 hover:border-[#2B080C] hover:bg-[#2B080C] text-[#2C3539] hover:text-white text-[10px] sm:text-xs font-semibold whitespace-nowrap rounded-full shadow-md flex items-center justify-center gap-1.5 transition-all transform active:scale-95"
           >
             <Eye className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
             <span>Quick View</span>
@@ -132,7 +132,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </div>
 
           {/* Product Title */}
-          <h3 className="text-xs sm:text-sm font-bold text-[#111827] group-hover:text-[#2B080C] transition-colors line-clamp-1 h-5 leading-5">
+          <h3 className="text-xs sm:text-sm font-bold text-[#2C3539] group-hover:text-[#2B080C] transition-colors line-clamp-1 h-5 leading-5">
             {product.name}
           </h3>
 
@@ -173,7 +173,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-1 sm:gap-1.5 mt-auto">
           <div className="flex flex-col justify-center min-h-[32px] min-w-0">
             <div className="flex items-baseline gap-0.5 sm:gap-1 flex-wrap">
-              <span className="text-[11px] sm:text-base font-extrabold text-slate-900 font-mono truncate">
+              <span className="text-[11px] sm:text-base font-extrabold text-[#2C3539] font-mono truncate">
                 ৳{product.price.toFixed(2)}
               </span>
               {product.originalPrice && (

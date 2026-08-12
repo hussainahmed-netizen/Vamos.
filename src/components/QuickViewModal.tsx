@@ -89,12 +89,12 @@ export const QuickViewModal: React.FC = () => {
               </div>
             </div>
 
-            <h2 className="text-xl font-bold text-slate-900 font-serif leading-snug">
+            <h2 className="text-xl font-bold text-[#2C3539] font-serif leading-snug">
               {quickViewProduct.name}
             </h2>
 
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-black text-slate-900 font-mono">
+              <span className="text-2xl font-black text-[#2C3539] font-mono">
                 ৳{quickViewProduct.price.toFixed(2)}
               </span>
               {quickViewProduct.originalPrice && (
@@ -111,7 +111,7 @@ export const QuickViewModal: React.FC = () => {
             {/* Colors picker */}
             {quickViewProduct.colors && (
               <div className="space-y-1.5 pt-2">
-                <span className="text-xs font-bold text-slate-900">Color: {selectedColor}</span>
+                <span className="text-xs font-bold text-[#2C3539]">Color: {selectedColor}</span>
                 <div className="flex gap-2">
                   {quickViewProduct.colors.map((c) => (
                     <button
@@ -131,7 +131,7 @@ export const QuickViewModal: React.FC = () => {
             {/* Sizes picker */}
             {quickViewProduct.sizes && (
               <div className="space-y-1.5 pt-1">
-                <span className="text-xs font-bold text-slate-900">Size:</span>
+                <span className="text-xs font-bold text-[#2C3539]">Size:</span>
                 <div className="flex gap-2">
                   {quickViewProduct.sizes.map((sz) => (
                     <button

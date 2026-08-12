@@ -40,7 +40,7 @@ export const FlashDeals: React.FC = () => {
             <div className="flex items-center gap-2 text-[#2B080C] font-extrabold text-xs uppercase tracking-widest">
               <Zap className="w-4 h-4 fill-current" /> Limited Time Flash Sale
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111827] font-serif">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#2C3539] font-serif">
               Today's Special Deals
             </h2>
           </div>
@@ -50,7 +50,7 @@ export const FlashDeals: React.FC = () => {
         <div className="flex items-center gap-3 bg-[#F9FAFB] px-5 py-3 rounded-2xl shadow-xs border border-[#E5E7EB] shrink-0">
           <Timer className="w-5 h-5 text-[#2B080C]" />
           <span className="text-xs font-bold text-[#6B7280] uppercase tracking-wider">Ends In:</span>
-          <div className="flex items-center gap-1.5 font-mono text-base font-extrabold text-[#111827]">
+          <div className="flex items-center gap-1.5 font-mono text-base font-extrabold text-[#2C3539]">
             <span className="bg-[#0B0E14] text-white px-2 py-1 rounded-lg">
               {String(timeLeft.hours).padStart(2, '0')}
             </span>

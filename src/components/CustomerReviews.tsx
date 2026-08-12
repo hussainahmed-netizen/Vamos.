@@ -70,7 +70,7 @@ export const CustomerReviews: React.FC = () => {
                 <span className="text-slate-400 font-medium">{review.date}</span>
               </div>
 
-              <h4 className="text-sm font-bold text-slate-900 line-clamp-1">{review.title}</h4>
+              <h4 className="text-sm font-bold text-[#2C3539] line-clamp-1">{review.title}</h4>
               <p className="text-xs text-slate-600 leading-relaxed italic">"{review.comment}"</p>
             </div>
 
@@ -86,7 +86,7 @@ export const CustomerReviews: React.FC = () => {
                   className="w-8 h-8 rounded-full object-cover border border-slate-200"
                 />
                 <div>
-                  <span className="text-xs font-bold text-slate-900 block leading-none">
+                  <span className="text-xs font-bold text-[#2C3539] block leading-none">
                     {review.author}
                   </span>
                   {review.verified && (

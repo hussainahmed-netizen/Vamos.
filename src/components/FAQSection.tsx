@@ -15,7 +15,7 @@ export const FAQSection: React.FC = () => {
         <div className="inline-flex items-center gap-1.5 text-[#2B080C] font-bold text-xs uppercase tracking-widest bg-[#2B080C]/10 border border-[#2B080C]/20 px-3 py-1 rounded-full">
           <HelpCircle className="w-3.5 h-3.5" /> Frequently Asked Questions
         </div>
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111827] font-serif">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#2C3539] font-serif">
           Got Questions? We Have Answers.
         </h2>
         <p className="text-sm text-[#6B7280]">
@@ -35,7 +35,7 @@ export const FAQSection: React.FC = () => {
             >
               <button
                 onClick={() => toggleAccordion(idx)}
-                className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-3 sm:gap-4 font-bold text-[#111827]"
+                className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-3 sm:gap-4 font-bold text-[#2C3539]"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3 min-w-0 flex-1">
                   <span className={`text-[13px] sm:text-base leading-snug transition-all ${isOpen ? 'whitespace-normal' : 'truncate'}`}>

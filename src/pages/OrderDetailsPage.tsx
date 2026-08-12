@@ -50,7 +50,7 @@ export const OrderDetailsPage: React.FC<OrderDetailsPageProps> = ({ orderId, onB
     return (
       <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center space-y-4 max-w-2xl mx-auto my-8">
         <AlertCircle className="w-12 h-12 text-rose-500 mx-auto" />
-        <h2 className="text-xl font-bold text-slate-900">Order Not Found</h2>
+        <h2 className="text-xl font-bold text-[#2C3539]">Order Not Found</h2>
         <p className="text-sm text-slate-500">
           We couldn't find details for order ID <span className="font-mono font-bold">{activeId}</span>.
         </p>
@@ -183,7 +183,7 @@ export const OrderDetailsPage: React.FC<OrderDetailsPageProps> = ({ orderId, onB
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight font-mono">
+              <h1 className="text-xl sm:text-2xl font-black text-[#2C3539] tracking-tight font-mono">
                 #{targetOrder.id}
               </h1>
               <span className="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full border border-emerald-300/60">
@@ -207,7 +207,7 @@ export const OrderDetailsPage: React.FC<OrderDetailsPageProps> = ({ orderId, onB
         {/* STEP-BY-STEP TRACKER STEPPER */}
         <div className="pt-2 pb-4">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+            <h3 className="text-xs font-bold text-[#2C3539] uppercase tracking-wider flex items-center gap-2">
               <Truck className="w-4 h-4 text-[#2B080C]" /> Live Shipment Tracking Status
             </h3>
           </div>
@@ -258,7 +258,7 @@ export const OrderDetailsPage: React.FC<OrderDetailsPageProps> = ({ orderId, onB
                     <div className="md:text-center min-w-0">
                       <p
                         className={`text-xs font-bold ${
-                          isCompleted ? 'text-slate-900' : 'text-slate-400'
+                          isCompleted ? 'text-[#2C3539]' : 'text-slate-400'
                         }`}
                       >
                         {step.label}
@@ -279,7 +279,7 @@ export const OrderDetailsPage: React.FC<OrderDetailsPageProps> = ({ orderId, onB
         <div className="lg:col-span-2 space-y-4">
           <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <h3 className="text-base font-bold text-[#2C3539] flex items-center gap-2">
                 <ShoppingBag className="w-4 h-4 text-[#2B080C]" /> Order Items ({targetOrder.items.length})
               </h3>
               <span className="text-xs text-slate-500 font-mono">Unit Prices in BDT (৳)</span>
@@ -310,7 +310,7 @@ export const OrderDetailsPage: React.FC<OrderDetailsPageProps> = ({ orderId, onB
                     <div className="flex-1 min-w-0">
                       <button
                         onClick={() => navigateToProduct(item.product.id)}
-                        className="text-left text-sm font-bold text-slate-900 hover:text-[#2B080C] transition-colors truncate block w-full"
+                        className="text-left text-sm font-bold text-[#2C3539] hover:text-[#2B080C] transition-colors truncate block w-full"
                       >
                         {item.product.name}
                       </button>
@@ -333,7 +333,7 @@ export const OrderDetailsPage: React.FC<OrderDetailsPageProps> = ({ orderId, onB
                     </div>
 
                     <div className="text-right shrink-0">
-                      <div className="text-sm font-extrabold text-slate-900 font-mono">
+                      <div className="text-sm font-extrabold text-[#2C3539] font-mono">
                         ৳{itemSubtotal.toFixed(2)}
                       </div>
                     </div>
@@ -348,7 +348,7 @@ export const OrderDetailsPage: React.FC<OrderDetailsPageProps> = ({ orderId, onB
         <div className="space-y-6">
           {/* Billing & Payment Summary Card */}
           <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
-            <h3 className="text-base font-bold text-slate-900 pb-3 border-b border-slate-100 flex items-center justify-between">
+            <h3 className="text-base font-bold text-[#2C3539] pb-3 border-b border-slate-100 flex items-center justify-between">
               <span>Payment Breakdown</span>
               <CreditCard className="w-4 h-4 text-slate-400" />
             </h3>
@@ -356,12 +356,12 @@ export const OrderDetailsPage: React.FC<OrderDetailsPageProps> = ({ orderId, onB
             <div className="space-y-2 text-xs text-slate-600">
               <div className="flex justify-between">
                 <span>Items Subtotal:</span>
-                <span className="font-mono font-semibold text-slate-900">৳{subtotal.toFixed(2)}</span>
+                <span className="font-mono font-semibold text-[#2C3539]">৳{subtotal.toFixed(2)}</span>
               </div>
 
               <div className="flex justify-between">
                 <span>Delivery Fee:</span>
-                <span className="font-mono font-semibold text-slate-900">
+                <span className="font-mono font-semibold text-[#2C3539]">
                   {shippingFee === 0 ? <strong className="text-emerald-700">FREE</strong> : `৳${shippingFee.toFixed(2)}`}
                 </span>
               </div>
@@ -373,7 +373,7 @@ export const OrderDetailsPage: React.FC<OrderDetailsPageProps> = ({ orderId, onB
                 </div>
               )}
 
-              <div className="pt-3 border-t border-slate-200 flex justify-between text-sm font-extrabold text-slate-900">
+              <div className="pt-3 border-t border-slate-200 flex justify-between text-sm font-extrabold text-[#2C3539]">
                 <span>Total Order Amount:</span>
                 <span className="font-mono text-[#2B080C] text-base">৳{total.toFixed(2)}</span>
               </div>
@@ -403,13 +403,13 @@ export const OrderDetailsPage: React.FC<OrderDetailsPageProps> = ({ orderId, onB
 
           {/* Shipping Address Card */}
           <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-3">
-            <h3 className="text-base font-bold text-slate-900 pb-2 border-b border-slate-100 flex items-center justify-between">
+            <h3 className="text-base font-bold text-[#2C3539] pb-2 border-b border-slate-100 flex items-center justify-between">
               <span>Shipping Destination</span>
               <MapPin className="w-4 h-4 text-[#2B080C]" />
             </h3>
 
             <div className="text-xs space-y-2 text-slate-700">
-              <p className="font-extrabold text-slate-900 text-sm">
+              <p className="font-extrabold text-[#2C3539] text-sm">
                 {targetOrder.shippingAddress?.fullName || 'John Doe'}
               </p>
               

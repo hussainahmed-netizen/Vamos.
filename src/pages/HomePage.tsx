@@ -50,7 +50,7 @@ export const HomePage: React.FC = () => {
             <div className="flex items-center gap-2 text-[#2B080C] font-bold text-xs uppercase tracking-widest mb-1">
               <Flame className="w-4 h-4 fill-current" /> Customer Favorites
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111827] font-serif">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#2C3539] font-serif">
               Best Seller Products
             </h2>
           </div>
@@ -59,7 +59,7 @@ export const HomePage: React.FC = () => {
               setSelectedCategory('all');
               setView('shop');
             }}
-            className="text-sm font-bold text-[#111827] hover:text-[#2B080C] flex items-center gap-1 group"
+            className="text-sm font-bold text-[#2C3539] hover:text-[#2B080C] flex items-center gap-1 group"
           >
             Explore Best Sellers <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
@@ -79,7 +79,7 @@ export const HomePage: React.FC = () => {
             <div className="flex items-center gap-2 text-[#2B080C] font-bold text-xs uppercase tracking-widest mb-1">
               HANDPICKED SELECTION
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111827] font-serif">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#2C3539] font-serif">
               Featured Products
             </h2>
           </div>
@@ -88,7 +88,7 @@ export const HomePage: React.FC = () => {
               setSelectedCategory('all');
               setView('shop');
             }}
-            className="text-sm font-bold text-[#111827] hover:text-[#2B080C] flex items-center gap-1 group"
+            className="text-sm font-bold text-[#2C3539] hover:text-[#2B080C] flex items-center gap-1 group"
           >
             Explore Featured <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
@@ -111,7 +111,7 @@ export const HomePage: React.FC = () => {
             <div className="flex items-center gap-2 text-[#2B080C] font-bold text-xs uppercase tracking-widest mb-1">
               Fresh In Store
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111827] font-serif">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#2C3539] font-serif">
               New Arrivals
             </h2>
           </div>
@@ -120,7 +120,7 @@ export const HomePage: React.FC = () => {
               setSelectedCategory('all');
               setView('shop');
             }}
-            className="text-sm font-bold text-[#111827] hover:text-[#2B080C] flex items-center gap-1 group"
+            className="text-sm font-bold text-[#2C3539] hover:text-[#2B080C] flex items-center gap-1 group"
           >
             Shop New Arrivals <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>

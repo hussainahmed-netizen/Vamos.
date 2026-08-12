@@ -86,14 +86,14 @@ export const AuthModal: React.FC = () => {
       <div className="bg-white rounded-3xl max-w-md w-full shadow-2xl relative border border-slate-200 max-h-[90vh] flex flex-col">
         <button
           onClick={() => setIsAuthModalOpen(false)}
-          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors z-10"
+          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-[#2C3539] hover:bg-slate-100 rounded-full transition-colors z-10"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="p-6 sm:p-8 overflow-y-auto">
           <div className="mb-6 text-center">
-          <h3 className="text-2xl font-bold text-slate-900 font-serif">
+          <h3 className="text-2xl font-bold text-[#2C3539] font-serif">
             {mode === 'signin' ? 'Welcome Back' : 'Create Account'}
           </h3>
           <p className="text-xs text-slate-500 mt-1">

@@ -95,8 +95,8 @@ export const ShopPage: React.FC = () => {
         <div className="h-24 bg-slate-200 rounded-2xl w-full mb-8"></div>
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="hidden lg:block h-[600px] bg-slate-200 rounded-3xl w-full"></div>
-          <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
+          <div className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {[...Array(10)].map((_, i) => (
               <div key={i} className="h-80 bg-slate-200 rounded-2xl w-full"></div>
             ))}
           </div>
@@ -310,7 +310,7 @@ export const ShopPage: React.FC = () => {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
               {filteredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}

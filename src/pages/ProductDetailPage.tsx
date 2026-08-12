@@ -411,7 +411,7 @@ export const ProductDetailPage: React.FC = () => {
     setView('checkout');
   };
 
-  const relatedItems = products.filter((p) => p.id !== storeProduct.id).slice(0, 4);
+  const relatedItems = products.filter((p) => p.id !== storeProduct.id).slice(0, 5);
 
   if (isLoading) {
     return (
@@ -1052,7 +1052,7 @@ export const ProductDetailPage: React.FC = () => {
           <h2 className="text-xl lg:text-2xl font-extrabold text-[#2C3539] font-serif">
             Related Products
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
             {relatedItems.map((relItem) => (
               <ProductCard key={relItem.id} product={relItem} />
             ))}

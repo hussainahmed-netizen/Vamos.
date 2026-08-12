@@ -252,24 +252,44 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           }
         }
 
-        // If data is empty, we keep the mock data fallback, else replace it
+        // Merge Categories so all 6 default categories + subcategories are preserved
+        let mergedCats: CategoryItem[] = MOCK_CATEGORIES;
         if (dbCategories && dbCategories.length > 0) {
-          // You could transform raw table data to CategoryItem[] here
-          // For now just mapping it somewhat safely
-          const mappedCats: CategoryItem[] = dbCategories.map(c => ({
-            id: c.id as CategoryId,
-            name: c.name,
-            description: c.description,
-            image: c.image,
-            itemCount: c.item_count || 0,
-            badge: c.badge || undefined,
-            subCategories: [] // Would fetch from sub_categories
-          }));
-          setCategories(mappedCats);
+          const dbMap = new Map(dbCategories.map((c: any) => [c.id, c]));
+          mergedCats = MOCK_CATEGORIES.map((mockCat) => {
+            const dbCat = dbMap.get(mockCat.id);
+            if (dbCat) {
+              return {
+                ...mockCat,
+                name: dbCat.name || mockCat.name,
+                description: dbCat.description || mockCat.description,
+                image: dbCat.image || mockCat.image,
+                badge: dbCat.badge || mockCat.badge,
+                itemCount: dbCat.item_count || mockCat.itemCount
+              };
+            }
+            return mockCat;
+          });
+
+          dbCategories.forEach((dbCat: any) => {
+            if (!mergedCats.some((c) => c.id === dbCat.id)) {
+              mergedCats.push({
+                id: dbCat.id as CategoryId,
+                name: dbCat.name,
+                description: dbCat.description,
+                image: dbCat.image,
+                itemCount: dbCat.item_count || 10,
+                badge: dbCat.badge || undefined,
+                subCategories: []
+              });
+            }
+          });
         }
+        setCategories(mergedCats);
         
+        let mergedProducts: Product[] = MOCK_PRODUCTS;
         if (dbProducts && dbProducts.length > 0) {
-          const mappedProds: Product[] = dbProducts.map(p => ({
+          const mappedProds: Product[] = dbProducts.map((p: any) => ({
             ...p,
             category: p.category_id as CategoryId,
             subCategory: p.sub_category_id,
@@ -282,9 +302,11 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             isDeal: p.is_deal,
             dealEndsInHours: p.deal_ends_in_hours
           }));
-          const uniqueProds = Array.from(new Map(mappedProds.map(p => [p.id, p])).values());
-          setProducts(uniqueProds);
+          const prodMap = new Map(MOCK_PRODUCTS.map((p) => [p.id, p]));
+          mappedProds.forEach((p) => prodMap.set(p.id, p));
+          mergedProducts = Array.from(prodMap.values());
         }
+        setProducts(mergedProducts);
 
       } catch (err: any) {
         console.warn('Error fetching from Supabase:', err);

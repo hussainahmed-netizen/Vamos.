@@ -81,14 +81,12 @@ export const ProfileSetupModal: React.FC = () => {
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in">
       <div className="bg-white rounded-3xl max-w-lg w-full shadow-2xl p-6 sm:p-8 relative border border-slate-200 overflow-y-auto max-h-[90vh]">
-        {isCancellable && (
-          <button
-            onClick={() => setIsProfileSetupRequired(false)}
-            className="absolute top-4 right-4 p-2 text-slate-400 hover:text-[#2C3539] hover:bg-slate-100 rounded-full transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        )}
+        <button
+          onClick={() => setIsProfileSetupRequired(false)}
+          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-[#2C3539] hover:bg-slate-100 rounded-full transition-colors"
+        >
+          <X className="w-5 h-5" />
+        </button>
 
         <div className="mb-6 text-center">
           <h3 className="text-2xl font-bold text-[#2C3539] font-serif">

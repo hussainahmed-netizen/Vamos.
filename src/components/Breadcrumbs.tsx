@@ -1,6 +1,5 @@
 import React from 'react';
 import { useStore } from '../context/StoreContext';
-import { CATEGORIES, PRODUCTS } from '../data/mockData';
 import { ChevronRight, Home } from 'lucide-react';
 
 interface BreadcrumbItem {
@@ -12,13 +11,19 @@ interface BreadcrumbItem {
 
 export const Breadcrumbs: React.FC = () => {
   const {
+    products,
+    categories,
     view,
     setView,
     selectedCategory,
     setSelectedCategory,
     selectedSubCategory,
     selectedProductId,
-    searchQuery
+    selectedOrderId,
+    accountTab,
+    searchQuery,
+    navigateToAccount,
+    navigateToCategory
   } = useStore();
 
   // Hide breadcrumb trail completely on the homepage
@@ -28,7 +33,7 @@ export const Breadcrumbs: React.FC = () => {
 
   const items: BreadcrumbItem[] = [];
 
-  // Always starts with Home
+  // 1. Always start with Home
   items.push({
     id: 'home',
     label: 'Home',
@@ -38,7 +43,7 @@ export const Breadcrumbs: React.FC = () => {
   if (view === 'shop') {
     if (selectedCategory === 'all') {
       items.push({
-        id: 'catalog',
+        id: 'shop',
         label: 'Shop Catalog',
         isCurrent: !searchQuery,
         onClick: searchQuery ? () => setSelectedCategory('all', null) : undefined
@@ -53,14 +58,12 @@ export const Breadcrumbs: React.FC = () => {
       }
     } else {
       items.push({
-        id: 'catalog',
+        id: 'shop',
         label: 'Shop Catalog',
-        onClick: () => {
-          setSelectedCategory('all', null);
-        }
+        onClick: () => setSelectedCategory('all', null)
       });
 
-      const catObj = CATEGORIES.find((c) => c.id === selectedCategory);
+      const catObj = categories.find((c) => c.id === selectedCategory);
       const catName = catObj?.name || selectedCategory;
 
       items.push({
@@ -82,29 +85,27 @@ export const Breadcrumbs: React.FC = () => {
       }
     }
   } else if (view === 'product') {
-    const product = PRODUCTS.find((p) => p.id === selectedProductId) || PRODUCTS[0];
-    const catObj = CATEGORIES.find((c) => c.id === product?.category);
-    const catName = catObj?.name || product?.categoryName || 'Catalog';
+    const product = products.find((p) => p.id === selectedProductId) || products[0];
+    const catObj = categories.find((c) => c.id === product?.category);
+    const catName = catObj?.name || product?.categoryName || 'Shop Catalog';
     const subObj = catObj?.subCategories?.find((s) => s.id === product?.subCategory);
-    const subName = subObj?.name || (product?.subCategory ? product.subCategory.charAt(0).toUpperCase() + product.subCategory.slice(1) : null);
-
-    items.push({
-      id: 'catalog',
-      label: 'Shop Catalog',
-      onClick: () => {
-        setSelectedCategory('all', null);
-        setView('shop');
-      }
-    });
+    const subName =
+      subObj?.name ||
+      (product?.subCategory
+        ? product.subCategory.charAt(0).toUpperCase() + product.subCategory.slice(1)
+        : null);
 
     if (product?.category) {
       items.push({
         id: `cat-${product.category}`,
         label: catName,
-        onClick: () => {
-          setSelectedCategory(product.category, null);
-          setView('shop');
-        }
+        onClick: () => navigateToCategory(product.category, null)
+      });
+    } else {
+      items.push({
+        id: 'shop',
+        label: 'Shop Catalog',
+        onClick: () => setSelectedCategory('all', null)
       });
     }
 
@@ -112,10 +113,7 @@ export const Breadcrumbs: React.FC = () => {
       items.push({
         id: `sub-${product.subCategory}`,
         label: subName,
-        onClick: () => {
-          setSelectedCategory(product.category, product.subCategory);
-          setView('shop');
-        }
+        onClick: () => navigateToCategory(product.category, product.subCategory)
       });
     }
 
@@ -157,12 +155,44 @@ export const Breadcrumbs: React.FC = () => {
     items.push({
       id: 'account',
       label: 'My Account',
-      isCurrent: true
+      onClick: accountTab !== 'overview' || selectedOrderId ? () => navigateToAccount('overview') : undefined,
+      isCurrent: accountTab === 'overview' && !selectedOrderId
     });
+
+    if (selectedOrderId) {
+      items.push({
+        id: 'account-orders',
+        label: 'My Orders',
+        onClick: () => navigateToAccount('orders')
+      });
+      items.push({
+        id: `order-${selectedOrderId}`,
+        label: `Order #${selectedOrderId}`,
+        isCurrent: true
+      });
+    } else if (accountTab === 'orders') {
+      items.push({
+        id: 'account-orders',
+        label: 'My Orders',
+        isCurrent: true
+      });
+    } else if (accountTab === 'reviews') {
+      items.push({
+        id: 'account-reviews',
+        label: 'My Reviews',
+        isCurrent: true
+      });
+    } else if (accountTab === 'returns') {
+      items.push({
+        id: 'account-returns',
+        label: 'My Returns & Cancellations',
+        isCurrent: true
+      });
+    }
   }
 
   return (
-    <div className="bg-white/80 border-b border-slate-200/80 backdrop-blur-xs py-2.5 px-4 sm:px-6 lg:px-8 transition-all">
+    <div className="bg-white/80 border-b border-slate-200/80 backdrop-blur-xs py-1.5 px-4 sm:px-6 lg:px-8 transition-all">
       <div className="max-w-[1536px] mx-auto">
         <nav aria-label="Breadcrumb" className="flex items-center flex-wrap gap-1.5 text-xs text-slate-500 font-medium">
           {items.map((item, index) => {
@@ -188,7 +218,7 @@ export const Breadcrumbs: React.FC = () => {
                     onClick={item.onClick}
                     className="hover:text-[#2B080C] hover:underline transition-colors flex items-center gap-1 shrink-0 text-left"
                   >
-                    {item.id === 'home' && <Home className="w-3 h-3 text-slate-400 group-hover:text-[#2B080C]" />}
+                    {index === 0 && <Home className="w-3 h-3 text-slate-400 group-hover:text-[#2B080C]" />}
                     <span>{item.label}</span>
                   </button>
                 )}

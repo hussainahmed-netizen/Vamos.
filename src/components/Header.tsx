@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useStore } from '../context/StoreContext';
 import { useBrand } from '../context/BrandContext';
 import { LogoContainer } from './LogoContainer';
-import { PRODUCTS, CATEGORIES } from '../data/mockData';
 import { CategoryId } from '../types';
 import {
   Search,
@@ -29,6 +28,8 @@ import {
 export const Header: React.FC = () => {
   const { brandConfig } = useBrand();
   const {
+    products,
+    categories,
     view,
     setView,
     pathname,
@@ -106,7 +107,7 @@ export const Header: React.FC = () => {
 
   // Filter products for search autocomplete
   const searchResults = searchQuery.trim().length > 0
-    ? PRODUCTS.filter(p =>
+    ? products.filter(p =>
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.categoryName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -448,7 +449,7 @@ export const Header: React.FC = () => {
                 Shop All Catalog
               </button>
 
-              {CATEGORIES.map((cat) => (
+              {categories.map((cat) => (
                 <div key={cat.id} className="relative group">
                   <button
                     onClick={() => handleCategoryClick(cat.id as CategoryId)}
@@ -476,11 +477,11 @@ export const Header: React.FC = () => {
                     >
                       <span>All {cat.name}</span>
                       <span className="text-[10px] text-slate-400 font-mono">
-                        ({PRODUCTS.filter((p) => p.category === cat.id).length})
+                        ({products.filter((p) => p.category === cat.id).length})
                       </span>
                     </button>
-                    {cat.subCategories.map((sub) => {
-                      const subCount = PRODUCTS.filter(
+                    {cat.subCategories?.map((sub) => {
+                      const subCount = products.filter(
                         (p) => p.category === cat.id && p.subCategory === sub.id
                       ).length;
                       return (
@@ -594,7 +595,7 @@ export const Header: React.FC = () => {
                 Categories
               </div>
 
-              {CATEGORIES.map((cat) => (
+              {categories.map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => handleCategoryClick(cat.id as CategoryId)}

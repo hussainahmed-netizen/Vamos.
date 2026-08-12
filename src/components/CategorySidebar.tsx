@@ -1,18 +1,19 @@
 import React from 'react';
-import { CATEGORIES, PRODUCTS } from '../data/mockData';
 import { useStore } from '../context/StoreContext';
 import { CategoryId } from '../types';
 import { ArrowLeft, ChevronRight, Check } from 'lucide-react';
 
 export const CategorySidebar: React.FC = () => {
   const {
+    products,
+    categories,
     selectedCategory,
     setSelectedCategory,
     selectedSubCategory,
     setSelectedSubCategory
   } = useStore();
 
-  const activeCategoryObj = CATEGORIES.find((c) => c.id === selectedCategory);
+  const activeCategoryObj = categories.find((c) => c.id === selectedCategory);
 
   return (
     <div className="space-y-3">
@@ -49,12 +50,12 @@ export const CategorySidebar: React.FC = () => {
                 <span>All Categories</span>
               </div>
               <span className={selectedCategory === 'all' ? 'text-white/80 font-mono text-[11px]' : 'text-slate-400 font-mono text-[11px]'}>
-                ({PRODUCTS.length})
+                ({products.length})
               </span>
             </button>
 
-            {CATEGORIES.map((cat) => {
-              const count = PRODUCTS.filter((p) => p.category === cat.id).length;
+            {categories.map((cat) => {
+              const count = products.filter((p) => p.category === cat.id).length;
               return (
                 <button
                   key={cat.id}
@@ -104,13 +105,13 @@ export const CategorySidebar: React.FC = () => {
                 <span className="truncate">All {activeCategoryObj?.name || 'Items'}</span>
               </div>
               <span className={`font-mono text-[11px] ${selectedSubCategory === null ? 'text-white/80' : 'text-slate-500'}`}>
-                ({PRODUCTS.filter((p) => p.category === selectedCategory).length})
+                ({products.filter((p) => p.category === selectedCategory).length})
               </span>
             </button>
 
             {/* Mapped Sub-Categories List */}
-            {activeCategoryObj?.subCategories.map((sub) => {
-              const subCount = PRODUCTS.filter(
+            {activeCategoryObj?.subCategories?.map((sub) => {
+              const subCount = products.filter(
                 (p) => p.category === selectedCategory && p.subCategory === sub.id
               ).length;
               const isSelected = selectedSubCategory === sub.id;

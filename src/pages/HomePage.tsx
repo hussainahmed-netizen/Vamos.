@@ -8,16 +8,29 @@ import { CustomerReviews } from '../components/CustomerReviews';
 import { BrandStory } from '../components/BrandStory';
 import { FAQSection } from '../components/FAQSection';
 import { Newsletter } from '../components/Newsletter';
-import { PRODUCTS } from '../data/mockData';
 import { useStore } from '../context/StoreContext';
 import { ArrowRight, Flame } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
-  const { setView, setSelectedCategory } = useStore();
+  const { setView, setSelectedCategory, products, isLoading } = useStore();
 
-  const bestSellers = PRODUCTS.filter((p) => p.isBestSeller);
-  const newArrivals = PRODUCTS.filter((p) => p.isNewArrival);
-  const featuredProducts = PRODUCTS.slice(0, 10);
+  const bestSellers = products.filter((p) => p.isBestSeller);
+  const newArrivals = products.filter((p) => p.isNewArrival);
+  const featuredProducts = products.slice(0, 10);
+
+  if (isLoading) {
+    return (
+      <div className="max-w-[1536px] mx-auto px-4 py-12 space-y-8 animate-pulse">
+        <div className="h-96 bg-slate-200 rounded-3xl w-full"></div>
+        <div className="h-10 bg-slate-200 rounded w-1/4"></div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="h-64 bg-slate-200 rounded-2xl w-full"></div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4 animate-in fade-in duration-300">

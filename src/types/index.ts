@@ -29,6 +29,8 @@ export interface Product {
   rating: number;
   reviewCount: number;
   images: string[];
+  image?: string;
+  imageUrl?: string;
   description: string;
   features: string[];
   specifications: Record<string, string>;
@@ -84,6 +86,7 @@ export interface ShippingAddress {
 }
 
 export type PaymentMethod = 'card' | 'cod' | 'paypal' | 'mobile_wallet';
+export type PaymentStatus = 'cod' | 'online_paid' | 'half_paid' | 'delivery_charge_paid';
 
 export interface Order {
   id: string;
@@ -91,14 +94,21 @@ export interface Order {
   items: CartItem[];
   shippingAddress: ShippingAddress;
   paymentMethod: PaymentMethod;
+  paymentStatus?: PaymentStatus;
+  amountPaid?: number;
+  dueAmount?: number;
   subtotal: number;
   tax: number;
   shippingFee: number;
   discount: number;
   total: number;
-  status: 'Processing' | 'Shipped' | 'Out for Delivery' | 'Delivered';
+  status: 'Order Placed' | 'Processing' | 'Shipped' | 'Out for Delivery' | 'Delivered';
   estimatedDelivery: string;
 }
+
+export type ViewMode = 'home' | 'shop' | 'product' | 'cart' | 'checkout' | 'order-success' | 'wishlist' | 'account';
+
+export type AccountTab = 'overview' | 'orders' | 'reviews' | 'returns';
 
 export interface FAQItem {
   question: string;

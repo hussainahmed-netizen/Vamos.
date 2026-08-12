@@ -3,7 +3,7 @@ import { useStore } from '../context/StoreContext';
 import { X, User, Package, Search, Clock, CheckCircle2, Truck, ShieldCheck } from 'lucide-react';
 
 export const AccountModal: React.FC = () => {
-  const { isAccountModalOpen, setIsAccountModalOpen, ordersHistory, currentOrder } = useStore();
+  const { isAccountModalOpen, setIsAccountModalOpen, ordersHistory, currentOrder, user, signInWithGoogle, signOut } = useStore();
   const [trackInput, setTrackInput] = useState('');
   const [foundOrder, setFoundOrder] = useState<any>(null);
   const [trackError, setTrackError] = useState(false);
@@ -39,11 +39,34 @@ export const AccountModal: React.FC = () => {
 
         <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
           <div className="w-12 h-12 bg-slate-900 text-emerald-400 rounded-2xl flex items-center justify-center font-bold text-xl">
-            <User className="w-6 h-6" />
+            {user?.email ? (
+              <img src={user.user_metadata?.avatar_url || `https://ui-avatars.com/api/?name=${user.email}`} alt="Avatar" className="w-full h-full rounded-2xl object-cover" />
+            ) : (
+              <User className="w-6 h-6" />
+            )}
+          </div>
+          <div className="flex-1">
+            <h3 className="text-xl font-bold text-slate-900 font-serif">Account & Order Tracker</h3>
+            <p className="text-xs text-slate-500">
+              {user?.email ? `Signed in as ${user.email}` : 'Track shipments, view order history, and account status'}
+            </p>
           </div>
           <div>
-            <h3 className="text-xl font-bold text-slate-900 font-serif">Account & Order Tracker</h3>
-            <p className="text-xs text-slate-500">Track shipments, view order history, and account status</p>
+            {!user?.email ? (
+              <button
+                onClick={signInWithGoogle}
+                className="px-4 py-2 bg-blue-600 text-white font-bold text-xs rounded-xl hover:bg-blue-700 transition-colors flex items-center gap-2"
+              >
+                Continue with Google
+              </button>
+            ) : (
+              <button
+                onClick={signOut}
+                className="px-4 py-2 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl hover:bg-slate-200 transition-colors"
+              >
+                Sign Out
+              </button>
+            )}
           </div>
         </div>
 

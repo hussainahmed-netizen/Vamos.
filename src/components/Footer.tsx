@@ -2,7 +2,6 @@ import React from 'react';
 import { useStore } from '../context/StoreContext';
 import { useBrand } from '../context/BrandContext';
 import { LogoContainer } from './LogoContainer';
-import { CATEGORIES } from '../data/mockData';
 import { CategoryId } from '../types';
 import {
   Truck,
@@ -20,7 +19,7 @@ import {
 } from 'lucide-react';
 
 export const Footer: React.FC = () => {
-  const { setView, setSelectedCategory, setActivePolicyModal, setIsAccountModalOpen } = useStore();
+  const { categories, setView, setSelectedCategory, navigateToCategory, setActivePolicyModal, setIsAccountModalOpen } = useStore();
   const { brandConfig } = useBrand();
 
   return (
@@ -125,12 +124,11 @@ export const Footer: React.FC = () => {
           <div className="space-y-3">
             <p className="text-xs font-bold text-white uppercase tracking-wider">Categories</p>
             <ul className="space-y-2 text-xs text-slate-400">
-              {CATEGORIES.map((cat) => (
+              {categories.map((cat) => (
                 <li key={cat.id}>
                   <button
                     onClick={() => {
-                      setSelectedCategory(cat.id as CategoryId);
-                      setView('shop');
+                      navigateToCategory(cat.id as CategoryId);
                     }}
                     className="hover:text-white transition-colors"
                   >

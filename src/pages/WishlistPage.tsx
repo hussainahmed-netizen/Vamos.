@@ -1,13 +1,12 @@
 import React from 'react';
 import { useStore } from '../context/StoreContext';
-import { PRODUCTS } from '../data/mockData';
 import { ProductCard } from '../components/ProductCard';
 import { Heart, ShoppingBag, ArrowRight, Trash2 } from 'lucide-react';
 
 export const WishlistPage: React.FC = () => {
-  const { wishlist, setView, toggleWishlist, addToCart, showToast } = useStore();
+  const { products, wishlist, setView, toggleWishlist, addToCart, showToast } = useStore();
 
-  const favoritedProducts = PRODUCTS.filter((p) => wishlist.includes(p.id));
+  const favoritedProducts = products.filter((p) => wishlist.includes(p.id));
 
   const handleAddAllToCart = () => {
     if (favoritedProducts.length === 0) return;

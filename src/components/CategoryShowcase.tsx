@@ -1,11 +1,10 @@
 import React from 'react';
-import { CATEGORIES } from '../data/mockData';
 import { useStore } from '../context/StoreContext';
 import { CategoryId } from '../types';
 import { ArrowRight, Layers } from 'lucide-react';
 
 export const CategoryShowcase: React.FC = () => {
-  const { navigateToCategory } = useStore();
+  const { navigateToCategory, categories } = useStore();
 
   return (
     <section className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -27,7 +26,7 @@ export const CategoryShowcase: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-        {CATEGORIES.map((cat) => (
+        {categories.map((cat) => (
           <div
             key={cat.id}
             onClick={() => navigateToCategory(cat.id as CategoryId)}

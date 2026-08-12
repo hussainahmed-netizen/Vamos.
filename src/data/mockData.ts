@@ -1,4 +1,4 @@
-import { Product, Review, FAQItem, Coupon, CategoryItem } from '../types';
+import { Product, Review, FAQItem, Coupon, CategoryItem, Order } from '../types';
 
 export const CATEGORIES: CategoryItem[] = [
   {
@@ -599,5 +599,120 @@ export const TRUST_BADGES = [
     title: 'Cash on Delivery (COD)',
     subtitle: 'Pay at your doorstep on arrival',
     icon: 'Banknote'
+  }
+];
+
+export const MOCK_ORDERS: Order[] = [
+  {
+    id: 'ORD-839210',
+    date: 'Aug 10, 2026',
+    items: [
+      {
+        product: PRODUCTS[0], // Acoustic Pro Wireless Headphones
+        quantity: 1,
+        selectedColor: 'Matte Black',
+        selectedSize: 'Standard'
+      },
+      {
+        product: PRODUCTS[1], // Minimalist Leather Daypack
+        quantity: 1,
+        selectedColor: 'Cognac Brown'
+      },
+      {
+        product: PRODUCTS[2], // Urban Oversized Hoodie
+        quantity: 2,
+        selectedColor: 'Charcoal Grey',
+        selectedSize: 'L'
+      }
+    ],
+    shippingAddress: {
+      fullName: 'John Doe',
+      email: 'johndoe@example.com',
+      phone: '+880 1700-000000',
+      address: 'House 42, Road 11, Banani',
+      city: 'Dhaka',
+      state: 'Dhaka Division',
+      zipCode: '1213',
+      country: 'Bangladesh'
+    },
+    paymentMethod: 'card',
+    paymentStatus: 'online_paid',
+    subtotal: 390.00,
+    tax: 19.50,
+    shippingFee: 0,
+    discount: 39.00,
+    total: 370.50,
+    amountPaid: 370.50,
+    dueAmount: 0.00,
+    status: 'Out for Delivery',
+    estimatedDelivery: 'Thu, Aug 13'
+  },
+  {
+    id: 'ORD-712849',
+    date: 'Aug 05, 2026',
+    items: [
+      {
+        product: PRODUCTS[3], // Smart OLED Fitness Tracker
+        quantity: 1,
+        selectedColor: 'Obsidian Black'
+      }
+    ],
+    shippingAddress: {
+      fullName: 'John Doe',
+      email: 'johndoe@example.com',
+      phone: '+880 1700-000000',
+      address: 'Sector 4, Uttara',
+      city: 'Dhaka',
+      state: 'Dhaka Division',
+      zipCode: '1230',
+      country: 'Bangladesh'
+    },
+    paymentMethod: 'cod',
+    paymentStatus: 'delivery_charge_paid',
+    subtotal: 89.99,
+    tax: 4.50,
+    shippingFee: 4.99,
+    discount: 0,
+    total: 99.48,
+    amountPaid: 4.99,
+    dueAmount: 94.49,
+    status: 'Shipped',
+    estimatedDelivery: 'Sat, Aug 15'
+  },
+  {
+    id: 'ORD-554102',
+    date: 'Jul 28, 2026',
+    items: [
+      {
+        product: PRODUCTS[4], // Ceramic Aroma Diffuser
+        quantity: 2,
+        selectedColor: 'Warm Sand'
+      },
+      {
+        product: PRODUCTS[5], // Hydrating Vitamin C Serum
+        quantity: 1
+      }
+    ],
+    shippingAddress: {
+      fullName: 'John Doe',
+      email: 'johndoe@example.com',
+      phone: '+880 1700-000000',
+      address: 'GEC Circle, Nasirabad',
+      city: 'Chittagong',
+      state: 'Chittagong Division',
+      zipCode: '4000',
+      country: 'Bangladesh'
+    },
+    paymentMethod: 'mobile_wallet',
+    paymentStatus: 'half_paid',
+    subtotal: 135.00,
+    tax: 6.75,
+    shippingFee: 0,
+    discount: 10.00,
+    total: 131.75,
+    amountPaid: 65.88,
+    dueAmount: 65.87,
+    status: 'Delivered',
+    estimatedDelivery: 'Mon, Aug 03'
   }
 ];

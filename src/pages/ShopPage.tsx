@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import { PRODUCTS, CATEGORIES } from '../data/mockData';
 import { useStore } from '../context/StoreContext';
 import { useBrand } from '../context/BrandContext';
 import { CategoryId } from '../types';
@@ -19,12 +18,15 @@ import {
 export const ShopPage: React.FC = () => {
   const { brandConfig } = useBrand();
   const {
+    products,
+    categories,
     selectedCategory,
     setSelectedCategory,
     selectedSubCategory,
     setSelectedSubCategory,
     searchQuery,
-    setSearchQuery
+    setSearchQuery,
+    isLoading
   } = useStore();
 
   const [priceRange, setPriceRange] = useState<number>(250);
@@ -35,7 +37,7 @@ export const ShopPage: React.FC = () => {
   const [showMobileFilters, setShowMobileFilters] = useState<boolean>(false);
 
   const filteredProducts = useMemo(() => {
-    return PRODUCTS.filter((p) => {
+    return products.filter((p) => {
       // Category filter
       if (selectedCategory !== 'all' && p.category !== selectedCategory) return false;
 
@@ -68,7 +70,7 @@ export const ShopPage: React.FC = () => {
       if (sortBy === 'rating') return b.rating - a.rating;
       return 0; // featured default
     });
-  }, [selectedCategory, selectedSubCategory, priceRange, minRating, onlyInStock, searchQuery, sortBy]);
+  }, [products, selectedCategory, selectedSubCategory, priceRange, minRating, onlyInStock, searchQuery, sortBy]);
 
   const clearFilters = () => {
     setSelectedCategory('all', null);
@@ -87,6 +89,22 @@ export const ShopPage: React.FC = () => {
     onlyInStock ||
     searchQuery.length > 0;
 
+  if (isLoading) {
+    return (
+      <div className="max-w-[1536px] mx-auto px-4 py-8 animate-pulse">
+        <div className="h-24 bg-slate-200 rounded-2xl w-full mb-8"></div>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div className="hidden lg:block h-[600px] bg-slate-200 rounded-3xl w-full"></div>
+          <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="h-80 bg-slate-200 rounded-2xl w-full"></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in duration-300">
       {/* Page Header */}
@@ -99,7 +117,7 @@ export const ShopPage: React.FC = () => {
             <h1 className="text-3xl sm:text-4xl font-extrabold text-[#111827] font-serif">
               {selectedCategory === 'all'
                 ? 'All Products Catalog'
-                : CATEGORIES.find((c) => c.id === selectedCategory)?.name || 'Product Listing'}
+                : categories.find((c) => c.id === selectedCategory)?.name || 'Product Listing'}
             </h1>
             <p className="text-xs sm:text-sm text-[#6B7280] mt-1">
               Showing {filteredProducts.length} items with instant availability & Cash on Delivery support

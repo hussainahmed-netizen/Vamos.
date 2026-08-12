@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useStore } from '../context/StoreContext';
-import { PRODUCTS, CATEGORIES } from '../data/mockData';
 import { ProductCard } from '../components/ProductCard';
 import {
   Star,
@@ -128,25 +127,81 @@ const PRODUCT_PAGE_CONFIG = {
 
 export const ProductDetailPage: React.FC = () => {
   const {
+    products,
+    categories,
     selectedProductId,
     addToCart,
     setView,
     setSelectedCategory,
     reviewsList,
     showToast,
+    isLoading
   } = useStore();
 
+  if (isLoading) {
+    return (
+      <div className="max-w-[1536px] mx-auto px-4 py-8 animate-pulse">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 pb-16 border-b border-slate-200">
+          <div className="w-full lg:w-1/2">
+            <div className="aspect-square bg-slate-200 rounded-3xl w-full mb-4"></div>
+            <div className="flex gap-4">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="aspect-square bg-slate-200 rounded-2xl w-24"></div>
+              ))}
+            </div>
+          </div>
+          <div className="w-full lg:w-1/2 space-y-6">
+            <div className="h-8 bg-slate-200 rounded-xl w-3/4"></div>
+            <div className="h-6 bg-slate-200 rounded-xl w-1/2"></div>
+            <div className="h-24 bg-slate-200 rounded-2xl w-full"></div>
+            <div className="h-12 bg-slate-200 rounded-2xl w-full"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Selected state from CONFIG or active product
-  const storeProduct = PRODUCTS.find((p) => p.id === selectedProductId) || PRODUCTS[0];
+  const storeProduct = products.find((p) => p.id === selectedProductId) || products[0] || {} as any;
+
+  // Dynamic Product Attributes
+  const displayTitle = storeProduct.name || PRODUCT_PAGE_CONFIG.name;
+  const displaySubtitle = storeProduct.subtitle || PRODUCT_PAGE_CONFIG.subtitle;
+  const displayPrice = storeProduct.price || PRODUCT_PAGE_CONFIG.offerPrice;
+  const displayOriginalPrice = storeProduct.originalPrice || PRODUCT_PAGE_CONFIG.regularPrice;
+  const displayRating = storeProduct.rating || PRODUCT_PAGE_CONFIG.rating;
+  const displayReviews = storeProduct.reviewCount || PRODUCT_PAGE_CONFIG.totalReviews;
+
+  // Dynamic Image Array Resolution
+  const productImages: string[] = (() => {
+    if (Array.isArray(storeProduct?.images) && storeProduct.images.length > 0) {
+      return storeProduct.images;
+    }
+    if (Array.isArray((storeProduct as any)?.imagesUrl) && (storeProduct as any).imagesUrl.length > 0) {
+      return (storeProduct as any).imagesUrl;
+    }
+    const singleImg = storeProduct?.image || (storeProduct as any)?.imageUrl;
+    if (singleImg) {
+      return [singleImg];
+    }
+    return ['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=80'];
+  })();
 
   // Dynamic Category & Breadcrumb Resolution
-  const mainCategoryObj = CATEGORIES.find((c) => c.id === storeProduct.category);
+  const mainCategoryObj = categories.find((c) => c.id === storeProduct.category);
   const mainCategoryName = mainCategoryObj?.name || storeProduct.categoryName || 'Catalog';
   const subCategoryObj = mainCategoryObj?.subCategories?.find((s) => s.id === storeProduct.subCategory);
   const subCategoryName = subCategoryObj?.name || (storeProduct.subCategory ? storeProduct.subCategory.charAt(0).toUpperCase() + storeProduct.subCategory.slice(1) : null);
-  const productTitle = storeProduct.name || PRODUCT_PAGE_CONFIG.name;
+  const productTitle = displayTitle;
 
   const [selectedImageIdx, setSelectedImageIdx] = useState(0);
+
+  // Reset selected image index when active product changes
+  useEffect(() => {
+    setSelectedImageIdx(0);
+  }, [storeProduct.id]);
+
+  const currentDisplayImage = productImages[selectedImageIdx] || productImages[0];
   const [selectedColor, setSelectedColor] = useState(PRODUCT_PAGE_CONFIG.colors[0].name);
   const [selectedSize, setSelectedSize] = useState(PRODUCT_PAGE_CONFIG.sizes[0]);
   const [quantity, setQuantity] = useState(1);
@@ -259,7 +314,7 @@ export const ProductDetailPage: React.FC = () => {
     setView('checkout');
   };
 
-  const relatedItems = PRODUCTS.filter((p) => p.id !== storeProduct.id).slice(0, 4);
+  const relatedItems = products.filter((p) => p.id !== storeProduct.id).slice(0, 4);
 
   return (
     <div className="font-['Hind_Siliguri','Plus_Jakarta_Sans',sans-serif] bg-slate-50 text-slate-900 pb-28 sm:pb-24 animate-in fade-in duration-300">
@@ -275,8 +330,8 @@ export const ProductDetailPage: React.FC = () => {
             {/* Main Product Display Image */}
             <div className="aspect-square max-h-[500px] bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 relative shadow-inner">
               <img
-                src={PRODUCT_PAGE_CONFIG.images[selectedImageIdx]}
-                alt={PRODUCT_PAGE_CONFIG.name}
+                src={currentDisplayImage}
+                alt={displayTitle}
                 className="w-full h-full object-cover transition-all duration-300"
               />
               {PRODUCT_PAGE_CONFIG.discountPercentage && (
@@ -286,22 +341,24 @@ export const ProductDetailPage: React.FC = () => {
               )}
             </div>
 
-            {/* Thumbnails row below - clean alignment, proper mt-3 vertical gap */}
-            <div className="flex flex-row items-center gap-2.5 overflow-x-auto pt-3 pb-1 px-0.5">
-              {PRODUCT_PAGE_CONFIG.images.map((imgUrl, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSelectedImageIdx(idx)}
-                  className={`w-16 h-16 sm:w-18 sm:h-18 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
-                    selectedImageIdx === idx
-                      ? 'border-[#2B080C] ring-2 ring-[#2B080C]/40 shadow-xs opacity-100'
-                      : 'border-slate-200 opacity-70 hover:opacity-100'
-                  }`}
-                >
-                  <img src={imgUrl} alt="" className="w-full h-full object-cover" />
-                </button>
-              ))}
-            </div>
+            {/* Thumbnails row below - dynamically rendered only when multiple images exist */}
+            {productImages.length > 1 && (
+              <div className="flex flex-row items-center gap-2.5 overflow-x-auto pt-3 pb-1 px-0.5">
+                {productImages.map((imgUrl, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setSelectedImageIdx(idx)}
+                    className={`w-16 h-16 sm:w-18 sm:h-18 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${
+                      selectedImageIdx === idx
+                        ? 'border-[#2B080C] ring-2 ring-[#2B080C]/40 shadow-xs opacity-100'
+                        : 'border-slate-200 opacity-70 hover:opacity-100'
+                    }`}
+                  >
+                    <img src={imgUrl} alt={`${displayTitle} - ${idx + 1}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Right Column: Actions & Meta (3:2 Ratio - 5 Cols, Compact Density) */}
@@ -309,19 +366,19 @@ export const ProductDetailPage: React.FC = () => {
             {/* Product Name */}
             <div>
               <h1 className="text-xl sm:text-2xl font-black text-[#111827] leading-tight mb-0.5">
-                {PRODUCT_PAGE_CONFIG.name}
+                {displayTitle}
               </h1>
-              <p className="text-xs text-[#6B7280] mb-1">{PRODUCT_PAGE_CONFIG.subtitle}</p>
+              <p className="text-xs text-[#6B7280] mb-1">{displaySubtitle}</p>
             </div>
 
             {/* Review Summary */}
             <div className="flex items-center gap-2 text-xs">
               <div className="flex items-center gap-1 text-amber-500 font-bold bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200/80">
                 <Star className="w-3.5 h-3.5 fill-current" />
-                <span>⭐ {PRODUCT_PAGE_CONFIG.rating}</span>
+                <span>⭐ {displayRating}</span>
               </div>
               <span className="text-[#6B7280] text-xs font-semibold">
-                | {PRODUCT_PAGE_CONFIG.totalReviews} Reviews (গ্রাহক রিভিউ)
+                | {displayReviews} Reviews (গ্রাহক রিভিউ)
               </span>
             </div>
 
@@ -333,10 +390,10 @@ export const ProductDetailPage: React.FC = () => {
                 </span>
                 <div className="flex items-baseline gap-2">
                   <span className="text-2xl font-black text-[#2B080C] font-mono leading-none">
-                    ৳{PRODUCT_PAGE_CONFIG.offerPrice.toFixed(2)}
+                    ৳{displayPrice.toFixed(2)}
                   </span>
                   <span className="text-sm text-[#6B7280] line-through font-mono">
-                    ৳{PRODUCT_PAGE_CONFIG.regularPrice.toFixed(2)}
+                    ৳{displayOriginalPrice.toFixed(2)}
                   </span>
                 </div>
               </div>
@@ -787,16 +844,16 @@ export const ProductDetailPage: React.FC = () => {
           {/* Product Thumbnail & Details */}
           <div className="flex items-center gap-3 min-w-0">
             <img
-              src={PRODUCT_PAGE_CONFIG.images[selectedImageIdx] || PRODUCT_PAGE_CONFIG.images[0]}
-              alt={PRODUCT_PAGE_CONFIG.name}
+              src={currentDisplayImage}
+              alt={displayTitle}
               className="w-11 h-11 sm:w-12 sm:h-12 object-cover rounded-xl border border-slate-200 shrink-0"
             />
             <div className="min-w-0">
               <h4 className="text-xs sm:text-sm font-extrabold text-slate-900 truncate">
-                {PRODUCT_PAGE_CONFIG.name}
+                {displayTitle}
               </h4>
               <div className="flex items-center gap-2 text-[11px] text-slate-500 font-mono">
-                <span className="text-[#2B080C] font-extrabold">৳{PRODUCT_PAGE_CONFIG.offerPrice.toFixed(2)}</span>
+                <span className="text-[#2B080C] font-extrabold">৳{displayPrice.toFixed(2)}</span>
                 <span className="hidden sm:inline">| Color: {selectedColor} | Size: {selectedSize}</span>
               </div>
             </div>

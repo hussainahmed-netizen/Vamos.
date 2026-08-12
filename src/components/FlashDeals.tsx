@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { PRODUCTS } from '../data/mockData';
+import { useStore } from '../context/StoreContext';
 import { ProductCard } from './ProductCard';
 import { Timer, Zap, Flame } from 'lucide-react';
 
 export const FlashDeals: React.FC = () => {
-  const dealProducts = PRODUCTS.filter((p) => p.isDeal);
+  const { products } = useStore();
+  const dealProducts = products.filter((p) => p.isDeal);
 
   // Countdown state
   const [timeLeft, setTimeLeft] = useState({

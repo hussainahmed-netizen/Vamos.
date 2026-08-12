@@ -1,17 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '../context/StoreContext';
-import { PRODUCTS } from '../data/mockData';
 import { X, Star, MessageSquarePlus } from 'lucide-react';
 
 export const ReviewModal: React.FC = () => {
-  const { isReviewModalOpen, setIsReviewModalOpen, addReview } = useStore();
+  const { isReviewModalOpen, setIsReviewModalOpen, addReview, products } = useStore();
 
-  const [productId, setProductId] = useState(PRODUCTS[0].id);
+  const [productId, setProductId] = useState('');
   const [author, setAuthor] = useState('');
   const [title, setTitle] = useState('');
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
+
+  useEffect(() => {
+    if (products.length > 0 && !productId) {
+      setProductId(products[0].id);
+    }
+  }, [products, productId]);
 
   if (!isReviewModalOpen) return null;
 
@@ -61,7 +66,7 @@ export const ReviewModal: React.FC = () => {
               onChange={(e) => setProductId(e.target.value)}
               className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 font-medium"
             >
-              {PRODUCTS.map((p) => (
+              {products.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name} (${p.price.toFixed(2)})
                 </option>

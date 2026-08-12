@@ -150,6 +150,7 @@ export const Header: React.FC = () => {
   };
 
   return (
+    <>
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-xs">
       {/* Top Announcement Bar */}
       {showAnnouncement && (
@@ -529,10 +530,12 @@ export const Header: React.FC = () => {
         )}
       </div>
 
-      {/* Mobile Drawer Navigation */}
+    </header>
+
+    {/* Mobile Drawer Navigation */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex">
-          <div className="w-4/5 max-w-xs bg-white h-full shadow-2xl flex flex-col p-5 overflow-y-auto">
+        <div className="lg:hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-xs flex animate-in fade-in duration-300">
+          <div className="w-4/5 max-w-xs bg-white h-full shadow-2xl flex flex-col p-5 overflow-y-auto animate-in slide-in-from-left duration-300">
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
               <LogoContainer
                 variant="light"
@@ -645,6 +648,6 @@ export const Header: React.FC = () => {
           <div className="flex-1" onClick={() => setIsMobileMenuOpen(false)} />
         </div>
       )}
-    </header>
+    </>
   );
 };

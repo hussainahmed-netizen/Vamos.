@@ -126,9 +126,9 @@ export const HeroBanner: React.FC = () => {
               key={activeSlide}
               src={slide.image}
               alt={slide.title}
-              className="w-full h-full object-cover object-center opacity-40 transition-all duration-1000 ease-out animate-in fade-in"
+              className="w-full h-full object-cover object-center opacity-90 sm:opacity-40 transition-all duration-1000 ease-out animate-in fade-in"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/90 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0B0E14] via-[#0B0E14]/40 to-transparent sm:bg-gradient-to-r sm:from-[#0B0E14] sm:via-[#0B0E14]/90 sm:to-transparent" />
           </div>
 
           {/* Foreground Content */}
@@ -144,16 +144,30 @@ export const HeroBanner: React.FC = () => {
             </div>
 
             {/* Title & Subtitle */}
-            <div className="max-w-xl space-y-2 mt-auto mb-4 sm:my-auto">
-              <h1 className="text-2xl sm:text-3xl lg:text-3xl font-extrabold tracking-tight font-serif text-slate-100 leading-snug">
+            <div className="max-w-xl space-y-2 mt-auto mb-2 sm:my-auto">
+              <h1 className="text-2xl sm:text-3xl lg:text-3xl font-extrabold tracking-tight font-serif text-slate-100 leading-snug drop-shadow-md">
                 {slide.title}
               </h1>
-              <p className="text-xs sm:text-sm text-slate-300 font-normal leading-relaxed line-clamp-2">
+              <p className="text-xs sm:text-sm text-slate-200 font-medium leading-relaxed line-clamp-2 drop-shadow-md">
                 {slide.subtitle}
               </p>
 
+              {/* Mobile Carousel Indicators (Above buttons on mobile) */}
+              <div className="flex sm:hidden items-center justify-start gap-1.5 pt-2 pb-1">
+                {slides.map((_, index) => (
+                  <button
+                    key={`mob-indicator-${index}`}
+                    onClick={() => setActiveSlide(index)}
+                    className={`h-1.5 rounded-full transition-all duration-500 shadow-sm ${
+                      activeSlide === index ? 'w-6 bg-white' : 'w-1.5 bg-white/50 hover:bg-white/80'
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
+
               {/* Action Buttons */}
-              <div className="pt-4 sm:pt-6 flex flex-row items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
+              <div className="pt-3 sm:pt-6 flex flex-row items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
                 <button
                   onClick={slide.action}
                   className="flex-1 sm:flex-none justify-center px-2 sm:px-5 py-2.5 bg-[#2B080C] hover:bg-[#380B0F] text-white font-bold text-[10px] sm:text-sm rounded-xl shadow-lg transition-all duration-300 hover:scale-105 flex items-center gap-1.5 sm:gap-2 group border border-white/10"
@@ -166,7 +180,7 @@ export const HeroBanner: React.FC = () => {
                     setSelectedCategory('all');
                     setView('shop');
                   }}
-                  className="flex-1 sm:flex-none justify-center px-2 sm:px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-[10px] sm:text-sm rounded-xl backdrop-blur-md transition-all flex items-center whitespace-nowrap"
+                  className="flex-1 sm:flex-none justify-center px-2 sm:px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white border border-white/30 font-bold text-[10px] sm:text-sm rounded-xl backdrop-blur-md transition-all flex items-center whitespace-nowrap shadow-sm"
                 >
                   Browse All Products
                 </button>
@@ -174,7 +188,7 @@ export const HeroBanner: React.FC = () => {
             </div>
 
             {/* Bottom Controls & Value Props */}
-            <div className="pt-3 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-3">
+            <div className="hidden sm:flex pt-3 border-t border-white/10 items-center justify-between gap-3">
               {/* Carousel Indicators */}
               <div className="flex items-center justify-center gap-1.5">
                 {slides.map((_, index) => (

@@ -121,14 +121,20 @@ export const HeroBanner: React.FC = () => {
            ==================================================================== */}
         <div className="lg:col-span-8 relative overflow-hidden bg-[#0B0E14] text-white rounded-2xl sm:rounded-3xl shadow-xl flex flex-col justify-between p-5 sm:p-7 lg:p-8 min-h-[350px] sm:min-h-0 sm:h-[380px] lg:h-[380px]">
           {/* Background Image with Overlay */}
-          <div className="absolute inset-0 z-0">
-            <img
-              key={activeSlide}
-              src={slide.image}
-              alt={slide.title}
-              className="w-full h-full object-cover object-center opacity-90 sm:opacity-40 transition-all duration-1000 ease-out animate-in fade-in"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0B0E14] via-[#0B0E14]/40 to-transparent sm:bg-gradient-to-r sm:from-[#0B0E14] sm:via-[#0B0E14]/90 sm:to-transparent" />
+          <div className="absolute inset-0 z-0 bg-[#0B0E14]">
+            {slides.map((s, index) => (
+              <img
+                key={index}
+                src={s.image}
+                alt={s.title}
+                className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ease-in-out ${
+                  activeSlide === index ? 'opacity-90 sm:opacity-40 z-10' : 'opacity-0 z-0'
+                }`}
+              />
+            ))}
+            <div className="absolute inset-0 z-20 bg-gradient-to-t from-[#0B0E14] via-[#0B0E14]/40 to-transparent sm:bg-gradient-to-r sm:from-[#0B0E14] sm:via-[#0B0E14]/90 sm:to-transparent pointer-events-none" />
+            {/* Edge blur effect for mobile aesthetic */}
+            <div className="absolute inset-0 z-30 backdrop-blur-[3px] sm:hidden pointer-events-none" style={{ maskImage: 'radial-gradient(ellipse at center, transparent 55%, black 100%)', WebkitMaskImage: 'radial-gradient(ellipse at center, transparent 55%, black 100%)' }} />
           </div>
 
           {/* Foreground Content */}
@@ -167,10 +173,10 @@ export const HeroBanner: React.FC = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-3 sm:pt-6 flex flex-row items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
+              <div className="pt-3 sm:pt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
                 <button
                   onClick={slide.action}
-                  className="flex-1 sm:flex-none justify-center px-2 sm:px-5 py-2.5 bg-[#2B080C] hover:bg-[#380B0F] text-white font-bold text-[10px] sm:text-sm rounded-xl shadow-lg transition-all duration-300 hover:scale-105 flex items-center gap-1.5 sm:gap-2 group border border-white/10"
+                  className="w-full sm:w-auto justify-center px-2.5 sm:px-5 py-2.5 sm:py-3 bg-[#2B080C] hover:bg-[#380B0F] text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg transition-all duration-300 hover:scale-105 flex items-center gap-1.5 sm:gap-2 group border border-white/10"
                 >
                   <span className="whitespace-nowrap">{slide.ctaText}</span>
                   <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 group-hover:translate-x-1 transition-transform" />
@@ -180,7 +186,7 @@ export const HeroBanner: React.FC = () => {
                     setSelectedCategory('all');
                     setView('shop');
                   }}
-                  className="flex-1 sm:flex-none justify-center px-2 sm:px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white border border-white/30 font-bold text-[10px] sm:text-sm rounded-xl backdrop-blur-md transition-all flex items-center whitespace-nowrap shadow-sm"
+                  className="w-full sm:w-auto justify-center px-2.5 sm:px-5 py-2.5 sm:py-3 bg-white/20 hover:bg-white/30 text-white border border-white/30 font-bold text-xs sm:text-sm rounded-xl backdrop-blur-md transition-all flex items-center whitespace-nowrap shadow-sm"
                 >
                   Browse All Products
                 </button>
@@ -229,12 +235,18 @@ export const HeroBanner: React.FC = () => {
             className="relative overflow-hidden rounded-xl sm:rounded-3xl bg-[#0B0E14] cursor-pointer group shadow-lg aspect-[4/3] sm:aspect-video lg:aspect-auto lg:h-full border border-slate-800/60"
             title={currentBox2.alt}
           >
-            <img
-              key={box2Index}
-              src={currentBox2.image}
-              alt={currentBox2.alt}
-              className="w-full h-full object-cover object-center group-hover:scale-105 transition-all duration-700 ease-out animate-in fade-in"
-            />
+            {box2Promos.map((promo, index) => (
+              <img
+                key={index}
+                src={promo.image}
+                alt={promo.alt}
+                className={`absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-all duration-1000 ease-in-out ${
+                  box2Index === index ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                }`}
+              />
+            ))}
+            {/* Edge blur effect for mobile aesthetic */}
+            <div className="absolute inset-0 z-20 backdrop-blur-[3px] sm:hidden pointer-events-none" style={{ maskImage: 'radial-gradient(ellipse at center, transparent 55%, black 100%)', WebkitMaskImage: 'radial-gradient(ellipse at center, transparent 55%, black 100%)' }} />
           </div>
 
           {/* BOX 3 (Bottom Right) */}
@@ -243,12 +255,18 @@ export const HeroBanner: React.FC = () => {
             className="relative overflow-hidden rounded-xl sm:rounded-3xl bg-[#0B0E14] cursor-pointer group shadow-lg aspect-[4/3] sm:aspect-video lg:aspect-auto lg:h-full border border-slate-800/60"
             title={currentBox3.alt}
           >
-            <img
-              key={box3Index}
-              src={currentBox3.image}
-              alt={currentBox3.alt}
-              className="w-full h-full object-cover object-center group-hover:scale-105 transition-all duration-700 ease-out animate-in fade-in"
-            />
+            {box3Promos.map((promo, index) => (
+              <img
+                key={index}
+                src={promo.image}
+                alt={promo.alt}
+                className={`absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-all duration-1000 ease-in-out ${
+                  box3Index === index ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                }`}
+              />
+            ))}
+            {/* Edge blur effect for mobile aesthetic */}
+            <div className="absolute inset-0 z-20 backdrop-blur-[3px] sm:hidden pointer-events-none" style={{ maskImage: 'radial-gradient(ellipse at center, transparent 55%, black 100%)', WebkitMaskImage: 'radial-gradient(ellipse at center, transparent 55%, black 100%)' }} />
           </div>
         </div>
       </div>

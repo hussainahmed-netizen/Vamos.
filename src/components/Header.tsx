@@ -156,40 +156,148 @@ export const Header: React.FC = () => {
       {showAnnouncement && (
         <div className="bg-[#0B0E14] text-slate-300 py-1.5 sm:py-2 px-4 overflow-hidden">
           <div className="max-w-[1536px] mx-auto flex items-center justify-between gap-4">
-            <div className="flex overflow-hidden relative w-full sm:w-auto mask-image-fade">
-              <div className="animate-marquee sm:animate-none flex items-center">
-                <div className="flex items-center gap-2 whitespace-nowrap pr-8 shrink-0">
-                  <span className="bg-[#2B080C] text-white font-bold px-2 py-0.5 rounded text-[9px] sm:text-[10px] tracking-wider uppercase shrink-0">
-                    Flash Offer
-                  </span>
-                  <span className="text-[10px] sm:text-xs">
-                    ⚡ Use code <strong className="text-white font-bold">WELCOME10</strong> for 10% OFF | Free Express Delivery over ৳60 | Cash on Delivery Available
-                  </span>
+            <div className="flex overflow-hidden relative w-full mask-image-fade">
+              <div className="animate-marquee flex items-center">
+                {/* Group A */}
+                <div className="flex items-center gap-6 pr-6 shrink-0">
+                  <div className="flex items-center gap-2.5 whitespace-nowrap shrink-0">
+                    <span className="bg-[#2B080C] text-white font-bold px-2 py-0.5 rounded text-[9px] sm:text-[10px] tracking-wider uppercase shrink-0">
+                      Flash Offer
+                    </span>
+                    <span className="text-[10px] sm:text-xs flex items-center gap-2">
+                      <span>⚡ Use code <strong className="text-white font-bold">WELCOME10</strong> for 10% OFF</span>
+                      <span className="opacity-40">|</span>
+                      <span>Free Express Delivery over ৳60</span>
+                      <span className="opacity-40">|</span>
+                      <span>Cash on Delivery Available</span>
+                      <span className="opacity-40">|</span>
+                      <span className="inline-flex items-center gap-1 text-slate-200 font-semibold">
+                        <Truck className="w-3.5 h-3.5 text-amber-400" /> Fast Delivery
+                      </span>
+                      <span className="opacity-40">|</span>
+                      <span className="inline-flex items-center gap-1 text-slate-200 font-semibold">
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> 100% Authentic
+                      </span>
+                    </span>
+                  </div>
+
+                  <span className="opacity-40 text-xs">|</span>
+
+                  <div className="flex items-center gap-2.5 whitespace-nowrap shrink-0">
+                    <span className="bg-[#2B080C] text-white font-bold px-2 py-0.5 rounded text-[9px] sm:text-[10px] tracking-wider uppercase shrink-0">
+                      Flash Offer
+                    </span>
+                    <span className="text-[10px] sm:text-xs flex items-center gap-2">
+                      <span>⚡ Use code <strong className="text-white font-bold">WELCOME10</strong> for 10% OFF</span>
+                      <span className="opacity-40">|</span>
+                      <span>Free Express Delivery over ৳60</span>
+                      <span className="opacity-40">|</span>
+                      <span>Cash on Delivery Available</span>
+                      <span className="opacity-40">|</span>
+                      <span className="inline-flex items-center gap-1 text-slate-200 font-semibold">
+                        <Truck className="w-3.5 h-3.5 text-amber-400" /> Fast Delivery
+                      </span>
+                      <span className="opacity-40">|</span>
+                      <span className="inline-flex items-center gap-1 text-slate-200 font-semibold">
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> 100% Authentic
+                      </span>
+                    </span>
+                  </div>
+
+                  <span className="opacity-40 text-xs">|</span>
+
+                  <div className="flex items-center gap-2.5 whitespace-nowrap shrink-0">
+                    <span className="bg-[#2B080C] text-white font-bold px-2 py-0.5 rounded text-[9px] sm:text-[10px] tracking-wider uppercase shrink-0">
+                      Flash Offer
+                    </span>
+                    <span className="text-[10px] sm:text-xs flex items-center gap-2">
+                      <span>⚡ Use code <strong className="text-white font-bold">WELCOME10</strong> for 10% OFF</span>
+                      <span className="opacity-40">|</span>
+                      <span>Free Express Delivery over ৳60</span>
+                      <span className="opacity-40">|</span>
+                      <span>Cash on Delivery Available</span>
+                      <span className="opacity-40">|</span>
+                      <span className="inline-flex items-center gap-1 text-slate-200 font-semibold">
+                        <Truck className="w-3.5 h-3.5 text-amber-400" /> Fast Delivery
+                      </span>
+                      <span className="opacity-40">|</span>
+                      <span className="inline-flex items-center gap-1 text-slate-200 font-semibold">
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> 100% Authentic
+                      </span>
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 whitespace-nowrap pr-8 shrink-0 sm:hidden" aria-hidden="true">
-                  <span className="bg-[#2B080C] text-white font-bold px-2 py-0.5 rounded text-[9px] sm:text-[10px] tracking-wider uppercase shrink-0">
-                    Flash Offer
-                  </span>
-                  <span className="text-[10px] sm:text-xs">
-                    ⚡ Use code <strong className="text-white font-bold">WELCOME10</strong> for 10% OFF | Free Express Delivery over ৳60 | Cash on Delivery Available
-                  </span>
+
+                {/* Group B (Exact clone for seamless infinite loop) */}
+                <div className="flex items-center gap-6 pr-6 shrink-0" aria-hidden="true">
+                  <div className="flex items-center gap-2.5 whitespace-nowrap shrink-0">
+                    <span className="bg-[#2B080C] text-white font-bold px-2 py-0.5 rounded text-[9px] sm:text-[10px] tracking-wider uppercase shrink-0">
+                      Flash Offer
+                    </span>
+                    <span className="text-[10px] sm:text-xs flex items-center gap-2">
+                      <span>⚡ Use code <strong className="text-white font-bold">WELCOME10</strong> for 10% OFF</span>
+                      <span className="opacity-40">|</span>
+                      <span>Free Express Delivery over ৳60</span>
+                      <span className="opacity-40">|</span>
+                      <span>Cash on Delivery Available</span>
+                      <span className="opacity-40">|</span>
+                      <span className="inline-flex items-center gap-1 text-slate-200 font-semibold">
+                        <Truck className="w-3.5 h-3.5 text-amber-400" /> Fast Delivery
+                      </span>
+                      <span className="opacity-40">|</span>
+                      <span className="inline-flex items-center gap-1 text-slate-200 font-semibold">
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> 100% Authentic
+                      </span>
+                    </span>
+                  </div>
+
+                  <span className="opacity-40 text-xs">|</span>
+
+                  <div className="flex items-center gap-2.5 whitespace-nowrap shrink-0">
+                    <span className="bg-[#2B080C] text-white font-bold px-2 py-0.5 rounded text-[9px] sm:text-[10px] tracking-wider uppercase shrink-0">
+                      Flash Offer
+                    </span>
+                    <span className="text-[10px] sm:text-xs flex items-center gap-2">
+                      <span>⚡ Use code <strong className="text-white font-bold">WELCOME10</strong> for 10% OFF</span>
+                      <span className="opacity-40">|</span>
+                      <span>Free Express Delivery over ৳60</span>
+                      <span className="opacity-40">|</span>
+                      <span>Cash on Delivery Available</span>
+                      <span className="opacity-40">|</span>
+                      <span className="inline-flex items-center gap-1 text-slate-200 font-semibold">
+                        <Truck className="w-3.5 h-3.5 text-amber-400" /> Fast Delivery
+                      </span>
+                      <span className="opacity-40">|</span>
+                      <span className="inline-flex items-center gap-1 text-slate-200 font-semibold">
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> 100% Authentic
+                      </span>
+                    </span>
+                  </div>
+
+                  <span className="opacity-40 text-xs">|</span>
+
+                  <div className="flex items-center gap-2.5 whitespace-nowrap shrink-0">
+                    <span className="bg-[#2B080C] text-white font-bold px-2 py-0.5 rounded text-[9px] sm:text-[10px] tracking-wider uppercase shrink-0">
+                      Flash Offer
+                    </span>
+                    <span className="text-[10px] sm:text-xs flex items-center gap-2">
+                      <span>⚡ Use code <strong className="text-white font-bold">WELCOME10</strong> for 10% OFF</span>
+                      <span className="opacity-40">|</span>
+                      <span>Free Express Delivery over ৳60</span>
+                      <span className="opacity-40">|</span>
+                      <span>Cash on Delivery Available</span>
+                      <span className="opacity-40">|</span>
+                      <span className="inline-flex items-center gap-1 text-slate-200 font-semibold">
+                        <Truck className="w-3.5 h-3.5 text-amber-400" /> Fast Delivery
+                      </span>
+                      <span className="opacity-40">|</span>
+                      <span className="inline-flex items-center gap-1 text-slate-200 font-semibold">
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> 100% Authentic
+                      </span>
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="hidden sm:flex items-center gap-4 shrink-0 text-slate-400">
-              <span className="flex items-center gap-1">
-                <Truck className="w-3.5 h-3.5 text-slate-200" /> Fast Delivery
-              </span>
-              <span className="flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-slate-200" /> 100% Authentic
-              </span>
-              <button
-                onClick={() => setShowAnnouncement(false)}
-                className="hover:text-white p-0.5"
-                title="Dismiss announcement"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
             </div>
           </div>
         </div>

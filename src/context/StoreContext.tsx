@@ -855,6 +855,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     <StoreContext.Provider
       value={{
         user,
+        profile,
+        setProfile,
+        isAuthModalOpen,
+        setIsAuthModalOpen,
+        isProfileSetupRequired,
+        setIsProfileSetupRequired,
         signInWithGoogle,
         signOut,
         products,

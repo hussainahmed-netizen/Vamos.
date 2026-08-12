@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 
 export const CheckoutPage: React.FC = () => {
-  const { cart, subtotal, discountAmount, shippingFee, total, createOrder, setView } = useStore();
+  const { cart, subtotal, discountAmount, shippingFee, total, createOrder, setView, selectedProductId, navigateToProduct } = useStore();
 
   const [step, setStep] = useState<1 | 2>(1); // Step 1: Address & Shipping, Step 2: Payment Method
 
@@ -71,10 +71,22 @@ export const CheckoutPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 p-3.5 sm:p-8 bg-[#2B080C]/5 border border-[#2B080C]/15 rounded-2xl sm:rounded-3xl shadow-2xs">
         <div>
           <button
-            onClick={() => setView('cart')}
+            onClick={() => {
+              if (step === 2) {
+                setStep(1);
+              } else {
+                const targetProdId = selectedProductId || (cart.length > 0 ? cart[cart.length - 1].product.id : null);
+                if (targetProdId) {
+                  navigateToProduct(targetProdId);
+                } else {
+                  setView('shop');
+                }
+              }
+            }}
             className="text-xs font-bold text-[#2B080C] hover:underline flex items-center gap-1 mb-1 sm:mb-2"
           >
-            <ArrowLeft className="w-3.5 h-3.5" /> Back to Shopping Cart
+            <ArrowLeft className="w-3.5 h-3.5" /> 
+            {step === 2 ? 'Back to Checkout Information' : 'Back to Product Details'}
           </button>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-[#2C3539] font-serif">Secure Express Checkout</h1>
         </div>

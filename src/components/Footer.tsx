@@ -19,11 +19,11 @@ import {
 } from 'lucide-react';
 
 export const Footer: React.FC = () => {
-  const { categories, setView, setSelectedCategory, navigateToCategory, setActivePolicyModal, setIsAccountModalOpen } = useStore();
+  const { categories, setView, setSelectedCategory, navigateToCategory, setActivePolicyModal, setIsAccountModalOpen, view } = useStore();
   const { brandConfig } = useBrand();
 
   return (
-    <footer className="bg-[#0B0E14] text-slate-300 pt-16 pb-12 border-t border-slate-900 mt-16">
+    <footer className={`bg-[#0B0E14] text-slate-300 pt-16 pb-12 border-t border-slate-900 mt-16 ${view === 'cart' ? 'hidden md:block' : ''}`}>
       <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Top 4 Value props */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pb-12 border-b border-slate-800 text-xs">

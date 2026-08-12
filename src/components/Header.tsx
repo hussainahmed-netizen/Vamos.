@@ -184,9 +184,9 @@ export const Header: React.FC = () => {
 
       {/* Main Navigation Header */}
       <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
-        <div className="flex items-center justify-between gap-6">
+        <div className="flex items-center justify-between gap-3 sm:gap-6">
           {/* Logo & Brand Identity */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-3 sm:gap-6">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="lg:hidden p-2 text-[#111827] hover:text-[#0B0E14] hover:bg-slate-100 rounded-lg"
@@ -205,6 +205,14 @@ export const Header: React.FC = () => {
             >
               <LogoContainer variant="light" size="md" />
             </button>
+          </div>
+
+          {/* Mobile Search Input Trigger */}
+          <div className="md:hidden flex-1 relative cursor-pointer ml-5" onClick={() => setIsMobileSearchOpen(true)}>
+            <div className="w-full pl-9 pr-4 py-2.5 bg-[#F9FAFB] border border-[#E5E7EB] rounded-full text-xs text-slate-500 flex items-center shadow-xs">
+              <Search className="w-4 h-4 text-[#6B7280] absolute left-3 top-2.5" />
+              <span className="truncate">Search products, brands...</span>
+            </div>
           </div>
 
           {/* Desktop Search Bar with Live Predictive Autocomplete */}
@@ -278,7 +286,7 @@ export const Header: React.FC = () => {
               onClick={() => {
                 setView('wishlist');
               }}
-              className={`relative p-2.5 text-[#111827] hover:text-[#0B0E14] hover:bg-slate-100 rounded-full transition-colors ${
+              className={`hidden md:flex relative p-2.5 text-[#111827] hover:text-[#0B0E14] hover:bg-slate-100 rounded-full transition-colors ${
                 view === 'wishlist' ? 'bg-slate-100 text-[#2B080C]' : ''
               }`}
               title="View Wishlist"
@@ -293,7 +301,7 @@ export const Header: React.FC = () => {
 
             {/* Account Profile Dropdown Trigger & Floating Card */}
             <div
-              className="relative"
+              className="hidden md:block relative"
               ref={accountDropdownRef}
               onMouseEnter={handleAccountMouseEnter}
               onMouseLeave={handleAccountMouseLeave}
@@ -393,7 +401,7 @@ export const Header: React.FC = () => {
             {/* Cart Drawer Trigger Button */}
             <button
               onClick={() => setIsCartDrawerOpen(true)}
-              className="flex items-center gap-2.5 px-3.5 py-2 bg-[#2B080C] hover:bg-[#380B0F] text-white rounded-full transition-all shadow-sm hover:shadow-md"
+              className="hidden md:flex items-center gap-2.5 px-3.5 py-2 bg-[#2B080C] hover:bg-[#380B0F] text-white rounded-full transition-all shadow-sm hover:shadow-md"
             >
               <div className="relative">
                 <ShoppingBag className="w-5 h-5 text-white" />
@@ -408,15 +416,6 @@ export const Header: React.FC = () => {
               </span>
             </button>
           </div>
-        </div>
-
-        {/* Mobile Search Input Trigger */}
-        <div className="md:hidden mt-3 relative cursor-pointer" onClick={() => setIsMobileSearchOpen(true)}>
-          <div className="w-full pl-9 pr-4 py-2 bg-slate-100/90 border border-slate-200 rounded-xl text-xs text-slate-500 flex items-center justify-between">
-            <span>Search products, brands, categories...</span>
-            <Search className="w-4 h-4 text-slate-400" />
-          </div>
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
         </div>
 
         {/* Desktop Category Bar */}

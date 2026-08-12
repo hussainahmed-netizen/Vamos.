@@ -25,7 +25,7 @@ export const BottomNav: React.FC = () => {
       label: 'Cart',
       icon: ShoppingBag,
       badge: cart.reduce((total, item) => total + item.quantity, 0),
-      action: () => setIsCartDrawerOpen(true),
+      action: () => setView('cart'),
       isActive: view === 'cart' || view === 'checkout',
     },
     {

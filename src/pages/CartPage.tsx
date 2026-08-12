@@ -50,7 +50,7 @@ export const CartPage: React.FC = () => {
 
   if (cart.length === 0) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-20 text-center space-y-6 animate-in fade-in">
+      <div className="max-w-3xl mx-auto px-4 py-3 sm:py-2 min-h-[44px]0 text-center space-y-6 animate-in fade-in">
         <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-400">
           <ShoppingBag className="w-10 h-10" />
         </div>
@@ -142,30 +142,29 @@ export const CartPage: React.FC = () => {
                     onClick={() =>
                       updateQuantity(item.product.id, item.quantity - 1, item.selectedColor, item.selectedSize)
                     }
-                    className="p-1.5 text-slate-500 hover:text-slate-900"
+                    className="p-3 sm:p-1.5 min-w-[44px] sm:min-w-0 flex justify-center items-center text-slate-500 hover:text-slate-900"
                   >
-                    <Minus className="w-3.5 h-3.5" />
+                    <Minus className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
                   </button>
-                  <span className="w-8 text-center text-xs font-bold font-mono">{item.quantity}</span>
+                  <span className="w-8 text-center text-sm sm:text-xs font-bold font-mono">{item.quantity}</span>
                   <button
                     onClick={() =>
                       updateQuantity(item.product.id, item.quantity + 1, item.selectedColor, item.selectedSize)
                     }
-                    className="p-1.5 text-slate-500 hover:text-slate-900"
+                    className="p-3 sm:p-1.5 min-w-[44px] sm:min-w-0 flex justify-center items-center text-slate-500 hover:text-slate-900"
                   >
-                    <Plus className="w-3.5 h-3.5" />
+                    <Plus className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
                   </button>
                 </div>
-
                 <div className="text-right">
                   <div className="text-base font-black text-slate-900 font-mono">
                     ৳{(item.product.price * item.quantity).toFixed(2)}
                   </div>
                   <button
                     onClick={() => removeFromCart(item.product.id, item.selectedColor, item.selectedSize)}
-                    className="text-xs text-rose-600 hover:underline font-semibold mt-1 inline-flex items-center gap-1"
+                    className="text-sm sm:text-xs text-rose-600 hover:underline font-semibold mt-1 inline-flex items-center gap-1 p-2 sm:p-0 min-h-[44px] sm:min-h-0"
                   >
-                    <Trash2 className="w-3.5 h-3.5" /> Remove
+                    <Trash2 className="w-4 h-4 sm:w-3.5 sm:h-3.5" /> Remove
                   </button>
                 </div>
               </div>
@@ -197,7 +196,7 @@ export const CartPage: React.FC = () => {
                   </div>
                   <button
                     type="submit"
-                    className="px-4 py-2.5 bg-slate-900 text-white font-bold text-xs rounded-xl hover:bg-slate-800 transition-colors"
+                    className="px-4 py-3 sm:py-2 min-h-[44px] bg-slate-900 text-white font-bold text-xs rounded-xl hover:bg-slate-800 transition-colors"
                   >
                     Apply
                   </button>

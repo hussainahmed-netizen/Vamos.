@@ -33,8 +33,13 @@ export const ProfileSetupModal: React.FC = () => {
       if (profile.full_name && profile.phone_number && profile.shipping_address && profile.city_district) {
         setIsCancellable(true);
       }
-    } else if (user?.user_metadata?.full_name) {
-      setFormData(prev => ({ ...prev, full_name: user.user_metadata.full_name }));
+    } else if (user?.user_metadata) {
+      setFormData(prev => ({
+        ...prev,
+        full_name: user.user_metadata.full_name || user.user_metadata.name || prev.full_name,
+        phone_number: user.user_metadata.phone_number || prev.phone_number,
+        shipping_address: user.user_metadata.shipping_address || prev.shipping_address
+      }));
       setIsCancellable(false);
     }
   }, [profile, user]);

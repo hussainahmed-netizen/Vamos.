@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Product, CartItem, Order, CategoryId, Review, PaymentMethod, ViewMode, AccountTab, CategoryItem, UserProfile } from '../types';
 import { CATEGORIES as MOCK_CATEGORIES, PRODUCTS as MOCK_PRODUCTS, REVIEWS as MOCK_REVIEWS, COUPONS, MOCK_ORDERS } from '../data/mockData';
 import { supabase } from '../lib/supabase';
+import type { User } from '@supabase/supabase-js';
 
 interface Toast {
   id: string;
@@ -114,9 +115,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isProfileSetupRequired, setIsProfileSetupRequired] = useState(false);
 
-  const fetchProfile = async (userId: string) => {
+  const fetchProfile = async (currentUser: User) => {
     try {
-      const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
+      const { data, error } = await supabase.from('profiles').select('*').eq('id', currentUser.id).single();
       if (error && error.code !== 'PGRST116') {
         if (error.code === 'PGRST205') {
           // Table doesn't exist yet, ignore
@@ -134,7 +135,28 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           setIsProfileSetupRequired(false);
         }
       } else {
-        // No profile found, setup required
+        // No profile found, attempt to auto-create from metadata if available
+        const meta = currentUser.user_metadata;
+        if (meta && (meta.full_name || meta.phone_number)) {
+           const newProfile = {
+             id: currentUser.id,
+             full_name: meta.full_name || meta.name || '',
+             email: currentUser.email || '',
+             phone_number: meta.phone_number || '',
+             shipping_address: meta.shipping_address || '',
+             city_district: 'N/A',
+             secondary_phone: '',
+             delivery_instructions: '',
+             updated_at: new Date().toISOString()
+           };
+           const { error: upsertErr } = await supabase.from('profiles').upsert(newProfile);
+           if (!upsertErr) {
+             setProfile(newProfile as unknown as UserProfile);
+             setIsProfileSetupRequired(false);
+             return;
+           }
+        }
+        
         setProfile(null);
         setIsProfileSetupRequired(true);
       }
@@ -169,7 +191,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           if (session?.user) {
             setUser(session.user);
             if (!session.user.is_anonymous) {
-              await fetchProfile(session.user.id);
+              await fetchProfile(session.user);
             }
           } else {
             const { data: anonData } = await supabase.auth.signInAnonymously();
@@ -185,7 +207,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
           setUser(session?.user || null);
           if (session?.user && !session.user.is_anonymous) {
-            fetchProfile(session.user.id);
+            fetchProfile(session.user);
             if (event === 'SIGNED_IN') {
               setIsAuthModalOpen(false);
             }

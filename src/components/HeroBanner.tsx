@@ -119,14 +119,14 @@ export const HeroBanner: React.FC = () => {
         {/* ====================================================================
            BOX 1: Left Main Hero Banner (~68% width on desktop)
            ==================================================================== */}
-        <div className="lg:col-span-8 relative overflow-hidden bg-[#0B0E14] text-white rounded-2xl sm:rounded-3xl shadow-xl flex flex-col justify-between p-5 sm:p-7 lg:p-8 h-[360px] sm:h-[380px] lg:h-[380px]">
+        <div className="lg:col-span-8 relative overflow-hidden bg-[#0B0E14] text-white rounded-2xl sm:rounded-3xl shadow-xl flex flex-col justify-between p-5 sm:p-7 lg:p-8 min-h-[350px] sm:min-h-0 sm:h-[380px] lg:h-[380px]">
           {/* Background Image with Overlay */}
           <div className="absolute inset-0 z-0">
             <img
               key={activeSlide}
               src={slide.image}
               alt={slide.title}
-              className="w-full h-full object-cover object-center opacity-35 scale-105 transition-all duration-1000 ease-out animate-in fade-in"
+              className="w-full h-full object-cover object-center opacity-40 transition-all duration-1000 ease-out animate-in fade-in"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-[#0B0E14] via-[#0B0E14]/90 to-transparent" />
           </div>
@@ -144,8 +144,8 @@ export const HeroBanner: React.FC = () => {
             </div>
 
             {/* Title & Subtitle */}
-            <div className="max-w-xl space-y-2 my-auto">
-              <h1 className="text-xl sm:text-3xl lg:text-3xl font-extrabold tracking-tight font-serif text-slate-100 leading-snug">
+            <div className="max-w-xl space-y-2 mt-auto mb-4 sm:my-auto">
+              <h1 className="text-2xl sm:text-3xl lg:text-3xl font-extrabold tracking-tight font-serif text-slate-100 leading-snug">
                 {slide.title}
               </h1>
               <p className="text-xs sm:text-sm text-slate-300 font-normal leading-relaxed line-clamp-2">
@@ -153,21 +153,20 @@ export const HeroBanner: React.FC = () => {
               </p>
 
               {/* Action Buttons */}
-              <div className="pt-2 flex flex-wrap items-center gap-3">
+              <div className="pt-4 sm:pt-6 flex flex-row items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
                 <button
                   onClick={slide.action}
-                  className="px-5 py-2.5 bg-[#2B080C] hover:bg-[#380B0F] text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg transition-all duration-300 hover:scale-105 flex items-center gap-2 group border border-white/10"
+                  className="flex-1 sm:flex-none justify-center px-2 sm:px-5 py-2.5 bg-[#2B080C] hover:bg-[#380B0F] text-white font-bold text-[10px] sm:text-sm rounded-xl shadow-lg transition-all duration-300 hover:scale-105 flex items-center gap-1.5 sm:gap-2 group border border-white/10"
                 >
-                  <span>{slide.ctaText}</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <span className="whitespace-nowrap">{slide.ctaText}</span>
+                  <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 group-hover:translate-x-1 transition-transform" />
                 </button>
-
                 <button
                   onClick={() => {
                     setSelectedCategory('all');
                     setView('shop');
                   }}
-                  className="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs sm:text-sm rounded-xl backdrop-blur-md transition-all"
+                  className="flex-1 sm:flex-none justify-center px-2 sm:px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-[10px] sm:text-sm rounded-xl backdrop-blur-md transition-all flex items-center whitespace-nowrap"
                 >
                   Browse All Products
                 </button>
@@ -175,9 +174,9 @@ export const HeroBanner: React.FC = () => {
             </div>
 
             {/* Bottom Controls & Value Props */}
-            <div className="pt-3 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="pt-3 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-center sm:justify-between gap-3">
               {/* Carousel Indicators */}
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center justify-center gap-1.5">
                 {slides.map((_, index) => (
                   <button
                     key={index}
@@ -191,7 +190,7 @@ export const HeroBanner: React.FC = () => {
               </div>
 
               {/* Value Badges */}
-              <div className="flex flex-wrap items-center gap-3.5 text-[11px] text-slate-300 font-medium">
+              <div className="hidden sm:flex flex-wrap items-center gap-3.5 text-[11px] text-slate-300 font-medium">
                 <span className="flex items-center gap-1">
                   <Truck className="w-3.5 h-3.5 text-white" /> Free Shipping &gt; ৳60
                 </span>
@@ -209,11 +208,11 @@ export const HeroBanner: React.FC = () => {
         {/* ====================================================================
            BOX 2 & 3: Right Side Banners Container (~32% width on desktop)
            ==================================================================== */}
-        <div className="lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 lg:grid-rows-2 gap-3.5 sm:gap-4 h-auto lg:h-[380px]">
+        <div className="lg:col-span-4 grid grid-cols-2 lg:grid-cols-1 lg:grid-rows-2 gap-3.5 sm:gap-4 h-auto lg:h-[380px]">
           {/* BOX 2 (Top Right) */}
           <div
             onClick={currentBox2.action}
-            className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-[#0B0E14] cursor-pointer group shadow-lg h-[175px] sm:h-[180px] lg:h-full border border-slate-800/60"
+            className="relative overflow-hidden rounded-xl sm:rounded-3xl bg-[#0B0E14] cursor-pointer group shadow-lg aspect-[4/3] sm:aspect-video lg:aspect-auto lg:h-full border border-slate-800/60"
             title={currentBox2.alt}
           >
             <img
@@ -227,7 +226,7 @@ export const HeroBanner: React.FC = () => {
           {/* BOX 3 (Bottom Right) */}
           <div
             onClick={currentBox3.action}
-            className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-[#0B0E14] cursor-pointer group shadow-lg h-[175px] sm:h-[180px] lg:h-full border border-slate-800/60"
+            className="relative overflow-hidden rounded-xl sm:rounded-3xl bg-[#0B0E14] cursor-pointer group shadow-lg aspect-[4/3] sm:aspect-video lg:aspect-auto lg:h-full border border-slate-800/60"
             title={currentBox3.alt}
           >
             <img

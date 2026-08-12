@@ -35,13 +35,15 @@ export const FAQSection: React.FC = () => {
             >
               <button
                 onClick={() => toggleAccordion(idx)}
-                className="w-full p-5 text-left flex items-center justify-between gap-4 font-bold text-[#111827] text-sm sm:text-base"
+                className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-3 sm:gap-4 font-bold text-[#111827]"
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-xs font-semibold text-[#2B080C] bg-[#2B080C]/10 px-2.5 py-0.5 rounded-full shrink-0">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3 min-w-0 flex-1">
+                  <span className={`text-[13px] sm:text-base leading-snug transition-all ${isOpen ? 'whitespace-normal' : 'truncate'}`}>
+                    {faq.question}
+                  </span>
+                  <span className="self-start sm:self-auto inline-block text-[10px] sm:text-xs font-semibold text-[#2B080C] bg-[#2B080C]/10 px-2 py-0.5 sm:px-2.5 rounded-full shrink-0">
                     {faq.category}
                   </span>
-                  <span>{faq.question}</span>
                 </div>
                 {isOpen ? (
                   <ChevronUp className="w-5 h-5 text-[#2B080C] shrink-0" />
@@ -51,8 +53,8 @@ export const FAQSection: React.FC = () => {
               </button>
 
               {isOpen && (
-                <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-[#6B7280] leading-relaxed border-t border-[#E5E7EB]">
-                  {faq.answer}
+                <div className="px-4 sm:px-5 pb-4 sm:pb-5 pt-3 sm:pt-4 text-[12px] sm:text-sm text-[#6B7280] leading-relaxed border-t border-[#E5E7EB]">
+                  <p>{faq.answer}</p>
                 </div>
               )}
             </div>

@@ -12,6 +12,7 @@ import { ReviewModal } from './components/ReviewModal';
 import { AccountModal } from './components/AccountModal';
 import { AuthModal } from './components/AuthModal';
 import { ProfileSetupModal } from './components/ProfileSetupModal';
+import { BottomNav } from './components/BottomNav';
 
 import { HomePage } from './pages/HomePage';
 import { ShopPage } from './pages/ShopPage';
@@ -33,7 +34,7 @@ const StoreContent: React.FC = () => {
   }, [view, user, setView, setIsAuthModalOpen]);
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] text-[#111827] flex flex-col font-sans selection:bg-[#2B080C] selection:text-white">
+    <div className="min-h-screen bg-[#F9FAFB] text-[#111827] flex flex-col font-sans selection:bg-[#2B080C] selection:text-white pb-16 md:pb-0">
       {/* Toast Notifications */}
       <ToastContainer />
 
@@ -63,6 +64,9 @@ const StoreContent: React.FC = () => {
       <AccountModal />
       <AuthModal />
       <ProfileSetupModal />
+
+      {/* Mobile Bottom Navigation Bar */}
+      <BottomNav />
 
       {/* Footer */}
       <Footer />

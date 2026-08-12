@@ -1,9 +1,9 @@
 import React from 'react';
-import { Home, Grid, Search, Heart, User } from 'lucide-react';
+import { Home, Grid, ShoppingBag, Heart, User } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 
 export const BottomNav: React.FC = () => {
-  const { view, setView, setIsMobileSearchOpen, wishlist, user, setIsAuthModalOpen } = useStore();
+  const { view, setView, cart, wishlist, user, setIsAuthModalOpen, setIsCartDrawerOpen } = useStore();
 
   const navItems = [
     {
@@ -15,17 +15,18 @@ export const BottomNav: React.FC = () => {
     },
     {
       id: 'catalog',
-      label: 'Catalog',
+      label: 'Shop',
       icon: Grid,
       action: () => setView('shop'),
       isActive: view === 'shop',
     },
     {
-      id: 'search',
-      label: 'Search',
-      icon: Search,
-      action: () => setIsMobileSearchOpen(true),
-      isActive: false,
+      id: 'cart',
+      label: 'Cart',
+      icon: ShoppingBag,
+      badge: cart.reduce((total, item) => total + item.quantity, 0),
+      action: () => setIsCartDrawerOpen(true),
+      isActive: view === 'cart' || view === 'checkout',
     },
     {
       id: 'wishlist',

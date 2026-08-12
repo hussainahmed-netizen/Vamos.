@@ -67,7 +67,7 @@ export const FlashDeals: React.FC = () => {
       </div>
 
       {/* Deal Products Grid - 5 columns on desktop */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4">
         {dealProducts.map((product) => (
           <div key={product.id} className="relative flex flex-col justify-between h-full">
             <div className="flex-1">

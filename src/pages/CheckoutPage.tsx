@@ -57,7 +57,7 @@ export const CheckoutPage: React.FC = () => {
         <p className="text-xs text-slate-500">Please add items to cart before proceeding to checkout.</p>
         <button
           onClick={() => setView('shop')}
-          className="px-6 py-2.5 bg-slate-900 text-white font-bold text-xs rounded-xl"
+          className="px-6 py-3 min-h-[44px] bg-slate-900 text-white font-bold text-xs rounded-xl"
         >
           Return to Store Catalog
         </button>
@@ -345,7 +345,7 @@ export const CheckoutPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl"
+                  className="px-6 py-3 min-h-[44px] bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl"
                 >
                   ← Back to Address
                 </button>

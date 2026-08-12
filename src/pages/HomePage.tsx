@@ -23,7 +23,7 @@ export const HomePage: React.FC = () => {
       <div className="max-w-[1536px] mx-auto px-4 py-12 space-y-8 animate-pulse">
         <div className="h-96 bg-slate-200 rounded-3xl w-full"></div>
         <div className="h-10 bg-slate-200 rounded w-1/4"></div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
           {[...Array(4)].map((_, i) => (
             <div key={i} className="h-64 bg-slate-200 rounded-2xl w-full"></div>
           ))}
@@ -65,7 +65,7 @@ export const HomePage: React.FC = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           {bestSellers.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
@@ -94,7 +94,7 @@ export const HomePage: React.FC = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4">
           {featuredProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
@@ -126,7 +126,7 @@ export const HomePage: React.FC = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           {newArrivals.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

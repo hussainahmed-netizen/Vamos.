@@ -72,23 +72,23 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {/* Wishlist Button */}
         <button
           onClick={handleWishlist}
-          className={`absolute top-2.5 right-2.5 p-2 rounded-full shadow-md backdrop-blur-md transition-all z-10 ${
+          className={`absolute top-2.5 right-2.5 w-11 h-11 sm:w-8 sm:h-8 flex items-center justify-center rounded-full shadow-md backdrop-blur-md transition-all z-10 ${
             isWishlisted
               ? 'bg-[#2B080C] text-white'
               : 'bg-white/90 text-[#111827] hover:bg-white hover:text-[#2B080C]'
           }`}
           title={isWishlisted ? 'Remove from wishlist' : 'Save to wishlist'}
         >
-          <Heart className={`w-3.5 h-3.5 ${isWishlisted ? 'fill-current' : ''}`} />
+          <Heart className={`w-4 h-4 sm:w-3.5 sm:h-3.5 ${isWishlisted ? 'fill-current' : ''}`} />
         </button>
 
         {/* Quick View & Image Options Hover Action Overlay */}
         <div className="absolute inset-x-0 bottom-3 px-2.5 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out flex items-center justify-center gap-2 z-10 pointer-events-none">
           <button
             onClick={handleQuickView}
-            className="pointer-events-auto px-3.5 py-1.5 bg-white/95 backdrop-blur-xs border border-slate-200 hover:border-[#2B080C] hover:bg-[#2B080C] text-[#111827] hover:text-white text-xs font-semibold rounded-full shadow-md flex items-center justify-center gap-1.5 transition-all transform active:scale-95"
+            className="pointer-events-auto min-h-[36px] sm:min-h-[32px] px-2.5 sm:px-3.5 py-1.5 bg-white/95 backdrop-blur-xs border border-slate-200 hover:border-[#2B080C] hover:bg-[#2B080C] text-[#111827] hover:text-white text-[10px] sm:text-xs font-semibold whitespace-nowrap rounded-full shadow-md flex items-center justify-center gap-1.5 transition-all transform active:scale-95"
           >
-            <Eye className="w-3.5 h-3.5" />
+            <Eye className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
             <span>Quick View</span>
           </button>
 
@@ -170,14 +170,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </div>
 
         {/* Pricing & Add To Cart CTA */}
-        <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-1.5 mt-auto">
-          <div className="flex flex-col justify-center min-h-[32px]">
-            <div className="flex items-baseline gap-1">
-              <span className="text-sm sm:text-base font-extrabold text-slate-900 font-mono">
+        <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-1 sm:gap-1.5 mt-auto">
+          <div className="flex flex-col justify-center min-h-[32px] min-w-0">
+            <div className="flex items-baseline gap-0.5 sm:gap-1 flex-wrap">
+              <span className="text-[11px] sm:text-base font-extrabold text-slate-900 font-mono truncate">
                 ৳{product.price.toFixed(2)}
               </span>
               {product.originalPrice && (
-                <span className="text-[10px] text-slate-400 line-through font-mono">
+                <span className="text-[9px] sm:text-[10px] text-slate-400 line-through font-mono truncate">
                   ৳{product.originalPrice.toFixed(2)}
                 </span>
               )}
@@ -195,7 +195,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
           <button
             onClick={handleAddToCart}
-            className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1 shrink-0 ${
+            className={`w-8 h-8 sm:w-auto sm:h-auto sm:min-h-0 p-0 sm:px-2.5 sm:py-1.5 rounded-lg sm:rounded-xl text-sm sm:text-xs font-bold transition-all flex items-center justify-center gap-1 shrink-0 ${
               isAdded
                 ? 'bg-[#0B0E14] text-white shadow-md'
                 : 'bg-[#2B080C] hover:bg-[#380B0F] text-white shadow-xs hover:shadow-md'
@@ -203,11 +203,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           >
             {isAdded ? (
               <>
-                <Check className="w-3.5 h-3.5 text-white" /> Added
+                <Check className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-white" /> <span className="hidden sm:inline">Added</span>
               </>
             ) : (
               <>
-                <ShoppingBag className="w-3.5 h-3.5" /> Add
+                <ShoppingBag className="w-4 h-4 sm:w-3.5 sm:h-3.5" /> <span className="hidden sm:inline">Add</span>
               </>
             )}
           </button>

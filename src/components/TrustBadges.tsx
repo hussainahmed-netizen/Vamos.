@@ -9,15 +9,15 @@ export const TrustBadges: React.FC = () => {
   const getIcon = (iconName: string) => {
     switch (iconName) {
       case 'ShieldCheck':
-        return <ShieldCheck className="w-8 h-8 text-[#2B080C]" />;
+        return <ShieldCheck className="w-5 h-5 sm:w-8 sm:h-8 text-[#2B080C]" />;
       case 'Truck':
-        return <Truck className="w-8 h-8 text-[#2B080C]" />;
+        return <Truck className="w-5 h-5 sm:w-8 sm:h-8 text-[#2B080C]" />;
       case 'RotateCcw':
-        return <RotateCcw className="w-8 h-8 text-[#2B080C]" />;
+        return <RotateCcw className="w-5 h-5 sm:w-8 sm:h-8 text-[#2B080C]" />;
       case 'Banknote':
-        return <Banknote className="w-8 h-8 text-[#2B080C]" />;
+        return <Banknote className="w-5 h-5 sm:w-8 sm:h-8 text-[#2B080C]" />;
       default:
-        return <ShieldCheck className="w-8 h-8 text-[#2B080C]" />;
+        return <ShieldCheck className="w-5 h-5 sm:w-8 sm:h-8 text-[#2B080C]" />;
     }
   };
 
@@ -30,25 +30,25 @@ export const TrustBadges: React.FC = () => {
   };
 
   return (
-    <section className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 py-10 my-8">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 bg-[#F9FAFB] border border-[#E5E7EB] p-6 sm:p-8 rounded-3xl shadow-xs">
+    <section className="max-w-[1536px] mx-auto px-2 sm:px-6 lg:px-8 py-6 sm:py-10 my-4 sm:my-8">
+      <div className="grid grid-cols-4 gap-2 sm:gap-6 bg-[#F9FAFB] border border-[#E5E7EB] p-3 sm:p-8 rounded-2xl sm:rounded-3xl shadow-xs">
         {TRUST_BADGES.map((badge) => (
           <div
             key={badge.id}
             onClick={() => setActivePolicyModal(getPolicyType(badge.id))}
-            className="flex items-start gap-4 p-4 rounded-2xl bg-white hover:bg-slate-50 transition-colors border border-[#E5E7EB] cursor-pointer group"
+            className="flex flex-col sm:flex-row items-center sm:items-start gap-1.5 sm:gap-4 p-2 sm:p-4 rounded-xl sm:rounded-2xl bg-white hover:bg-slate-50 transition-colors border border-[#E5E7EB] cursor-pointer group text-center sm:text-left"
           >
-            <div className="p-3 bg-[#F9FAFB] rounded-2xl group-hover:scale-110 transition-transform shrink-0">
+            <div className="p-1.5 sm:p-3 bg-[#F9FAFB] rounded-lg sm:rounded-2xl group-hover:scale-110 transition-transform shrink-0">
               {getIcon(badge.icon)}
             </div>
             <div>
-              <h4 className="text-base font-bold text-[#111827] group-hover:text-[#2B080C] transition-colors">
+              <h4 className="text-[9px] sm:text-base font-bold text-[#111827] group-hover:text-[#2B080C] transition-colors leading-tight">
                 {badge.title}
               </h4>
-              <p className="text-xs text-[#6B7280] mt-1 leading-relaxed">
+              <p className="hidden sm:block text-xs text-[#6B7280] mt-1 leading-relaxed">
                 {badge.subtitle}
               </p>
-              <span className="text-[11px] font-semibold text-[#2B080C] mt-2 inline-block group-hover:underline">
+              <span className="hidden sm:inline-block text-[11px] font-semibold text-[#2B080C] mt-2 group-hover:underline">
                 Learn policy →
               </span>
             </div>

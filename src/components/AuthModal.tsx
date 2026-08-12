@@ -15,51 +15,62 @@ export const AuthModal: React.FC = () => {
 
   if (!isAuthModalOpen) return null;
 
-  const handleAutoFill = () => {
-    setEmail('test@example.com');
-    setPassword('password123');
-  };
-
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       if (mode === 'signup') {
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
+          options: {
+            data: {
+              full_name: fullName,
+              phone_number: phone,
+              shipping_address: shippingAddress,
+            }
+          }
         });
+
         if (error) {
           if (error.message.includes('already registered') || error.message.includes('already exists')) {
             throw new Error("An account with this email already exists. Please Sign In instead.");
           }
           throw error;
         }
-        
-        if (data.user) {
-          await supabase.from('profiles').upsert({
-            id: data.user.id,
-            full_name: fullName,
-            email: email,
-            phone_number: phone,
-            shipping_address: shippingAddress,
-            city_district: 'N/A',
-            updated_at: new Date().toISOString()
-          });
+
+        // Force user to log in manually as per requirements
+        if (data.session) {
+          await supabase.auth.signOut();
         }
 
-        showToast('Account created successfully! Logging you in...', 'success');
-        setIsAuthModalOpen(false);
-        navigateToAccount('overview');
+        showToast('Account created successfully! Please sign in to continue.', 'success');
+        setMode('signin');
+        setPassword('');
+        setFullName('');
+        setPhone('');
+        setShippingAddress('');
+        return;
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
+
         if (error) {
+          if (error.message.includes('Email not confirmed') || error.message.includes('Invalid login credentials')) {
+             throw new Error("Invalid credentials, OR email not verified. Please check your inbox!");
+          }
           throw new Error("Invalid email or password. Please try again.");
         }
+
         showToast('Signed in successfully', 'success');
+        
+        // Clear fields
+        setEmail('');
+        setPassword('');
+        
         setIsAuthModalOpen(false);
         navigateToAccount('overview');
       }
@@ -193,14 +204,6 @@ export const AuthModal: React.FC = () => {
           >
             {loading ? 'Processing...' : mode === 'signin' ? 'Sign In' : 'Sign Up'}
             {!loading && <ArrowRight className="w-4 h-4" />}
-          </button>
-          
-          <button 
-            type="button" 
-            onClick={handleAutoFill} 
-            className="w-full text-center text-xs text-slate-400 underline hover:text-slate-600 mt-2"
-          >
-            Auto-fill Test Credentials
           </button>
         </form>
 

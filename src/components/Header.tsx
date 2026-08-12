@@ -69,6 +69,7 @@ export const Header: React.FC = () => {
   const shouldHideCategoryBar = isHiddenByView || isHiddenByPath;
 
   const handleAccountMouseEnter = () => {
+    if (!user || user.is_anonymous) return;
     if (accountTimeoutRef.current) {
       clearTimeout(accountTimeoutRef.current);
       accountTimeoutRef.current = null;
@@ -309,7 +310,7 @@ export const Header: React.FC = () => {
               </button>
 
               {/* Floating Profile Dropdown Card Container with pt-2 hit area bridge */}
-              {isAccountDropdownOpen && (
+              {isAccountDropdownOpen && user && !user.is_anonymous && (
                 <div
                   className="absolute top-full right-0 pt-2 z-50 pointer-events-auto animate-in fade-in slide-in-from-top-2 duration-150"
                   onMouseEnter={handleAccountMouseEnter}

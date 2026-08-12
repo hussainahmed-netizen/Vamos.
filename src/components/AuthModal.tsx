@@ -21,7 +21,12 @@ export const AuthModal: React.FC = () => {
           email,
           password,
         });
-        if (error) throw error;
+        if (error) {
+          if (error.message.includes('already registered') || error.message.includes('already exists')) {
+            throw new Error("An account with this email already exists. Please Sign In instead.");
+          }
+          throw error;
+        }
         showToast('Account created successfully! You are now signed in.', 'success');
         setIsAuthModalOpen(false);
       } else {
@@ -29,7 +34,12 @@ export const AuthModal: React.FC = () => {
           email,
           password,
         });
-        if (error) throw error;
+        if (error) {
+          if (error.message.includes('Invalid login credentials')) {
+            throw new Error("This account was created using Google Sign-In. Please click 'Continue with Google' to log in.");
+          }
+          throw error;
+        }
         showToast('Signed in successfully', 'success');
         setIsAuthModalOpen(false);
       }

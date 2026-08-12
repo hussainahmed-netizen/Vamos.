@@ -180,10 +180,13 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
 
         // Setup auth state change listener
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
           setUser(session?.user || null);
           if (session?.user && !session.user.is_anonymous) {
             fetchProfile(session.user.id);
+            if (event === 'SIGNED_IN') {
+              setIsAuthModalOpen(false);
+            }
           } else {
             setProfile(null);
             setIsProfileSetupRequired(false);

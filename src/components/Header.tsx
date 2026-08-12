@@ -39,6 +39,9 @@ export const Header: React.FC = () => {
     wishlist,
     setIsCartDrawerOpen,
     setIsAccountModalOpen,
+    user,
+    setIsAuthModalOpen,
+    signOut,
     navigateToProduct,
     navigateToCategory,
     navigateToAccount,
@@ -85,6 +88,11 @@ export const Header: React.FC = () => {
 
   const handleAccountClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!user || user.is_anonymous) {
+      setIsAuthModalOpen(true);
+      return;
+    }
+    
     if (accountTimeoutRef.current) {
       clearTimeout(accountTimeoutRef.current);
       accountTimeoutRef.current = null;
@@ -365,7 +373,7 @@ export const Header: React.FC = () => {
                       <button
                         onClick={() => {
                           closeAccountDropdown();
-                          showToast('Logged out successfully', 'info');
+                          signOut(); showToast('Logged out successfully', 'info');
                           setView('home');
                           window.history.pushState({}, '', '/');
                         }}

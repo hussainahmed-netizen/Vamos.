@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Product, CartItem, Order, CategoryId, Review, PaymentMethod, ViewMode, AccountTab, CategoryItem } from '../types';
+import { Product, CartItem, Order, CategoryId, Review, PaymentMethod, ViewMode, AccountTab, CategoryItem, UserProfile } from '../types';
 import { CATEGORIES as MOCK_CATEGORIES, PRODUCTS as MOCK_PRODUCTS, REVIEWS as MOCK_REVIEWS, COUPONS, MOCK_ORDERS } from '../data/mockData';
 import { supabase } from '../lib/supabase';
 
@@ -12,6 +12,12 @@ interface Toast {
 interface StoreContextType {
   // Global Data & Loading States
   user: any | null;
+  profile: UserProfile | null;
+  setProfile: (profile: UserProfile | null) => void;
+  isAuthModalOpen: boolean;
+  setIsAuthModalOpen: (isOpen: boolean) => void;
+  isProfileSetupRequired: boolean;
+  setIsProfileSetupRequired: (isRequired: boolean) => void;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
   products: Product[];
@@ -102,6 +108,38 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [user, setUser] = useState<any | null>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isProfileSetupRequired, setIsProfileSetupRequired] = useState(false);
+
+  const fetchProfile = async (userId: string) => {
+    try {
+      const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
+      if (error && error.code !== 'PGRST116') {
+        if (error.code === 'PGRST205') {
+          // Table doesn't exist yet, ignore
+          return;
+        }
+        console.error('Error fetching profile:', error);
+      }
+      
+      if (data) {
+        setProfile(data);
+        // Check mandatory fields
+        if (!data.full_name || !data.phone_number || !data.shipping_address || !data.city_district) {
+          setIsProfileSetupRequired(true);
+        } else {
+          setIsProfileSetupRequired(false);
+        }
+      } else {
+        // No profile found, setup required
+        setProfile(null);
+        setIsProfileSetupRequired(true);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const signInWithGoogle = async () => {
     await supabase.auth.signInWithOAuth({
@@ -128,6 +166,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           const { data: { session } } = await supabase.auth.getSession();
           if (session?.user) {
             setUser(session.user);
+            if (!session.user.is_anonymous) {
+              await fetchProfile(session.user.id);
+            }
           } else {
             const { data: anonData } = await supabase.auth.signInAnonymously();
             if (anonData?.session?.user) {
@@ -141,6 +182,12 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         // Setup auth state change listener
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
           setUser(session?.user || null);
+          if (session?.user && !session.user.is_anonymous) {
+            fetchProfile(session.user.id);
+          } else {
+            setProfile(null);
+            setIsProfileSetupRequired(false);
+          }
         });
         authListener = subscription;
         

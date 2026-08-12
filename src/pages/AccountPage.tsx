@@ -35,6 +35,8 @@ export const AccountPage: React.FC = () => {
     setView,
     showToast,
     user,
+    profile,
+    setIsProfileSetupRequired,
     signInWithGoogle,
     signOut
   } = useStore();
@@ -177,7 +179,13 @@ export const AccountPage: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                  <div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setIsProfileSetupRequired(true)}
+                      className="px-4 py-2 bg-[#2B080C] text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all hover:bg-[#380B0F] hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      <Edit2 className="w-3.5 h-3.5" /> Edit Profile
+                    </button>
                     {!user?.email ? (
                       <button
                         onClick={signInWithGoogle}
@@ -210,14 +218,18 @@ export const AccountPage: React.FC = () => {
                     <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
                       <Phone className="w-3.5 h-3.5 text-slate-400" /> Phone Number
                     </div>
-                    <p className="text-sm font-semibold text-slate-900">+880 1700-000000</p>
+                    <p className="text-sm font-semibold text-slate-900">
+                      {profile?.phone_number || 'Not provided'}
+                    </p>
                   </div>
 
                   <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
                     <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
                       <MapPin className="w-3.5 h-3.5 text-slate-400" /> Default Shipping
                     </div>
-                    <p className="text-sm font-semibold text-slate-900 truncate">Dhaka, Bangladesh</p>
+                    <p className="text-sm font-semibold text-slate-900 truncate">
+                      {profile?.shipping_address ? `${profile.shipping_address}, ${profile.city_district}` : 'Not provided'}
+                    </p>
                   </div>
                 </div>
               </div>

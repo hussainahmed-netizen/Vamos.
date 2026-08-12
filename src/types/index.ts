@@ -115,3 +115,13 @@ export interface FAQItem {
   answer: string;
   category: string;
 }
+
+export interface UserProfile {
+  id: string;
+  full_name: string | null;
+  phone_number: string | null;
+  shipping_address: string | null;
+  city_district: string | null;
+  secondary_phone: string | null;
+  delivery_instructions: string | null;
+}

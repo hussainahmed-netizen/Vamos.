@@ -10,6 +10,8 @@ import { QuickViewModal } from './components/QuickViewModal';
 import { PolicyModal } from './components/PolicyModal';
 import { ReviewModal } from './components/ReviewModal';
 import { AccountModal } from './components/AccountModal';
+import { AuthModal } from './components/AuthModal';
+import { ProfileSetupModal } from './components/ProfileSetupModal';
 
 import { HomePage } from './pages/HomePage';
 import { ShopPage } from './pages/ShopPage';
@@ -21,7 +23,14 @@ import { WishlistPage } from './pages/WishlistPage';
 import { AccountPage } from './pages/AccountPage';
 
 const StoreContent: React.FC = () => {
-  const { view } = useStore();
+  const { view, user, setIsAuthModalOpen, setView } = useStore();
+
+  React.useEffect(() => {
+    if (view === 'account' && (!user || user.is_anonymous)) {
+      setView('home');
+      setIsAuthModalOpen(true);
+    }
+  }, [view, user, setView, setIsAuthModalOpen]);
 
   return (
     <div className="min-h-screen bg-[#F9FAFB] text-[#111827] flex flex-col font-sans selection:bg-[#2B080C] selection:text-white">
@@ -43,7 +52,7 @@ const StoreContent: React.FC = () => {
         {view === 'checkout' && <CheckoutPage />}
         {view === 'order-success' && <OrderSuccessPage />}
         {view === 'wishlist' && <WishlistPage />}
-        {view === 'account' && <AccountPage />}
+        {view === 'account' && user && !user.is_anonymous && <AccountPage />}
       </main>
 
       {/* Drawers & Modals */}
@@ -52,6 +61,8 @@ const StoreContent: React.FC = () => {
       <PolicyModal />
       <ReviewModal />
       <AccountModal />
+      <AuthModal />
+      <ProfileSetupModal />
 
       {/* Footer */}
       <Footer />

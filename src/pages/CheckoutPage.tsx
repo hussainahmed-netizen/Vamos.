@@ -222,11 +222,11 @@ export const CheckoutPage: React.FC = () => {
                 />
               </div>
 
-              <div className="pt-4 flex justify-end">
+              <div className="pt-4 flex justify-center sm:justify-end">
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  className="px-8 py-3.5 bg-slate-900 text-white font-bold text-xs rounded-xl hover:bg-slate-800 transition-colors flex items-center gap-2"
+                  className="w-full sm:w-auto px-8 py-3.5 bg-slate-900 text-white font-bold text-xs rounded-xl hover:bg-slate-800 transition-colors flex items-center justify-center gap-2"
                 >
                   <span>Continue to Payment Method</span>
                   <ArrowRight className="w-4 h-4" />
@@ -341,11 +341,11 @@ export const CheckoutPage: React.FC = () => {
                 </div>
               )}
 
-              <div className="pt-4 flex justify-between items-center">
+              <div className="pt-4 flex flex-col-reverse sm:flex-row justify-between items-center gap-3">
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="px-6 py-3 min-h-[44px] bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl"
+                  className="w-full sm:w-auto px-6 py-3 min-h-[44px] bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl text-center"
                 >
                   ← Back to Address
                 </button>
@@ -353,7 +353,7 @@ export const CheckoutPage: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-sm rounded-2xl shadow-xl transition-all flex items-center gap-2"
+                  className="w-full sm:w-auto px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-sm rounded-2xl shadow-xl transition-all flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? (
                     <span>Processing Order...</span>

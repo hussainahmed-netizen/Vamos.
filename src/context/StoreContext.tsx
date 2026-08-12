@@ -726,28 +726,27 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const toggleWishlist = async (productId: string) => {
-    setWishlist((prev) => {
-      const exists = prev.includes(productId);
-      if (exists) {
-        showToast('Removed from wishlist', 'info');
-        // Fire and forget to Supabase
-        supabase.auth.getSession().then(({ data: { session } }) => {
-          if (session?.user) {
-            supabase.from('wishlists').delete().eq('product_id', productId).eq('user_id', session.user.id).then();
-          }
-        });
-        return prev.filter((id) => id !== productId);
-      } else {
-        showToast('Saved to wishlist!', 'success');
-        // Fire and forget to Supabase
-        supabase.auth.getSession().then(({ data: { session } }) => {
-          if (session?.user) {
-            supabase.from('wishlists').insert({ product_id: productId, user_id: session.user.id }).then();
-          }
-        });
-        return [...prev, productId];
-      }
-    });
+    const exists = wishlist.includes(productId);
+
+    if (exists) {
+      showToast('Removed from wishlist', 'info');
+      // Fire and forget to Supabase
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session?.user) {
+          supabase.from('wishlists').delete().eq('product_id', productId).eq('user_id', session.user.id).then();
+        }
+      });
+      setWishlist((prev) => prev.filter((id) => id !== productId));
+    } else {
+      showToast('Saved to wishlist!', 'success');
+      // Fire and forget to Supabase
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session?.user) {
+          supabase.from('wishlists').insert({ product_id: productId, user_id: session.user.id }).then();
+        }
+      });
+      setWishlist((prev) => [...prev, productId]);
+    }
   };
 
   const applyCoupon = (code: string) => {

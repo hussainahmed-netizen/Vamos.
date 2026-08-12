@@ -153,15 +153,27 @@ export const Header: React.FC = () => {
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-xs">
       {/* Top Announcement Bar */}
       {showAnnouncement && (
-        <div className="bg-[#0B0E14] text-slate-300 text-xs py-2 px-4">
+        <div className="bg-[#0B0E14] text-slate-300 py-1.5 sm:py-2 px-4 overflow-hidden">
           <div className="max-w-[1536px] mx-auto flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2 overflow-hidden whitespace-nowrap">
-              <span className="bg-[#2B080C] text-white font-bold px-2.5 py-0.5 rounded text-[10px] tracking-wider uppercase">
-                Flash Offer
-              </span>
-              <span className="truncate">
-                ⚡ Use code <strong className="text-white font-bold">WELCOME10</strong> for 10% OFF | Free Express Delivery over ৳60 | Cash on Delivery Available
-              </span>
+            <div className="flex overflow-hidden relative w-full sm:w-auto mask-image-fade">
+              <div className="animate-marquee sm:animate-none flex items-center">
+                <div className="flex items-center gap-2 whitespace-nowrap pr-8 shrink-0">
+                  <span className="bg-[#2B080C] text-white font-bold px-2 py-0.5 rounded text-[9px] sm:text-[10px] tracking-wider uppercase shrink-0">
+                    Flash Offer
+                  </span>
+                  <span className="text-[10px] sm:text-xs">
+                    ⚡ Use code <strong className="text-white font-bold">WELCOME10</strong> for 10% OFF | Free Express Delivery over ৳60 | Cash on Delivery Available
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 whitespace-nowrap pr-8 shrink-0 sm:hidden" aria-hidden="true">
+                  <span className="bg-[#2B080C] text-white font-bold px-2 py-0.5 rounded text-[9px] sm:text-[10px] tracking-wider uppercase shrink-0">
+                    Flash Offer
+                  </span>
+                  <span className="text-[10px] sm:text-xs">
+                    ⚡ Use code <strong className="text-white font-bold">WELCOME10</strong> for 10% OFF | Free Express Delivery over ৳60 | Cash on Delivery Available
+                  </span>
+                </div>
+              </div>
             </div>
             <div className="hidden sm:flex items-center gap-4 shrink-0 text-slate-400">
               <span className="flex items-center gap-1">
@@ -208,7 +220,7 @@ export const Header: React.FC = () => {
           </div>
 
           {/* Mobile Search Input Trigger */}
-          <div className="md:hidden flex-1 relative cursor-pointer ml-5" onClick={() => setIsMobileSearchOpen(true)}>
+          <div className="md:hidden w-[160px] relative cursor-pointer ml-auto" onClick={() => setIsMobileSearchOpen(true)}>
             <div className="w-full pl-9 pr-4 py-2.5 bg-[#F9FAFB] border border-[#E5E7EB] rounded-full text-xs text-slate-500 flex items-center shadow-xs">
               <Search className="w-4 h-4 text-[#6B7280] absolute left-3 top-2.5" />
               <span className="truncate">Search products, brands...</span>

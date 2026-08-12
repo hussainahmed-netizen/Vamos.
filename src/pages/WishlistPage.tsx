@@ -23,19 +23,19 @@ export const WishlistPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-in fade-in duration-300">
+    <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 pt-3 pb-8 sm:pt-8 space-y-6 sm:space-y-8 animate-in fade-in duration-300">
       {/* Header Section */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 sm:p-8 bg-white border border-slate-200/80 rounded-3xl shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4 sm:p-8 sm:bg-white sm:border sm:border-slate-200/80 sm:rounded-3xl sm:shadow-xs">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="p-2 bg-[#2B080C]/10 text-[#2B080C] rounded-xl inline-flex">
+            <span className="p-2 bg-[#2B080C]/10 text-[#2B080C] rounded-xl hidden md:inline-flex">
               <Heart className="w-5 h-5 fill-current" />
             </span>
-            <span className="text-xs font-bold uppercase tracking-wider text-[#2B080C]">
+            <span className="text-xs font-bold text-[#2B080C] uppercase tracking-widest font-mono">
               Saved Products
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#111827] font-serif">
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-[#111827] font-serif">
             My Wishlist
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">

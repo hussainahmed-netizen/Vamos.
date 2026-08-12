@@ -23,7 +23,7 @@ export const Footer: React.FC = () => {
   const { brandConfig } = useBrand();
 
   return (
-    <footer className={`bg-[#0B0E14] text-slate-300 pt-16 pb-12 border-t border-slate-900 mt-16 ${view === 'cart' ? 'hidden md:block' : ''}`}>
+    <footer className={`bg-[#0B0E14] text-slate-300 pt-16 pb-12 border-t border-slate-900 mt-16 ${view === 'cart' || view === 'wishlist' || view === 'checkout' || view === 'shop' ? 'mobile-hide-footer' : ''}`}>
       <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Top 4 Value props */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pb-12 border-b border-slate-800 text-xs">
@@ -181,7 +181,7 @@ export const Footer: React.FC = () => {
           {/* Payment Badges */}
           <div className="flex flex-wrap items-center gap-2">
             <span className="px-2.5 py-1 bg-[#2B080C] border border-[#2B080C] rounded text-[10px] font-bold text-white">
-              💵 CASH ON DELIVERY (COD)
+              CASH ON DELIVERY (COD)
             </span>
             <span className="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded text-[10px] font-bold text-slate-300">
               VISA

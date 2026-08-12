@@ -91,7 +91,7 @@ export const ShopPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="max-w-[1536px] mx-auto px-4 py-8 animate-pulse">
+      <div className="max-w-[1536px] mx-auto px-4 pt-3 pb-8 sm:pt-8 animate-pulse">
         <div className="h-24 bg-slate-200 rounded-2xl w-full mb-8"></div>
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="hidden lg:block h-[600px] bg-slate-200 rounded-3xl w-full"></div>
@@ -106,9 +106,9 @@ export const ShopPage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-in fade-in duration-300">
+    <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 pt-3 pb-8 sm:pt-8 animate-in fade-in duration-300">
       {/* Page Header */}
-      <div className="mb-6">
+      <div className="mb-4 sm:mb-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E5E7EB]">
           <div>
             <span className="text-xs font-bold text-[#2B080C] uppercase tracking-widest font-mono">

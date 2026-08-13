@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useUser, SignedIn, SignedOut, SignInButton, SignUpButton, SignOutButton, UserButton } from '@clerk/clerk-react';
+import { useUser, useClerk, SignedIn, SignedOut, SignInButton, SignUpButton } from '@clerk/clerk-react';
 import { useStore } from '../context/StoreContext';
 import { OrderDetailsPage } from './OrderDetailsPage';
 import {
@@ -24,6 +24,7 @@ type AccountTab = 'overview' | 'orders' | 'reviews' | 'returns';
 
 export const AccountPage: React.FC = () => {
   const { user } = useUser();
+  const { signOut } = useClerk();
   const {
     accountTab,
     setAccountTab,
@@ -183,12 +184,6 @@ export const AccountPage: React.FC = () => {
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <UserButton />
-                      <SignOutButton>
-                        <button className="px-3.5 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded-xl text-xs font-bold transition-colors cursor-pointer">
-                          Log Out
-                        </button>
-                      </SignOutButton>
                     </div>
                   </div>
 

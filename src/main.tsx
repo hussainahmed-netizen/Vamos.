@@ -87,7 +87,18 @@ if (typeof window !== 'undefined') {
 const isValidPublishableKey = (key?: string): boolean => {
   if (!key || typeof key !== 'string') return false;
   const trimmed = key.trim();
-  return (trimmed.startsWith('pk_test_') || trimmed.startsWith('pk_live_')) && trimmed.length > 20;
+  if (!trimmed.startsWith('pk_test_') && !trimmed.startsWith('pk_live_')) return false;
+  if (trimmed.length <= 20) return false;
+  try {
+    const b64 = trimmed.split('_')[2] || trimmed.split('_')[1];
+    const decoded = atob(b64);
+    if (decoded.includes('vamos') || decoded.includes('pelican') || decoded.includes('vercel.app')) {
+      return false;
+    }
+  } catch (e) {
+    // ignore
+  }
+  return true;
 };
 
 interface ClerkBoundaryProps {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useUser, useClerk, SignedIn, SignedOut } from '@clerk/clerk-react';
+import { useAuth, useUser, useClerk, SignedIn, SignedOut } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
 import { OrderDetailsPage } from './OrderDetailsPage';
 import {
@@ -23,8 +24,28 @@ import {
 type AccountTab = 'overview' | 'orders' | 'reviews' | 'returns';
 
 export const AccountPage: React.FC = () => {
-  const { user } = useUser();
-  const { signOut } = useClerk();
+  const navigate = useNavigate();
+  let isLoaded = false;
+  let isSignedIn = false;
+  let user: ReturnType<typeof useUser>['user'] = null;
+  let clerkObj: ReturnType<typeof useClerk> | null = null;
+
+  try {
+    const auth = useAuth();
+    const clerkUser = useUser();
+    const clerk = useClerk();
+    isLoaded = auth.isLoaded;
+    isSignedIn = auth.isSignedIn || false;
+    user = clerkUser.user || null;
+    clerkObj = clerk;
+  } catch {
+    // Fallback if ClerkProvider is omitted
+    isLoaded = true;
+    isSignedIn = false;
+  }
+
+  const signOut = clerkObj?.signOut ? clerkObj.signOut : async () => {};
+
   const {
     accountTab,
     setAccountTab,
@@ -38,6 +59,26 @@ export const AccountPage: React.FC = () => {
     setView,
     showToast
   } = useStore();
+
+  // Strict Route Protection: If user manually accesses /account while logged out,
+  // strictly redirect them to Home ('/') and trigger clerk.openSignIn()
+  useEffect(() => {
+    if (isLoaded && !isSignedIn) {
+      navigate('/', { replace: true });
+      setView('home');
+      if (clerkObj?.openSignIn) {
+        try {
+          clerkObj.openSignIn();
+        } catch (err) {
+          console.warn('clerk.openSignIn failed on route protection redirect:', err);
+        }
+      }
+    }
+  }, [isLoaded, isSignedIn]);
+
+  if (isLoaded && !isSignedIn) {
+    return null;
+  }
 
   const [trackInput, setTrackInput] = useState('');
   const [foundOrder, setFoundOrder] = useState<any>(null);

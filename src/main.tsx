@@ -8,8 +8,7 @@ import './index.css';
 
 const PUBLISHABLE_KEY =
   import.meta.env.VITE_CLERK_PUBLISHABLE_KEY ||
-  import.meta.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ||
-  'pk_test_JVJe3cUtnyOSELyTbQvwLPSQnpxktqQVNpoovOYNil';
+  import.meta.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 const SafeClerkWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   if (!PUBLISHABLE_KEY) {

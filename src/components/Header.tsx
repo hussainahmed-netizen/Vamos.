@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { SignedIn, SignedOut, SignInButton, SignUpButton, SignOutButton, UserButton } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, SignInButton, SignUpButton, SignOutButton, UserButton, useUser } from '@clerk/clerk-react';
 import { ErrorBoundary } from './ErrorBoundary';
 import { useStore } from '../context/StoreContext';
 import { useBrand } from '../context/BrandContext';
@@ -27,6 +27,68 @@ import {
   LogOut,
   Settings
 } from 'lucide-react';
+
+const HeaderAccountButton: React.FC<{
+  view: string;
+  navigateToAccount: (tab?: string) => void;
+}> = ({ view, navigateToAccount }) => {
+  let isLoaded = false;
+  let isSignedIn = false;
+
+  try {
+    const clerkUser = useUser();
+    isLoaded = clerkUser.isLoaded;
+    isSignedIn = clerkUser.isSignedIn || false;
+  } catch {
+    // Fallback if useUser is used outside ClerkProvider
+  }
+
+  if (!isLoaded) {
+    return (
+      <button
+        onClick={() => navigateToAccount('overview')}
+        className={`flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 rounded-full transition-colors cursor-pointer ${
+          view === 'account' ? 'bg-slate-100 text-[#2B080C]' : ''
+        }`}
+        title="My Account"
+      >
+        <User className="w-5 h-5 text-[#2B080C]" />
+        <span className="hidden sm:inline text-xs font-semibold">Account</span>
+      </button>
+    );
+  }
+
+  if (isSignedIn) {
+    return (
+      <div className="flex items-center gap-2">
+        <UserButton />
+        <button
+          onClick={() => navigateToAccount('overview')}
+          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 rounded-full transition-colors cursor-pointer ${
+            view === 'account' ? 'bg-slate-100 text-[#2B080C]' : ''
+          }`}
+          title="My Account"
+        >
+          <span className="hidden sm:inline">Account</span>
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <SignInButton mode="modal">
+      <button
+        className={`flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 rounded-full transition-colors cursor-pointer ${
+          view === 'account' ? 'bg-slate-100 text-[#2B080C]' : ''
+        }`}
+        title="Sign In / Account"
+      >
+        <User className="w-5 h-5 text-[#2B080C]" />
+        <span className="hidden sm:inline text-xs font-semibold">Account</span>
+      </button>
+    </SignInButton>
+  );
+};
 
 export const Header: React.FC = () => {
   const { brandConfig } = useBrand();
@@ -408,7 +470,7 @@ export const Header: React.FC = () => {
             </button>
 
             {/* Account Button with Clerk Auth State */}
-            <div className="hidden md:block relative">
+            <div className="hidden md:flex items-center relative">
               <ErrorBoundary
                 fallback={
                   <button
@@ -423,25 +485,7 @@ export const Header: React.FC = () => {
                   </button>
                 }
               >
-                {/* Logged Out State */}
-                <SignedOut>
-                  <SignInButton mode="modal">
-                    <button
-                      className="flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
-                      title="Sign In / Account"
-                    >
-                      <User className="w-5 h-5 text-[#2B080C]" />
-                      <span className="hidden sm:inline text-xs font-semibold">Account</span>
-                    </button>
-                  </SignInButton>
-                </SignedOut>
-
-                {/* Logged In State */}
-                <SignedIn>
-                  <div className="flex items-center">
-                    <UserButton />
-                  </div>
-                </SignedIn>
+                <HeaderAccountButton view={view} navigateToAccount={navigateToAccount} />
               </ErrorBoundary>
             </div>
 

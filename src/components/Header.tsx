@@ -29,58 +29,22 @@ import {
   Settings
 } from 'lucide-react';
 
-const DefaultAccountButton: React.FC<{
+const HeaderAccountButton: React.FC<{
   view: string;
   navigateToAccount: (tab?: string) => void;
 }> = ({ view, navigateToAccount }) => {
   const navigate = useNavigate();
-  return (
-    <button
-      onClick={() => {
-        navigate('/account');
-        navigateToAccount('overview');
-      }}
-      className={`flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 rounded-full transition-colors cursor-pointer relative z-30 pointer-events-auto ${
-        view === 'account' ? 'bg-slate-100 text-[#2B080C]' : ''
-      }`}
-      title="Sign In / Account"
-    >
-      <User className="w-5 h-5 text-[#2B080C]" />
-      <span className="hidden sm:inline text-xs font-semibold">Account</span>
-    </button>
-  );
-};
-
-const ClerkHeaderAccountButton: React.FC<{
-  view: string;
-  navigateToAccount: (tab?: string) => void;
-}> = ({ view, navigateToAccount }) => {
-  const navigate = useNavigate();
-  const auth = useAuth();
+  const { isSignedIn } = useAuth();
   const clerk = useClerk();
   const clerkUser = useUser();
-  const isSignedIn = !!auth.isSignedIn;
   const user = clerkUser.user;
 
-  const handleAccountClick = (e?: React.MouseEvent) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+  const handleAccountClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
 
     if (!isSignedIn) {
-      if (clerk?.openSignIn) {
-        try {
-          clerk.openSignIn();
-        } catch (err) {
-          console.warn('clerk.openSignIn failed:', err);
-          navigate('/account');
-          navigateToAccount('overview');
-        }
-      } else {
-        navigate('/account');
-        navigateToAccount('overview');
-      }
+      clerk.openSignIn();
     } else {
       navigate('/account');
       navigateToAccount('overview');
@@ -91,11 +55,7 @@ const ClerkHeaderAccountButton: React.FC<{
     e.preventDefault();
     e.stopPropagation();
     if (clerk?.signOut) {
-      try {
-        await clerk.signOut();
-      } catch (err) {
-        console.warn('Sign out failed:', err);
-      }
+      await clerk.signOut();
     }
   };
 
@@ -124,7 +84,6 @@ const ClerkHeaderAccountButton: React.FC<{
           <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:rotate-180 transition-transform duration-200 hidden sm:inline" />
         </button>
 
-        {/* Custom Dropdown Menu Revealed on Hover */}
         <div className="absolute top-full right-0 pt-2 z-50 hidden group-hover:block pointer-events-auto animate-in fade-in slide-in-from-top-2 duration-150">
           <div className="w-64 sm:w-72 bg-white rounded-2xl shadow-xl border border-slate-200/80 py-2 relative">
             <div className="absolute -top-1.5 right-6 sm:right-8 w-3 h-3 bg-white border-t border-l border-slate-200/80 rotate-45 z-10" />
@@ -228,46 +187,13 @@ const ClerkHeaderAccountButton: React.FC<{
   );
 };
 
-const HeaderAccountButton: React.FC<{
-  view: string;
-  navigateToAccount: (tab?: string) => void;
-}> = (props) => {
-  return (
-    <ErrorBoundary fallback={<DefaultAccountButton {...props} />}>
-      <ClerkHeaderAccountButton {...props} />
-    </ErrorBoundary>
-  );
-};
-
-const DefaultMobileAccountButton: React.FC<{
+const MobileAccountButton: React.FC<{
   navigateToAccount: (tab?: string) => void;
   closeMobileMenu: () => void;
 }> = ({ navigateToAccount, closeMobileMenu }) => {
   const navigate = useNavigate();
-  return (
-    <button
-      onClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        closeMobileMenu();
-        navigate('/account');
-        navigateToAccount('overview');
-      }}
-      className="w-full flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-bold text-slate-800 bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer relative z-30 pointer-events-auto"
-    >
-      <User className="w-4 h-4 text-[#2B080C]" /> Account & Sign In
-    </button>
-  );
-};
-
-const ClerkMobileAccountButton: React.FC<{
-  navigateToAccount: (tab?: string) => void;
-  closeMobileMenu: () => void;
-}> = ({ navigateToAccount, closeMobileMenu }) => {
-  const navigate = useNavigate();
-  const auth = useAuth();
+  const { isSignedIn } = useAuth();
   const clerk = useClerk();
-  const isSignedIn = !!auth.isSignedIn;
 
   const handleAccountClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -275,18 +201,7 @@ const ClerkMobileAccountButton: React.FC<{
     closeMobileMenu();
 
     if (!isSignedIn) {
-      if (clerk?.openSignIn) {
-        try {
-          clerk.openSignIn();
-        } catch (err) {
-          console.warn('clerk.openSignIn failed:', err);
-          navigate('/account');
-          navigateToAccount('overview');
-        }
-      } else {
-        navigate('/account');
-        navigateToAccount('overview');
-      }
+      clerk.openSignIn();
     } else {
       navigate('/account');
       navigateToAccount('overview');
@@ -300,17 +215,6 @@ const ClerkMobileAccountButton: React.FC<{
     >
       <User className="w-4 h-4 text-[#2B080C]" /> {isSignedIn ? 'My Account' : 'Account & Sign In'}
     </button>
-  );
-};
-
-const MobileAccountButton: React.FC<{
-  navigateToAccount: (tab?: string) => void;
-  closeMobileMenu: () => void;
-}> = (props) => {
-  return (
-    <ErrorBoundary fallback={<DefaultMobileAccountButton {...props} />}>
-      <ClerkMobileAccountButton {...props} />
-    </ErrorBoundary>
   );
 };
 

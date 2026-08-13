@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { SignedIn, SignedOut, SignInButton, SignUpButton, useUser, useClerk } from '@clerk/clerk-react';
+import { useAuth, useClerk, useUser, SignedIn, SignedOut } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
 import { ErrorBoundary } from './ErrorBoundary';
 import { useStore } from '../context/StoreContext';
 import { useBrand } from '../context/BrandContext';
@@ -32,62 +33,41 @@ const HeaderAccountButton: React.FC<{
   view: string;
   navigateToAccount: (tab?: string) => void;
 }> = ({ view, navigateToAccount }) => {
-  let isLoaded = false;
-  let isSignedIn = false;
-  let user: ReturnType<typeof useUser>['user'] = null;
-  let clerkObj: ReturnType<typeof useClerk> | null = null;
+  const { isSignedIn } = useAuth();
+  const clerk = useClerk();
+  const navigate = useNavigate();
+  const { user } = useUser();
 
-  try {
-    const clerkUser = useUser();
-    const clerk = useClerk();
-    isLoaded = clerkUser.isLoaded;
-    isSignedIn = clerkUser.isSignedIn || false;
-    user = clerkUser.user || null;
-    clerkObj = clerk;
-  } catch {
-    // Fallback if useUser or useClerk is used outside ClerkProvider
-  }
+  const handleAccountClick = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
 
-  const handleAccountClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (isSignedIn) {
+    if (!isSignedIn) {
+      clerk.openSignIn();
+    } else {
+      navigate('/account');
       navigateToAccount('overview');
-      return;
     }
-
-    if (clerkObj?.openSignIn) {
-      try {
-        clerkObj.openSignIn({});
-        return;
-      } catch (err) {
-        console.warn('clerk.openSignIn failed, falling back to account page:', err);
-      }
-    }
-
-    // Fallback if clerk is not available or fails
-    navigateToAccount('overview');
   };
 
   const handleSignOut = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (clerkObj?.signOut) {
-      try {
-        await clerkObj.signOut();
-      } catch (err) {
-        console.warn('Sign out failed:', err);
-      }
+    try {
+      await clerk.signOut();
+    } catch (err) {
+      console.warn('Sign out failed:', err);
     }
   };
 
   if (isSignedIn) {
     return (
-      <div className="group relative">
+      <div className="group relative z-30 pointer-events-auto">
         <button
           onClick={handleAccountClick}
-          className={`flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 group-hover:bg-slate-100 group-hover:text-[#2B080C] rounded-full transition-colors cursor-pointer ${
+          className={`flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 group-hover:bg-slate-100 group-hover:text-[#2B080C] rounded-full transition-colors cursor-pointer relative z-30 pointer-events-auto ${
             view === 'account' ? 'bg-slate-100 text-[#2B080C]' : ''
           }`}
           title="My Account"
@@ -141,7 +121,10 @@ const HeaderAccountButton: React.FC<{
             {/* Custom Navigation Options */}
             <div className="relative z-20 space-y-0.5 px-1.5">
               <button
-                onClick={() => navigateToAccount('overview')}
+                onClick={() => {
+                  navigate('/account');
+                  navigateToAccount('overview');
+                }}
                 className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-[#2C3539] hover:bg-slate-100/80 rounded-xl transition-colors text-left cursor-pointer group/item"
               >
                 <Smile className="w-5 h-5 text-slate-500 group-hover/item:text-[#2C3539] stroke-[1.5] shrink-0" />
@@ -149,7 +132,10 @@ const HeaderAccountButton: React.FC<{
               </button>
 
               <button
-                onClick={() => navigateToAccount('orders')}
+                onClick={() => {
+                  navigate('/account');
+                  navigateToAccount('orders');
+                }}
                 className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-[#2C3539] hover:bg-slate-100/80 rounded-xl transition-colors text-left cursor-pointer group/item"
               >
                 <Package className="w-5 h-5 text-slate-500 group-hover/item:text-[#2C3539] stroke-[1.5] shrink-0" />
@@ -157,7 +143,10 @@ const HeaderAccountButton: React.FC<{
               </button>
 
               <button
-                onClick={() => navigateToAccount('reviews')}
+                onClick={() => {
+                  navigate('/account');
+                  navigateToAccount('reviews');
+                }}
                 className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-[#2C3539] hover:bg-slate-100/80 rounded-xl transition-colors text-left cursor-pointer group/item"
               >
                 <Star className="w-5 h-5 text-slate-500 group-hover/item:text-amber-500 stroke-[1.5] shrink-0" />
@@ -165,7 +154,10 @@ const HeaderAccountButton: React.FC<{
               </button>
 
               <button
-                onClick={() => navigateToAccount('settings')}
+                onClick={() => {
+                  navigate('/account');
+                  navigateToAccount('settings');
+                }}
                 className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-[#2C3539] hover:bg-slate-100/80 rounded-xl transition-colors text-left cursor-pointer group/item"
               >
                 <Settings className="w-5 h-5 text-slate-500 group-hover/item:text-[#2C3539] stroke-[1.5] shrink-0" />
@@ -197,7 +189,7 @@ const HeaderAccountButton: React.FC<{
   return (
     <button
       onClick={handleAccountClick}
-      className={`flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 rounded-full transition-colors cursor-pointer ${
+      className={`flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 rounded-full transition-colors cursor-pointer relative z-30 pointer-events-auto ${
         view === 'account' ? 'bg-slate-100 text-[#2B080C]' : ''
       }`}
       title="Sign In / Account"
@@ -212,31 +204,27 @@ const MobileAccountButton: React.FC<{
   navigateToAccount: (tab?: string) => void;
   closeMobileMenu: () => void;
 }> = ({ navigateToAccount, closeMobileMenu }) => {
-  let clerkObj: ReturnType<typeof useClerk> | null = null;
-  try {
-    clerkObj = useClerk();
-  } catch {
-    // Fallback if used outside ClerkProvider
-  }
+  const { isSignedIn } = useAuth();
+  const clerk = useClerk();
+  const navigate = useNavigate();
 
-  const handleClick = (e: React.MouseEvent) => {
+  const handleAccountClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     closeMobileMenu();
-    if (clerkObj?.openSignIn) {
-      try {
-        clerkObj.openSignIn({});
-        return;
-      } catch {
-        // Fallback
-      }
+
+    if (!isSignedIn) {
+      clerk.openSignIn();
+    } else {
+      navigate('/account');
+      navigateToAccount('overview');
     }
-    navigateToAccount('overview');
   };
 
   return (
     <button
-      onClick={handleClick}
-      className="w-full flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-bold text-slate-800 bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer"
+      onClick={handleAccountClick}
+      className="w-full flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-bold text-slate-800 bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer relative z-30 pointer-events-auto"
     >
       <User className="w-4 h-4 text-[#2B080C]" /> Account & Sign In
     </button>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useUser, useClerk, SignedIn, SignedOut, SignInButton, SignUpButton } from '@clerk/clerk-react';
+import { useUser, useClerk, SignedIn, SignedOut } from '@clerk/clerk-react';
 import { useStore } from '../context/StoreContext';
 import { OrderDetailsPage } from './OrderDetailsPage';
 import {
@@ -233,17 +233,32 @@ export const AccountPage: React.FC = () => {
                   </div>
 
                   <div className="flex flex-wrap items-center gap-3 pt-2">
-                    <SignInButton mode="modal">
-                      <button className="px-6 py-2.5 bg-white text-[#2B080C] font-extrabold text-xs rounded-xl hover:bg-slate-100 transition-all shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
-                        Sign In Now
-                      </button>
-                    </SignInButton>
+                    <button
+                      onClick={() => {
+                        try {
+                          signOut();
+                        } catch {}
+                        const clerkInstance = (window as any).Clerk;
+                        if (clerkInstance?.openSignIn) {
+                          clerkInstance.openSignIn();
+                        }
+                      }}
+                      className="px-6 py-2.5 bg-white text-[#2B080C] font-extrabold text-xs rounded-xl hover:bg-slate-100 transition-all shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                    >
+                      Sign In Now
+                    </button>
 
-                    <SignUpButton mode="modal">
-                      <button className="px-6 py-2.5 bg-amber-400 text-[#2B080C] font-extrabold text-xs rounded-xl hover:bg-amber-300 transition-all shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
-                        Create Free Account
-                      </button>
-                    </SignUpButton>
+                    <button
+                      onClick={() => {
+                        const clerkInstance = (window as any).Clerk;
+                        if (clerkInstance?.openSignUp) {
+                          clerkInstance.openSignUp();
+                        }
+                      }}
+                      className="px-6 py-2.5 bg-amber-400 text-[#2B080C] font-extrabold text-xs rounded-xl hover:bg-amber-300 transition-all shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                    >
+                      Create Free Account
+                    </button>
                   </div>
                 </div>
               </SignedOut>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useUser, SignedIn, SignedOut, SignInButton, SignUpButton, SignOutButton, UserButton } from '@clerk/clerk-react';
 import { useStore } from '../context/StoreContext';
 import { OrderDetailsPage } from './OrderDetailsPage';
 import {
@@ -22,6 +23,7 @@ import {
 type AccountTab = 'overview' | 'orders' | 'reviews' | 'returns';
 
 export const AccountPage: React.FC = () => {
+  const { user } = useUser();
   const {
     accountTab,
     setAccountTab,
@@ -155,52 +157,101 @@ export const AccountPage: React.FC = () => {
           {/* TAB 1: OVERVIEW */}
           {accountTab === 'overview' && (
             <div className={`space-y-6 ${slideDirection === 'right' ? 'animate-tab-slide-right' : 'animate-tab-slide-left'}`}>
-              <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
-                  <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 bg-[#2B080C] text-white font-bold rounded-2xl flex items-center justify-center text-xl shadow-md overflow-hidden">
-                      <User className="w-7 h-7 text-white" />
+              <SignedIn>
+                <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                    <div className="flex items-center gap-4">
+                      {user?.imageUrl ? (
+                        <img
+                          src={user.imageUrl}
+                          alt={user.fullName || 'User'}
+                          className="w-14 h-14 rounded-2xl object-cover border-2 border-[#2B080C] shadow-md"
+                        />
+                      ) : (
+                        <div className="w-14 h-14 bg-[#2B080C] text-white font-bold rounded-2xl flex items-center justify-center text-xl shadow-md overflow-hidden">
+                          <User className="w-7 h-7 text-white" />
+                        </div>
+                      )}
+                      <div>
+                        <h3 className="text-lg font-bold text-[#2C3539]">
+                          {user?.fullName || user?.username || 'Customer Account'}
+                        </h3>
+                        <p className="text-xs text-slate-500">
+                          {user?.primaryEmailAddress?.emailAddress || 'Manage your orders, saved items, and reviews'}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-lg font-bold text-[#2C3539]">
-                        Customer Account
-                      </h3>
-                      <p className="text-xs text-slate-500">
-                        Manage your orders, saved items, and reviews
+
+                    <div className="flex items-center gap-3">
+                      <UserButton />
+                      <SignOutButton>
+                        <button className="px-3.5 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded-xl text-xs font-bold transition-colors cursor-pointer">
+                          Log Out
+                        </button>
+                      </SignOutButton>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+                      <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
+                        <Mail className="w-3.5 h-3.5 text-slate-400" /> Account Status
+                      </div>
+                      <p className="text-sm font-semibold text-emerald-700 truncate">
+                        Verified & Active
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+                      <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
+                        <Phone className="w-3.5 h-3.5 text-slate-400" /> Primary Email
+                      </div>
+                      <p className="text-sm font-semibold text-[#2C3539] truncate">
+                        {user?.primaryEmailAddress?.emailAddress || 'Connected'}
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+                      <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
+                        <MapPin className="w-3.5 h-3.5 text-slate-400" /> Shipping Region
+                      </div>
+                      <p className="text-sm font-semibold text-[#2C3539] truncate">
+                        Bangladesh
                       </p>
                     </div>
                   </div>
                 </div>
+              </SignedIn>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
-                    <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
-                      <Mail className="w-3.5 h-3.5 text-slate-400" /> Account Status
+              <SignedOut>
+                <div className="bg-gradient-to-br from-[#2B080C] to-[#481217] text-white rounded-2xl p-6 sm:p-8 shadow-xl space-y-4">
+                  <div className="max-w-xl space-y-2">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 rounded-full text-xs font-semibold backdrop-blur-xs text-amber-200">
+                      <ShieldCheck className="w-3.5 h-3.5" /> Instant & Secure Auth
                     </div>
-                    <p className="text-sm font-semibold text-[#2C3539] truncate">
-                      Active Customer
+                    <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight">
+                      Sign in or Register to your Account
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                      Sync your wishlist, track live orders, manage saved addresses, and leave reviews with your Google account or email address.
                     </p>
                   </div>
 
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
-                    <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
-                      <Phone className="w-3.5 h-3.5 text-slate-400" /> Member Tier
-                    </div>
-                    <p className="text-sm font-semibold text-[#2C3539]">
-                      Standard Member
-                    </p>
-                  </div>
+                  <div className="flex flex-wrap items-center gap-3 pt-2">
+                    <SignInButton mode="modal">
+                      <button className="px-6 py-2.5 bg-white text-[#2B080C] font-extrabold text-xs rounded-xl hover:bg-slate-100 transition-all shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
+                        Sign In Now
+                      </button>
+                    </SignInButton>
 
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
-                    <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
-                      <MapPin className="w-3.5 h-3.5 text-slate-400" /> Shipping Region
-                    </div>
-                    <p className="text-sm font-semibold text-[#2C3539] truncate">
-                      Bangladesh
-                    </p>
+                    <SignUpButton mode="modal">
+                      <button className="px-6 py-2.5 bg-amber-400 text-[#2B080C] font-extrabold text-xs rounded-xl hover:bg-amber-300 transition-all shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
+                        Create Free Account
+                      </button>
+                    </SignUpButton>
                   </div>
                 </div>
-              </div>
+              </SignedOut>
 
               {/* Quick Summary Stats */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

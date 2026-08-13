@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth, useUser, useClerk } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
 import { OrderDetailsPage } from './OrderDetailsPage';
@@ -503,43 +502,11 @@ const AccountPageContent: React.FC<{ user: any }> = ({ user }) => {
   );
 };
 
-const ClerkAccountPageInner: React.FC = () => {
-  const navigate = useNavigate();
-  const auth = useAuth();
-  const clerkUser = useUser();
-  const clerk = useClerk();
-
-  const isLoaded = auth.isLoaded;
-  const isSignedIn = !!auth.isSignedIn;
-  const user = clerkUser.user || null;
-
-  const { setView } = useStore();
-
-  useEffect(() => {
-    if (isLoaded && !isSignedIn && clerk) {
-      navigate('/', { replace: true });
-      setView('home');
-      if (clerk.openSignIn) {
-        try {
-          clerk.openSignIn();
-        } catch (err) {
-          console.warn('clerk.openSignIn failed on route protection redirect:', err);
-        }
-      }
-    }
-  }, [isLoaded, isSignedIn, clerk, navigate, setView]);
-
-  if (isLoaded && !isSignedIn) {
-    return null;
-  }
-
-  return <AccountPageContent user={user} />;
-};
-
 export const AccountPage: React.FC = () => {
-  return (
-    <ErrorBoundary fallback={<AccountPageContent user={null} />}>
-      <ClerkAccountPageInner />
-    </ErrorBoundary>
-  );
+  const dummyUser = {
+    fullName: 'Customer Account',
+    primaryEmailAddress: { emailAddress: 'user@example.com' }
+  };
+
+  return <AccountPageContent user={dummyUser} />;
 };

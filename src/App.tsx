@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { StoreProvider, useStore } from './context/StoreContext';
 import { BrandProvider } from './context/BrandContext';
-import { useAuth } from '@clerk/clerk-react';
 import { Header } from './components/Header';
 import { Breadcrumbs } from './components/Breadcrumbs';
 import { Footer } from './components/Footer';
@@ -24,13 +23,6 @@ import { AdminPage } from './pages/AdminPage';
 
 const StoreContent: React.FC = () => {
   const { view, setView } = useStore();
-  const { isLoaded, isSignedIn } = useAuth();
-
-  useEffect(() => {
-    if (isLoaded && !isSignedIn && view === 'account') {
-      setView('home');
-    }
-  }, [isLoaded, isSignedIn, view, setView]);
 
   return (
     <div className="min-h-screen bg-[#F9FAFB] text-[#2C3539] flex flex-col font-sans selection:bg-[#2B080C] selection:text-white pb-16 md:pb-0">

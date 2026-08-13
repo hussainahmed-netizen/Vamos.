@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useAuth, useClerk, useUser } from '@clerk/clerk-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { ErrorBoundary } from './ErrorBoundary';
 import { useStore } from '../context/StoreContext';
 import { useBrand } from '../context/BrandContext';
@@ -34,29 +33,26 @@ const HeaderAccountButton: React.FC<{
   navigateToAccount: (tab?: string) => void;
 }> = ({ view, navigateToAccount }) => {
   const navigate = useNavigate();
-  const { isSignedIn } = useAuth();
-  const clerk = useClerk();
-  const clerkUser = useUser();
-  const user = clerkUser.user;
+  // Using dummy state for UI preservation
+  const isSignedIn = true;
+  const user = {
+    imageUrl: null,
+    firstName: 'Customer',
+    fullName: 'Customer Account',
+    primaryEmailAddress: { emailAddress: 'user@example.com' }
+  };
 
   const handleAccountClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-
-    if (!isSignedIn) {
-      clerk.openSignIn();
-    } else {
-      navigate('/account');
-      navigateToAccount('overview');
-    }
+    navigate('/account');
+    navigateToAccount('overview');
   };
 
   const handleSignOut = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (clerk?.signOut) {
-      await clerk.signOut();
-    }
+    navigate('/');
   };
 
   if (isSignedIn) {
@@ -192,20 +188,14 @@ const MobileAccountButton: React.FC<{
   closeMobileMenu: () => void;
 }> = ({ navigateToAccount, closeMobileMenu }) => {
   const navigate = useNavigate();
-  const { isSignedIn } = useAuth();
-  const clerk = useClerk();
 
   const handleAccountClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     closeMobileMenu();
 
-    if (!isSignedIn) {
-      clerk.openSignIn();
-    } else {
-      navigate('/account');
-      navigateToAccount('overview');
-    }
+    navigate('/account');
+    navigateToAccount('overview');
   };
 
   return (

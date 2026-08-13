@@ -108,25 +108,38 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setIsLoading(true);
     setError(null);
     try {
+      const safeFetchJson = async (url: string, fallback: any) => {
+        try {
+          const r = await fetch(url);
+          if (!r.ok) return fallback;
+          const ct = r.headers.get('content-type') || '';
+          if (!ct.includes('application/json')) return fallback;
+          return await r.json();
+        } catch {
+          return fallback;
+        }
+      };
+
       const [prodRes, catRes, revRes, ordRes, coupRes] = await Promise.all([
-        fetch('/api/products').then(r => r.ok ? r.json() : MOCK_PRODUCTS),
-        fetch('/api/categories').then(r => r.ok ? r.json() : MOCK_CATEGORIES),
-        fetch('/api/reviews').then(r => r.ok ? r.json() : MOCK_REVIEWS),
-        fetch('/api/orders').then(r => r.ok ? r.json() : MOCK_ORDERS),
-        fetch('/api/coupons').then(r => r.ok ? r.json() : COUPONS)
+        safeFetchJson('/api/products', MOCK_PRODUCTS),
+        safeFetchJson('/api/categories', MOCK_CATEGORIES),
+        safeFetchJson('/api/reviews', MOCK_REVIEWS),
+        safeFetchJson('/api/orders', MOCK_ORDERS),
+        safeFetchJson('/api/coupons', COUPONS)
       ]);
 
-      if (Array.isArray(prodRes)) setProducts(prodRes);
-      if (Array.isArray(catRes)) setCategories(catRes);
-      if (Array.isArray(revRes)) setReviewsList(revRes);
-      if (Array.isArray(ordRes)) setOrdersHistory(ordRes);
-      if (Array.isArray(coupRes)) setCouponsList(coupRes);
+      setProducts(Array.isArray(prodRes) && prodRes.length > 0 ? prodRes : MOCK_PRODUCTS);
+      setCategories(Array.isArray(catRes) && catRes.length > 0 ? catRes : MOCK_CATEGORIES);
+      setReviewsList(Array.isArray(revRes) ? revRes : MOCK_REVIEWS);
+      setOrdersHistory(Array.isArray(ordRes) ? ordRes : MOCK_ORDERS);
+      setCouponsList(Array.isArray(coupRes) ? coupRes : COUPONS);
     } catch (err: any) {
       console.warn('Falling back to local cache if API fails:', err);
       setProducts(MOCK_PRODUCTS);
       setCategories(MOCK_CATEGORIES);
       setReviewsList(MOCK_REVIEWS);
       setOrdersHistory(MOCK_ORDERS);
+      setCouponsList(COUPONS);
     } finally {
       setIsLoading(false);
     }

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { SignedIn, SignedOut, SignInButton, SignOutButton } from '@clerk/clerk-react';
+import { ErrorBoundary } from './ErrorBoundary';
 import { useStore } from '../context/StoreContext';
 import { useBrand } from '../context/BrandContext';
 import { LogoContainer } from './LogoContainer';
@@ -408,25 +409,11 @@ export const Header: React.FC = () => {
 
             {/* Account Button with Clerk Auth State */}
             <div className="hidden md:block relative">
-              {/* Logged Out State: Direct sign-in trigger, NO hover dropdown */}
-              <SignedOut>
-                <SignInButton mode="modal">
-                  <button
-                    className="flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
-                    title="Sign In"
-                  >
-                    <User className="w-5 h-5" />
-                    <span className="hidden sm:inline text-xs font-semibold">Account</span>
-                  </button>
-                </SignInButton>
-              </SignedOut>
-
-              {/* Logged In State: Direct click to /account, custom dropdown menu on hover */}
-              <SignedIn>
-                <div className="group relative">
+              <ErrorBoundary
+                fallback={
                   <button
                     onClick={() => navigateToAccount('overview')}
-                    className={`flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 group-hover:bg-slate-100 group-hover:text-[#2B080C] rounded-full transition-colors cursor-pointer ${
+                    className={`flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 rounded-full transition-colors cursor-pointer ${
                       view === 'account' ? 'bg-slate-100 text-[#2B080C]' : ''
                     }`}
                     title="My Account"
@@ -434,65 +421,94 @@ export const Header: React.FC = () => {
                     <User className="w-5 h-5 text-[#2B080C]" />
                     <span className="hidden sm:inline text-xs font-semibold">Account</span>
                   </button>
+                }
+              >
+                {/* Logged Out State: Direct sign-in trigger, NO hover dropdown */}
+                <SignedOut>
+                  <SignInButton mode="modal">
+                    <button
+                      className="flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
+                      title="Sign In"
+                    >
+                      <User className="w-5 h-5" />
+                      <span className="hidden sm:inline text-xs font-semibold">Account</span>
+                    </button>
+                  </SignInButton>
+                </SignedOut>
 
-                  {/* Custom Dropdown Menu Revealed on Hover */}
-                  <div className="absolute top-full right-0 pt-2 z-50 hidden group-hover:block pointer-events-auto animate-in fade-in slide-in-from-top-2 duration-150">
-                    <div className="w-64 sm:w-72 bg-white rounded-2xl shadow-xl border border-slate-200/80 py-2 relative">
-                      {/* Pointer Arrow */}
-                      <div className="absolute -top-1.5 right-6 sm:right-8 w-3 h-3 bg-white border-t border-l border-slate-200/80 rotate-45 z-10" />
+                {/* Logged In State: Direct click to /account, custom dropdown menu on hover */}
+                <SignedIn>
+                  <div className="group relative">
+                    <button
+                      onClick={() => navigateToAccount('overview')}
+                      className={`flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 group-hover:bg-slate-100 group-hover:text-[#2B080C] rounded-full transition-colors cursor-pointer ${
+                        view === 'account' ? 'bg-slate-100 text-[#2B080C]' : ''
+                      }`}
+                      title="My Account"
+                    >
+                      <User className="w-5 h-5 text-[#2B080C]" />
+                      <span className="hidden sm:inline text-xs font-semibold">Account</span>
+                    </button>
 
-                      {/* Dropdown Items */}
-                      <div className="relative z-20 space-y-0.5 px-1.5">
-                        {/* 1. Manage My Account */}
-                        <button
-                          onClick={() => navigateToAccount('overview')}
-                          className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-[#2C3539] hover:bg-slate-100/80 rounded-xl transition-colors text-left cursor-pointer group/item"
-                        >
-                          <Smile className="w-5 h-5 text-slate-500 group-hover/item:text-[#2C3539] stroke-[1.5] shrink-0" />
-                          <span>Manage My Account</span>
-                        </button>
+                    {/* Custom Dropdown Menu Revealed on Hover */}
+                    <div className="absolute top-full right-0 pt-2 z-50 hidden group-hover:block pointer-events-auto animate-in fade-in slide-in-from-top-2 duration-150">
+                      <div className="w-64 sm:w-72 bg-white rounded-2xl shadow-xl border border-slate-200/80 py-2 relative">
+                        {/* Pointer Arrow */}
+                        <div className="absolute -top-1.5 right-6 sm:right-8 w-3 h-3 bg-white border-t border-l border-slate-200/80 rotate-45 z-10" />
 
-                        {/* 2. My Orders */}
-                        <button
-                          onClick={() => navigateToAccount('orders')}
-                          className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-[#2C3539] hover:bg-slate-100/80 rounded-xl transition-colors text-left cursor-pointer group/item"
-                        >
-                          <Package className="w-5 h-5 text-slate-500 group-hover/item:text-[#2C3539] stroke-[1.5] shrink-0" />
-                          <span>My Orders</span>
-                        </button>
-
-                        {/* 3. My Reviews */}
-                        <button
-                          onClick={() => navigateToAccount('reviews')}
-                          className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-[#2C3539] hover:bg-slate-100/80 rounded-xl transition-colors text-left cursor-pointer group/item"
-                        >
-                          <Star className="w-5 h-5 text-slate-500 group-hover/item:text-amber-500 stroke-[1.5] shrink-0" />
-                          <span>My Reviews</span>
-                        </button>
-
-                        {/* 4. Account Settings */}
-                        <button
-                          onClick={() => navigateToAccount('settings')}
-                          className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-[#2C3539] hover:bg-slate-100/80 rounded-xl transition-colors text-left cursor-pointer group/item"
-                        >
-                          <Settings className="w-5 h-5 text-slate-500 group-hover/item:text-[#2C3539] stroke-[1.5] shrink-0" />
-                          <span>Account Settings</span>
-                        </button>
-
-                        <div className="my-1 border-t border-slate-100" />
-
-                        {/* 5. Logout Action with Clerk SignOutButton */}
-                        <SignOutButton>
-                          <button className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl transition-colors text-left cursor-pointer group/item">
-                            <LogOut className="w-5 h-5 text-red-500 group-hover/item:text-red-600 stroke-[1.5] shrink-0" />
-                            <span>Log Out</span>
+                        {/* Dropdown Items */}
+                        <div className="relative z-20 space-y-0.5 px-1.5">
+                          {/* 1. Manage My Account */}
+                          <button
+                            onClick={() => navigateToAccount('overview')}
+                            className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-[#2C3539] hover:bg-slate-100/80 rounded-xl transition-colors text-left cursor-pointer group/item"
+                          >
+                            <Smile className="w-5 h-5 text-slate-500 group-hover/item:text-[#2C3539] stroke-[1.5] shrink-0" />
+                            <span>Manage My Account</span>
                           </button>
-                        </SignOutButton>
+
+                          {/* 2. My Orders */}
+                          <button
+                            onClick={() => navigateToAccount('orders')}
+                            className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-[#2C3539] hover:bg-slate-100/80 rounded-xl transition-colors text-left cursor-pointer group/item"
+                          >
+                            <Package className="w-5 h-5 text-slate-500 group-hover/item:text-[#2C3539] stroke-[1.5] shrink-0" />
+                            <span>My Orders</span>
+                          </button>
+
+                          {/* 3. My Reviews */}
+                          <button
+                            onClick={() => navigateToAccount('reviews')}
+                            className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-[#2C3539] hover:bg-slate-100/80 rounded-xl transition-colors text-left cursor-pointer group/item"
+                          >
+                            <Star className="w-5 h-5 text-slate-500 group-hover/item:text-amber-500 stroke-[1.5] shrink-0" />
+                            <span>My Reviews</span>
+                          </button>
+
+                          {/* 4. Account Settings */}
+                          <button
+                            onClick={() => navigateToAccount('settings')}
+                            className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-[#2C3539] hover:bg-slate-100/80 rounded-xl transition-colors text-left cursor-pointer group/item"
+                          >
+                            <Settings className="w-5 h-5 text-slate-500 group-hover/item:text-[#2C3539] stroke-[1.5] shrink-0" />
+                            <span>Account Settings</span>
+                          </button>
+
+                          <div className="my-1 border-t border-slate-100" />
+
+                          {/* 5. Logout Action with Clerk SignOutButton */}
+                          <SignOutButton>
+                            <button className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl transition-colors text-left cursor-pointer group/item">
+                              <LogOut className="w-5 h-5 text-red-500 group-hover/item:text-red-600 stroke-[1.5] shrink-0" />
+                              <span>Log Out</span>
+                            </button>
+                          </SignOutButton>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </SignedIn>
+                </SignedIn>
+              </ErrorBoundary>
             </div>
 
             {/* Cart Drawer Trigger Button */}

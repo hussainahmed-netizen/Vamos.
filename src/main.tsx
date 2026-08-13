@@ -1,23 +1,36 @@
-import { StrictMode } from 'react';
+import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ClerkProvider } from '@clerk/clerk-react';
 import App from './App.tsx';
+import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 import './index.css';
 
 const PUBLISHABLE_KEY =
   import.meta.env.VITE_CLERK_PUBLISHABLE_KEY ||
   import.meta.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ||
-  'pk_test_JVJe3cUtnyOSELyTbQvwLPSQnpxktqQVNpoovOYNil';
+  '';
+
+const SafeClerkWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  if (!PUBLISHABLE_KEY) {
+    return <>{children}</>;
+  }
+
+  return (
+    <ErrorBoundary fallback={<>{children}</>}>
+      <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+        {children}
+      </ClerkProvider>
+    </ErrorBoundary>
+  );
+};
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {PUBLISHABLE_KEY ? (
-      <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+    <ErrorBoundary>
+      <SafeClerkWrapper>
         <App />
-      </ClerkProvider>
-    ) : (
-      <App />
-    )}
+      </SafeClerkWrapper>
+    </ErrorBoundary>
   </StrictMode>,
 );
 

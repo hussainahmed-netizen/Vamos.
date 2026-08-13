@@ -19,12 +19,14 @@ import {
   MapPin,
   Mail,
   Phone,
-  Edit2
+  Edit2,
+  Lock,
+  ArrowRight
 } from 'lucide-react';
 
 type AccountTab = 'overview' | 'orders' | 'reviews' | 'returns';
 
-const AccountPageContent: React.FC<{ user: any }> = ({ user }) => {
+const AccountPageContent: React.FC<{ user: any }> = ({ user: externalUser }) => {
   const navigate = useNavigate();
   const {
     accountTab,
@@ -37,8 +39,36 @@ const AccountPageContent: React.FC<{ user: any }> = ({ user }) => {
     reviewsList,
     wishlist,
     setView,
-    showToast
+    showToast,
+    localAuthUser,
+    setLocalAuthUser
   } = useStore();
+
+  const user = externalUser || localAuthUser;
+
+  const [isLoginMode, setIsLoginMode] = useState(true);
+  const [authEmail, setAuthEmail] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
+  const [authName, setAuthName] = useState('');
+  
+  const handleLocalAuth = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!authEmail || !authPassword) {
+      showToast('Please fill in all required fields.', 'error');
+      return;
+    }
+    
+    // Create a mock user dynamically
+    const mockUser = {
+      id: 'local_user_' + Date.now(),
+      fullName: isLoginMode ? (authEmail.split('@')[0] || 'Customer') : (authName || 'Customer'),
+      primaryEmailAddress: { emailAddress: authEmail },
+      imageUrl: null
+    };
+    
+    setLocalAuthUser(mockUser);
+    showToast(isLoginMode ? 'Successfully logged in!' : 'Account created successfully!', 'success');
+  };
 
   const [trackInput, setTrackInput] = useState('');
   const [foundOrder, setFoundOrder] = useState<any>(null);
@@ -103,6 +133,100 @@ const AccountPageContent: React.FC<{ user: any }> = ({ user }) => {
     { id: 'reviews', label: 'My Reviews', icon: Star },
     { id: 'returns', label: 'My Returns & Cancellations', icon: XCircle }
   ] as const;
+
+  if (!user) {
+    return (
+      <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 animate-in fade-in duration-300">
+        <div className="max-w-md mx-auto">
+          <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
+            <div className="bg-[#2B080C] p-8 text-center relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-16 -mt-16" />
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full blur-xl -ml-12 -mb-12" />
+              <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/20">
+                <Lock className="w-8 h-8 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-white mb-2">
+                {isLoginMode ? 'Welcome Back' : 'Create Account'}
+              </h2>
+              <p className="text-white/80 text-sm">
+                {isLoginMode
+                  ? 'Sign in to access your orders and saved items'
+                  : 'Join us for exclusive deals and faster checkout'}
+              </p>
+            </div>
+            
+            <div className="p-8">
+              <form onSubmit={handleLocalAuth} className="space-y-4">
+                {!isLoginMode && (
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-1.5">Full Name</label>
+                    <input
+                      type="text"
+                      required
+                      value={authName}
+                      onChange={(e) => setAuthName(e.target.value)}
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2B080C] focus:bg-white transition-all text-sm"
+                      placeholder="John Doe"
+                    />
+                  </div>
+                )}
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email Address</label>
+                  <input
+                    type="email"
+                    required
+                    value={authEmail}
+                    onChange={(e) => setAuthEmail(e.target.value)}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2B080C] focus:bg-white transition-all text-sm"
+                    placeholder="john@example.com"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+                  <input
+                    type="password"
+                    required
+                    value={authPassword}
+                    onChange={(e) => setAuthPassword(e.target.value)}
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#2B080C] focus:bg-white transition-all text-sm"
+                    placeholder="••••••••"
+                  />
+                </div>
+                
+                {isLoginMode && (
+                  <div className="flex justify-end">
+                    <button type="button" className="text-xs font-semibold text-[#2B080C] hover:underline">
+                      Forgot Password?
+                    </button>
+                  </div>
+                )}
+                
+                <button
+                  type="submit"
+                  className="w-full py-3.5 bg-[#2B080C] text-white font-bold rounded-xl shadow-lg shadow-[#2B080C]/20 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-[#2B080C]/30 transition-all flex items-center justify-center gap-2 mt-6"
+                >
+                  {isLoginMode ? 'Sign In' : 'Create Account'}
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </form>
+              
+              <div className="mt-8 text-center">
+                <p className="text-sm text-slate-500">
+                  {isLoginMode ? "Don't have an account?" : "Already have an account?"}
+                  <button
+                    onClick={() => setIsLoginMode(!isLoginMode)}
+                    className="ml-1.5 font-bold text-[#2B080C] hover:underline"
+                  >
+                    {isLoginMode ? 'Sign Up' : 'Sign In'}
+                  </button>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-8 pt-3 sm:pt-4 pb-8 sm:pb-12 animate-in fade-in duration-300">
@@ -512,26 +636,6 @@ const ClerkAccountPageInner: React.FC = () => {
   const isLoaded = auth.isLoaded;
   const isSignedIn = !!auth.isSignedIn;
   const user = clerkUser.user || null;
-
-  const { setView } = useStore();
-
-  useEffect(() => {
-    if (isLoaded && !isSignedIn && clerk) {
-      navigate('/', { replace: true });
-      setView('home');
-      if (clerk.openSignIn) {
-        try {
-          clerk.openSignIn();
-        } catch (err) {
-          console.warn('clerk.openSignIn failed on route protection redirect:', err);
-        }
-      }
-    }
-  }, [isLoaded, isSignedIn, clerk, navigate, setView]);
-
-  if (isLoaded && !isSignedIn) {
-    return null;
-  }
 
   return <AccountPageContent user={user} />;
 };

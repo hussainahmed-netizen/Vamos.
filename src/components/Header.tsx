@@ -34,6 +34,89 @@ const DefaultAccountButton: React.FC<{
   navigateToAccount: (tab?: string) => void;
 }> = ({ view, navigateToAccount }) => {
   const navigate = useNavigate();
+  const { localAuthUser, setLocalAuthUser } = useStore();
+  
+  if (localAuthUser) {
+    return (
+      <div className="group relative z-30 pointer-events-auto">
+        <button
+          onClick={() => {
+            navigate('/account');
+            navigateToAccount('overview');
+          }}
+          className={`flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 group-hover:bg-slate-100 group-hover:text-[#2B080C] rounded-full transition-colors cursor-pointer relative z-30 pointer-events-auto ${
+            view === 'account' ? 'bg-slate-100 text-[#2B080C]' : ''
+          }`}
+          title="My Account"
+        >
+          <User className="w-5 h-5 text-[#2B080C]" />
+          <span className="hidden sm:inline text-xs font-semibold">
+            {localAuthUser.fullName?.split(' ')[0] || 'Account'}
+          </span>
+          <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:rotate-180 transition-transform duration-200 hidden sm:inline" />
+        </button>
+
+        {/* Custom Dropdown Menu Revealed on Hover */}
+        <div className="absolute top-full right-0 pt-2 z-50 hidden group-hover:block pointer-events-auto animate-in fade-in slide-in-from-top-2 duration-150">
+          <div className="w-64 sm:w-72 bg-white rounded-2xl shadow-xl border border-slate-200/80 py-2 relative">
+            <div className="absolute -top-1.5 right-6 sm:right-8 w-3 h-3 bg-white border-t border-l border-slate-200/80 rotate-45 z-10" />
+
+            <div className="px-4 py-2.5 mb-1 border-b border-slate-100 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-[#2B080C] text-white flex items-center justify-center font-bold text-xs">
+                {localAuthUser.fullName?.[0] || 'U'}
+              </div>
+              <div className="overflow-hidden">
+                <p className="text-xs font-bold text-[#2C3539] truncate">
+                  {localAuthUser.fullName || 'My Account'}
+                </p>
+                <p className="text-[11px] text-slate-400 truncate">
+                  {localAuthUser.primaryEmailAddress?.emailAddress}
+                </p>
+              </div>
+            </div>
+
+            <div className="relative z-20 space-y-0.5 px-1.5">
+              <button
+                onClick={() => {
+                  navigate('/account');
+                  navigateToAccount('overview');
+                }}
+                className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-[#2C3539] hover:bg-slate-100/80 rounded-xl transition-colors text-left cursor-pointer group/item"
+              >
+                <Smile className="w-5 h-5 text-slate-500 group-hover/item:text-[#2C3539] stroke-[1.5] shrink-0" />
+                <span>Manage My Account</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  navigate('/account');
+                  navigateToAccount('orders');
+                }}
+                className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-slate-700 hover:text-[#2C3539] hover:bg-slate-100/80 rounded-xl transition-colors text-left cursor-pointer group/item"
+              >
+                <Package className="w-5 h-5 text-slate-500 group-hover/item:text-[#2C3539] stroke-[1.5] shrink-0" />
+                <span>My Orders</span>
+              </button>
+              
+              <div className="my-1 border-t border-slate-100" />
+
+              <button
+                onClick={() => {
+                  setLocalAuthUser(null);
+                  navigate('/');
+                }}
+                className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl transition-colors text-left cursor-pointer group/item"
+              >
+                <LogOut className="w-5 h-5 text-red-500 group-hover/item:text-red-600 stroke-[1.5] shrink-0" />
+                <span>Log Out</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <button
       onClick={() => {
@@ -46,7 +129,7 @@ const DefaultAccountButton: React.FC<{
       title="Sign In / Account"
     >
       <User className="w-5 h-5 text-[#2B080C]" />
-      <span className="hidden sm:inline text-xs font-semibold">Account</span>
+      <span className="hidden sm:inline text-xs font-semibold">Sign In</span>
     </button>
   );
 };
@@ -61,6 +144,7 @@ const ClerkHeaderAccountButton: React.FC<{
   const clerkUser = useUser();
   const isSignedIn = !!auth.isSignedIn;
   const user = clerkUser.user;
+  const { localAuthUser, setLocalAuthUser } = useStore();
 
   const handleAccountClick = (e?: React.MouseEvent) => {
     if (e) {
@@ -68,7 +152,7 @@ const ClerkHeaderAccountButton: React.FC<{
       e.stopPropagation();
     }
 
-    if (!isSignedIn) {
+    if (!isSignedIn && !localAuthUser) {
       if (clerk?.openSignIn) {
         try {
           clerk.openSignIn();
@@ -90,6 +174,11 @@ const ClerkHeaderAccountButton: React.FC<{
   const handleSignOut = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (localAuthUser) {
+      setLocalAuthUser(null);
+      navigate('/');
+      return;
+    }
     if (clerk?.signOut) {
       try {
         await clerk.signOut();
@@ -99,7 +188,9 @@ const ClerkHeaderAccountButton: React.FC<{
     }
   };
 
-  if (isSignedIn) {
+  if (isSignedIn || localAuthUser) {
+    const displayUser = user || localAuthUser;
+    
     return (
       <div className="group relative z-30 pointer-events-auto">
         <button
@@ -109,17 +200,17 @@ const ClerkHeaderAccountButton: React.FC<{
           }`}
           title="My Account"
         >
-          {user?.imageUrl ? (
+          {displayUser?.imageUrl ? (
             <img
-              src={user.imageUrl}
-              alt={user.fullName || 'Account'}
+              src={displayUser.imageUrl}
+              alt={displayUser.fullName || 'Account'}
               className="w-6 h-6 rounded-full object-cover border border-[#2B080C]"
             />
           ) : (
             <User className="w-5 h-5 text-[#2B080C]" />
           )}
           <span className="hidden sm:inline text-xs font-semibold">
-            {user?.firstName || user?.fullName?.split(' ')[0] || 'Account'}
+            {displayUser?.firstName || displayUser?.fullName?.split(' ')[0] || 'Account'}
           </span>
           <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:rotate-180 transition-transform duration-200 hidden sm:inline" />
         </button>
@@ -129,25 +220,25 @@ const ClerkHeaderAccountButton: React.FC<{
           <div className="w-64 sm:w-72 bg-white rounded-2xl shadow-xl border border-slate-200/80 py-2 relative">
             <div className="absolute -top-1.5 right-6 sm:right-8 w-3 h-3 bg-white border-t border-l border-slate-200/80 rotate-45 z-10" />
 
-            {user && (
+            {displayUser && (
               <div className="px-4 py-2.5 mb-1 border-b border-slate-100 flex items-center gap-3">
-                {user.imageUrl ? (
+                {displayUser.imageUrl ? (
                   <img
-                    src={user.imageUrl}
-                    alt={user.fullName || 'User Profile'}
+                    src={displayUser.imageUrl}
+                    alt={displayUser.fullName || 'User Profile'}
                     className="w-9 h-9 rounded-full object-cover border border-[#2B080C]"
                   />
                 ) : (
                   <div className="w-9 h-9 rounded-full bg-[#2B080C] text-white flex items-center justify-center font-bold text-xs">
-                    {user.firstName?.[0] || 'U'}
+                    {displayUser.firstName?.[0] || displayUser.fullName?.[0] || 'U'}
                   </div>
                 )}
                 <div className="overflow-hidden">
                   <p className="text-xs font-bold text-[#2C3539] truncate">
-                    {user.fullName || user.username || 'My Account'}
+                    {displayUser.fullName || displayUser.username || 'My Account'}
                   </p>
                   <p className="text-[11px] text-slate-400 truncate">
-                    {user.primaryEmailAddress?.emailAddress}
+                    {displayUser.primaryEmailAddress?.emailAddress}
                   </p>
                 </div>
               </div>
@@ -223,7 +314,7 @@ const ClerkHeaderAccountButton: React.FC<{
       title="Sign In / Account"
     >
       <User className="w-5 h-5 text-[#2B080C]" />
-      <span className="hidden sm:inline text-xs font-semibold">Account</span>
+      <span className="hidden sm:inline text-xs font-semibold">Sign In</span>
     </button>
   );
 };
@@ -244,6 +335,8 @@ const DefaultMobileAccountButton: React.FC<{
   closeMobileMenu: () => void;
 }> = ({ navigateToAccount, closeMobileMenu }) => {
   const navigate = useNavigate();
+  const { localAuthUser } = useStore();
+  
   return (
     <button
       onClick={(e) => {
@@ -255,7 +348,7 @@ const DefaultMobileAccountButton: React.FC<{
       }}
       className="w-full flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-bold text-slate-800 bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer relative z-30 pointer-events-auto"
     >
-      <User className="w-4 h-4 text-[#2B080C]" /> Account & Sign In
+      <User className="w-4 h-4 text-[#2B080C]" /> {localAuthUser ? 'My Account' : 'Sign In'}
     </button>
   );
 };
@@ -268,13 +361,14 @@ const ClerkMobileAccountButton: React.FC<{
   const auth = useAuth();
   const clerk = useClerk();
   const isSignedIn = !!auth.isSignedIn;
+  const { localAuthUser } = useStore();
 
   const handleAccountClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     closeMobileMenu();
 
-    if (!isSignedIn) {
+    if (!isSignedIn && !localAuthUser) {
       if (clerk?.openSignIn) {
         try {
           clerk.openSignIn();
@@ -298,7 +392,7 @@ const ClerkMobileAccountButton: React.FC<{
       onClick={handleAccountClick}
       className="w-full flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-bold text-slate-800 bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer relative z-30 pointer-events-auto"
     >
-      <User className="w-4 h-4 text-[#2B080C]" /> {isSignedIn ? 'My Account' : 'Account & Sign In'}
+      <User className="w-4 h-4 text-[#2B080C]" /> {(isSignedIn || localAuthUser) ? 'My Account' : 'Sign In'}
     </button>
   );
 };

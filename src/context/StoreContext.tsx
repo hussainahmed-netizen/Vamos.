@@ -91,6 +91,10 @@ interface StoreContextType {
   // Navigation helper
   navigateToProduct: (productId: string) => void;
   navigateToCategory: (category: CategoryId, subCategory?: string | null) => void;
+  
+  // Local Auth Fallback
+  localAuthUser: any | null;
+  setLocalAuthUser: (user: any | null) => void;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -103,6 +107,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [couponsList, setCouponsList] = useState<Coupon[]>(COUPONS);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [localAuthUser, setLocalAuthUser] = useState<any | null>(null);
 
   const refreshData = async () => {
     setIsLoading(true);
@@ -742,7 +747,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setAccountTab,
         navigateToAccount,
         navigateToProduct,
-        navigateToCategory
+        navigateToCategory,
+        localAuthUser,
+        setLocalAuthUser
       }}
     >
       {children}

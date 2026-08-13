@@ -1,9 +1,40 @@
 import React from 'react';
 import { Home, Grid, ShoppingBag, Heart, User } from 'lucide-react';
+import { useUser, useClerk } from '@clerk/clerk-react';
 import { useStore } from '../context/StoreContext';
 
 export const BottomNav: React.FC = () => {
   const { view, setView, cart, wishlist } = useStore();
+
+  let isSignedIn = false;
+  let clerkObj: ReturnType<typeof useClerk> | null = null;
+
+  try {
+    const user = useUser();
+    const clerk = useClerk();
+    isSignedIn = user.isSignedIn || false;
+    clerkObj = clerk;
+  } catch {
+    // Fallback if called outside ClerkProvider
+  }
+
+  const handleAccountClick = () => {
+    if (isSignedIn) {
+      setView('account');
+      return;
+    }
+
+    if (clerkObj?.openSignIn) {
+      try {
+        clerkObj.openSignIn({});
+        return;
+      } catch {
+        // Fallback
+      }
+    }
+
+    setView('account');
+  };
 
   const navItems = [
     {
@@ -40,7 +71,7 @@ export const BottomNav: React.FC = () => {
       id: 'account',
       label: 'Account',
       icon: User,
-      action: () => setView('account'),
+      action: handleAccountClick,
       isActive: view === 'account',
     },
   ];

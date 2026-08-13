@@ -35,7 +35,7 @@ const HeaderAccountButton: React.FC<{
   let isLoaded = false;
   let isSignedIn = false;
   let user: ReturnType<typeof useUser>['user'] = null;
-  let signOutFunc: () => Promise<void> = async () => {};
+  let clerkObj: ReturnType<typeof useClerk> | null = null;
 
   try {
     const clerkUser = useUser();
@@ -43,31 +43,50 @@ const HeaderAccountButton: React.FC<{
     isLoaded = clerkUser.isLoaded;
     isSignedIn = clerkUser.isSignedIn || false;
     user = clerkUser.user || null;
-    signOutFunc = clerk.signOut;
+    clerkObj = clerk;
   } catch {
-    // Fallback if useUser is used outside ClerkProvider
+    // Fallback if useUser or useClerk is used outside ClerkProvider
   }
 
-  if (!isLoaded) {
-    return (
-      <button
-        onClick={() => navigateToAccount('overview')}
-        className={`flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 rounded-full transition-colors cursor-pointer ${
-          view === 'account' ? 'bg-slate-100 text-[#2B080C]' : ''
-        }`}
-        title="My Account"
-      >
-        <User className="w-5 h-5 text-[#2B080C]" />
-        <span className="hidden sm:inline text-xs font-semibold">Account</span>
-      </button>
-    );
-  }
+  const handleAccountClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (isSignedIn) {
+      navigateToAccount('overview');
+      return;
+    }
+
+    if (clerkObj?.openSignIn) {
+      try {
+        clerkObj.openSignIn({});
+        return;
+      } catch (err) {
+        console.warn('clerk.openSignIn failed, falling back to account page:', err);
+      }
+    }
+
+    // Fallback if clerk is not available or fails
+    navigateToAccount('overview');
+  };
+
+  const handleSignOut = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (clerkObj?.signOut) {
+      try {
+        await clerkObj.signOut();
+      } catch (err) {
+        console.warn('Sign out failed:', err);
+      }
+    }
+  };
 
   if (isSignedIn) {
     return (
       <div className="group relative">
         <button
-          onClick={() => navigateToAccount('overview')}
+          onClick={handleAccountClick}
           className={`flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 group-hover:bg-slate-100 group-hover:text-[#2B080C] rounded-full transition-colors cursor-pointer ${
             view === 'account' ? 'bg-slate-100 text-[#2B080C]' : ''
           }`}
@@ -156,7 +175,7 @@ const HeaderAccountButton: React.FC<{
               <div className="my-1 border-t border-slate-100" />
 
               <button
-                onClick={() => signOutFunc()}
+                onClick={handleSignOut}
                 className="w-full flex items-center gap-3.5 px-3.5 py-2.5 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl transition-colors text-left cursor-pointer group/item"
               >
                 <LogOut className="w-5 h-5 text-red-500 group-hover/item:text-red-600 stroke-[1.5] shrink-0" />
@@ -176,17 +195,51 @@ const HeaderAccountButton: React.FC<{
   }
 
   return (
-    <SignInButton mode="modal">
-      <button
-        className={`flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 rounded-full transition-colors cursor-pointer ${
-          view === 'account' ? 'bg-slate-100 text-[#2B080C]' : ''
-        }`}
-        title="Sign In / Account"
-      >
-        <User className="w-5 h-5 text-[#2B080C]" />
-        <span className="hidden sm:inline text-xs font-semibold">Account</span>
-      </button>
-    </SignInButton>
+    <button
+      onClick={handleAccountClick}
+      className={`flex items-center gap-2 p-2 sm:px-3.5 sm:py-2 text-[#2C3539] hover:text-[#0B0E14] hover:bg-slate-100 rounded-full transition-colors cursor-pointer ${
+        view === 'account' ? 'bg-slate-100 text-[#2B080C]' : ''
+      }`}
+      title="Sign In / Account"
+    >
+      <User className="w-5 h-5 text-[#2B080C]" />
+      <span className="hidden sm:inline text-xs font-semibold">Account</span>
+    </button>
+  );
+};
+
+const MobileAccountButton: React.FC<{
+  navigateToAccount: (tab?: string) => void;
+  closeMobileMenu: () => void;
+}> = ({ navigateToAccount, closeMobileMenu }) => {
+  let clerkObj: ReturnType<typeof useClerk> | null = null;
+  try {
+    clerkObj = useClerk();
+  } catch {
+    // Fallback if used outside ClerkProvider
+  }
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    closeMobileMenu();
+    if (clerkObj?.openSignIn) {
+      try {
+        clerkObj.openSignIn({});
+        return;
+      } catch {
+        // Fallback
+      }
+    }
+    navigateToAccount('overview');
+  };
+
+  return (
+    <button
+      onClick={handleClick}
+      className="w-full flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-bold text-slate-800 bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer"
+    >
+      <User className="w-4 h-4 text-[#2B080C]" /> Account & Sign In
+    </button>
   );
 };
 
@@ -819,11 +872,10 @@ export const Header: React.FC = () => {
 
             <div className="mt-auto pt-4 border-t border-slate-100 space-y-2">
               <SignedOut>
-                <SignInButton mode="modal">
-                  <button className="w-full flex items-center justify-center gap-2 px-3 py-2.5 text-xs font-bold text-slate-800 bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer">
-                    <User className="w-4 h-4 text-[#2B080C]" /> Account & Sign In
-                  </button>
-                </SignInButton>
+                <MobileAccountButton
+                  navigateToAccount={navigateToAccount}
+                  closeMobileMenu={() => setIsMobileMenuOpen(false)}
+                />
               </SignedOut>
 
               <SignedIn>

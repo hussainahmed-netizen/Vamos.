@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth, useUser, useClerk, SignedIn, SignedOut } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
 import { OrderDetailsPage } from './OrderDetailsPage';
@@ -25,26 +24,6 @@ type AccountTab = 'overview' | 'orders' | 'reviews' | 'returns';
 
 export const AccountPage: React.FC = () => {
   const navigate = useNavigate();
-  let isLoaded = false;
-  let isSignedIn = false;
-  let user: ReturnType<typeof useUser>['user'] = null;
-  let clerkObj: ReturnType<typeof useClerk> | null = null;
-
-  try {
-    const auth = useAuth();
-    const clerkUser = useUser();
-    const clerk = useClerk();
-    isLoaded = auth.isLoaded;
-    isSignedIn = auth.isSignedIn || false;
-    user = clerkUser.user || null;
-    clerkObj = clerk;
-  } catch {
-    // Fallback if ClerkProvider is omitted
-    isLoaded = true;
-    isSignedIn = false;
-  }
-
-  const signOut = clerkObj?.signOut ? clerkObj.signOut : async () => {};
 
   const {
     accountTab,
@@ -59,26 +38,6 @@ export const AccountPage: React.FC = () => {
     setView,
     showToast
   } = useStore();
-
-  // Strict Route Protection: If user manually accesses /account while logged out,
-  // strictly redirect them to Home ('/') and trigger clerk.openSignIn()
-  useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-      navigate('/', { replace: true });
-      setView('home');
-      if (clerkObj?.openSignIn) {
-        try {
-          clerkObj.openSignIn();
-        } catch (err) {
-          console.warn('clerk.openSignIn failed on route protection redirect:', err);
-        }
-      }
-    }
-  }, [isLoaded, isSignedIn]);
-
-  if (isLoaded && !isSignedIn) {
-    return null;
-  }
 
   const [trackInput, setTrackInput] = useState('');
   const [foundOrder, setFoundOrder] = useState<any>(null);
@@ -199,110 +158,52 @@ export const AccountPage: React.FC = () => {
           {/* TAB 1: OVERVIEW */}
           {accountTab === 'overview' && (
             <div className={`space-y-6 ${slideDirection === 'right' ? 'animate-tab-slide-right' : 'animate-tab-slide-left'}`}>
-              <SignedIn>
-                <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
-                    <div className="flex items-center gap-4">
-                      {user?.imageUrl ? (
-                        <img
-                          src={user.imageUrl}
-                          alt={user.fullName || 'User'}
-                          className="w-14 h-14 rounded-2xl object-cover border-2 border-[#2B080C] shadow-md"
-                        />
-                      ) : (
-                        <div className="w-14 h-14 bg-[#2B080C] text-white font-bold rounded-2xl flex items-center justify-center text-xl shadow-md overflow-hidden">
-                          <User className="w-7 h-7 text-white" />
-                        </div>
-                      )}
-                      <div>
-                        <h3 className="text-lg font-bold text-[#2C3539]">
-                          {user?.fullName || user?.username || 'Customer Account'}
-                        </h3>
-                        <p className="text-xs text-slate-500">
-                          {user?.primaryEmailAddress?.emailAddress || 'Manage your orders, saved items, and reviews'}
-                        </p>
-                      </div>
+              <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 bg-[#2B080C] text-white font-bold rounded-2xl flex items-center justify-center text-xl shadow-md overflow-hidden">
+                      <User className="w-7 h-7 text-white" />
                     </div>
-
-                    <div className="flex items-center gap-3">
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
-                      <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
-                        <Mail className="w-3.5 h-3.5 text-slate-400" /> Account Status
-                      </div>
-                      <p className="text-sm font-semibold text-emerald-700 truncate">
-                        Verified & Active
-                      </p>
-                    </div>
-
-                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
-                      <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
-                        <Phone className="w-3.5 h-3.5 text-slate-400" /> Primary Email
-                      </div>
-                      <p className="text-sm font-semibold text-[#2C3539] truncate">
-                        {user?.primaryEmailAddress?.emailAddress || 'Connected'}
-                      </p>
-                    </div>
-
-                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
-                      <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
-                        <MapPin className="w-3.5 h-3.5 text-slate-400" /> Shipping Region
-                      </div>
-                      <p className="text-sm font-semibold text-[#2C3539] truncate">
-                        Bangladesh
+                    <div>
+                      <h3 className="text-lg font-bold text-[#2C3539]">
+                        Customer Account
+                      </h3>
+                      <p className="text-xs text-slate-500">
+                        Manage your orders, saved items, and reviews
                       </p>
                     </div>
                   </div>
                 </div>
-              </SignedIn>
 
-              <SignedOut>
-                <div className="bg-gradient-to-br from-[#2B080C] to-[#481217] text-white rounded-2xl p-6 sm:p-8 shadow-xl space-y-4">
-                  <div className="max-w-xl space-y-2">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 rounded-full text-xs font-semibold backdrop-blur-xs text-amber-200">
-                      <ShieldCheck className="w-3.5 h-3.5" /> Instant & Secure Auth
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+                    <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
+                      <Mail className="w-3.5 h-3.5 text-slate-400" /> Account Status
                     </div>
-                    <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight">
-                      Sign in or Register to your Account
-                    </h3>
-                    <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
-                      Sync your wishlist, track live orders, manage saved addresses, and leave reviews with your Google account or email address.
+                    <p className="text-sm font-semibold text-emerald-700 truncate">
+                      Active
                     </p>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-3 pt-2">
-                    <button
-                      onClick={() => {
-                        try {
-                          signOut();
-                        } catch {}
-                        const clerkInstance = (window as any).Clerk;
-                        if (clerkInstance?.openSignIn) {
-                          clerkInstance.openSignIn();
-                        }
-                      }}
-                      className="px-6 py-2.5 bg-white text-[#2B080C] font-extrabold text-xs rounded-xl hover:bg-slate-100 transition-all shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
-                    >
-                      Sign In Now
-                    </button>
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+                    <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
+                      <Phone className="w-3.5 h-3.5 text-slate-400" /> Total Orders
+                    </div>
+                    <p className="text-sm font-semibold text-[#2C3539] truncate">
+                      {ordersHistory.length} Orders
+                    </p>
+                  </div>
 
-                    <button
-                      onClick={() => {
-                        const clerkInstance = (window as any).Clerk;
-                        if (clerkInstance?.openSignUp) {
-                          clerkInstance.openSignUp();
-                        }
-                      }}
-                      className="px-6 py-2.5 bg-amber-400 text-[#2B080C] font-extrabold text-xs rounded-xl hover:bg-amber-300 transition-all shadow-md hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
-                    >
-                      Create Free Account
-                    </button>
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+                    <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
+                      <MapPin className="w-3.5 h-3.5 text-slate-400" /> Shipping Region
+                    </div>
+                    <p className="text-sm font-semibold text-[#2C3539] truncate">
+                      Bangladesh
+                    </p>
                   </div>
                 </div>
-              </SignedOut>
+              </div>
 
               {/* Quick Summary Stats */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

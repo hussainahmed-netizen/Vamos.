@@ -1,13 +1,10 @@
 import React from 'react';
 import { Home, Grid, ShoppingBag, Heart, User } from 'lucide-react';
-import { useAuth, useClerk } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
 
 export const BottomNav: React.FC = () => {
   const { view, setView, navigateToAccount, cart, wishlist } = useStore();
-  const { isSignedIn } = useAuth();
-  const clerk = useClerk();
   const navigate = useNavigate();
 
   const handleAccountClick = (e?: React.MouseEvent) => {
@@ -15,13 +12,8 @@ export const BottomNav: React.FC = () => {
       e.preventDefault();
       e.stopPropagation();
     }
-
-    if (!isSignedIn) {
-      clerk.openSignIn();
-    } else {
-      navigate('/account');
-      navigateToAccount('overview');
-    }
+    navigate('/account');
+    navigateToAccount('overview');
   };
 
   const navItems = [

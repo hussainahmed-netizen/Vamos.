@@ -24,6 +24,8 @@ export const ShopPage: React.FC = () => {
     setSelectedCategory,
     selectedSubCategory,
     setSelectedSubCategory,
+    showOnlyDeals,
+    setShowOnlyDeals,
     searchQuery,
     setSearchQuery,
     isLoading
@@ -38,6 +40,9 @@ export const ShopPage: React.FC = () => {
 
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
+      // Deals filter
+      if (showOnlyDeals && !p.isDeal) return false;
+
       // Category filter
       if (selectedCategory !== 'all' && p.category !== selectedCategory) return false;
 
@@ -70,9 +75,10 @@ export const ShopPage: React.FC = () => {
       if (sortBy === 'rating') return b.rating - a.rating;
       return 0; // featured default
     });
-  }, [products, selectedCategory, selectedSubCategory, priceRange, minRating, onlyInStock, searchQuery, sortBy]);
+  }, [products, selectedCategory, selectedSubCategory, showOnlyDeals, priceRange, minRating, onlyInStock, searchQuery, sortBy]);
 
   const clearFilters = () => {
+    setShowOnlyDeals(false);
     setSelectedCategory('all', null);
     setSelectedSubCategory(null);
     setPriceRange(250);
@@ -82,6 +88,7 @@ export const ShopPage: React.FC = () => {
   };
 
   const hasActiveFilters =
+    showOnlyDeals ||
     selectedCategory !== 'all' ||
     Boolean(selectedSubCategory) ||
     priceRange < 250 ||
@@ -115,7 +122,9 @@ export const ShopPage: React.FC = () => {
               {brandConfig.brandName} Catalog
             </span>
             <h1 className="text-2xl sm:text-4xl font-extrabold text-[#2C3539] font-serif">
-              {selectedCategory === 'all'
+              {showOnlyDeals
+                ? '🔥 Special Deals & Sales'
+                : selectedCategory === 'all'
                 ? 'All Products Catalog'
                 : categories.find((c) => c.id === selectedCategory)?.name || 'Product Listing'}
             </h1>
@@ -172,6 +181,21 @@ export const ShopPage: React.FC = () => {
             )}
           </div>
 
+          {/* Deals & Offers Filter Toggle */}
+          <div className="pt-2">
+            <label className="flex items-center gap-2.5 p-2.5 rounded-2xl bg-amber-50/80 border border-amber-200/80 hover:bg-amber-100/60 transition-colors cursor-pointer text-xs font-bold text-amber-900">
+              <input
+                type="checkbox"
+                checked={showOnlyDeals}
+                onChange={(e) => setShowOnlyDeals(e.target.checked)}
+                className="w-4 h-4 accent-[#2B080C] rounded cursor-pointer"
+              />
+              <span className="flex items-center gap-1.5">
+                🔥 Special Deals & Sales Only
+              </span>
+            </label>
+          </div>
+
           <CategorySidebar />
 
           <div className="space-y-2 pt-4 border-t border-slate-200">
@@ -210,6 +234,21 @@ export const ShopPage: React.FC = () => {
                 >
                   <X className="w-5 h-5" />
                 </button>
+              </div>
+
+              {/* Deals & Offers Filter Toggle */}
+              <div>
+                <label className="flex items-center gap-2.5 p-3 rounded-2xl bg-amber-50 border border-amber-200 cursor-pointer text-xs font-bold text-amber-900">
+                  <input
+                    type="checkbox"
+                    checked={showOnlyDeals}
+                    onChange={(e) => setShowOnlyDeals(e.target.checked)}
+                    className="w-4 h-4 accent-[#2B080C] rounded cursor-pointer"
+                  />
+                  <span className="flex items-center gap-1.5">
+                    🔥 Special Deals & Sales Only
+                  </span>
+                </label>
               </div>
 
               {/* Category Options */}

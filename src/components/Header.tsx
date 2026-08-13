@@ -47,6 +47,7 @@ export const Header: React.FC = () => {
     searchQuery,
     setSearchQuery,
     setIsMobileSearchOpen,
+    setShowOnlyDeals,
     subtotal
   } = useStore();
 
@@ -128,6 +129,7 @@ export const Header: React.FC = () => {
   }, []);
 
   const handleCategoryClick = (catId: CategoryId) => {
+    setShowOnlyDeals(false);
     setSelectedCategory(catId);
     setView('shop');
     setIsMobileMenuOpen(false);
@@ -519,6 +521,7 @@ export const Header: React.FC = () => {
             <div className="flex items-center gap-8 text-slate-600">
               <button
                 onClick={() => {
+                  setShowOnlyDeals(false);
                   setSelectedCategory('all');
                   setView('home');
                 }}
@@ -533,6 +536,7 @@ export const Header: React.FC = () => {
 
               <button
                 onClick={() => {
+                  setShowOnlyDeals(false);
                   setSelectedCategory('all');
                   setView('shop');
                 }}
@@ -548,7 +552,10 @@ export const Header: React.FC = () => {
               {categories.map((cat) => (
                 <div key={cat.id} className="relative group">
                   <button
-                    onClick={() => handleCategoryClick(cat.id as CategoryId)}
+                    onClick={() => {
+                      setShowOnlyDeals(false);
+                      handleCategoryClick(cat.id as CategoryId);
+                    }}
                     className={`hover:text-[#2C3539] transition-colors pb-1 border-b-2 flex items-center gap-1 py-1 ${
                       view === 'shop' && selectedCategory === cat.id
                         ? 'border-[#2B080C] text-[#2B080C] font-semibold'
@@ -566,6 +573,7 @@ export const Header: React.FC = () => {
                     </div>
                     <button
                       onClick={() => {
+                        setShowOnlyDeals(false);
                         setSelectedCategory(cat.id as CategoryId, null);
                         setView('shop');
                       }}
@@ -584,6 +592,7 @@ export const Header: React.FC = () => {
                         <button
                           key={sub.id}
                           onClick={() => {
+                            setShowOnlyDeals(false);
                             setSelectedCategory(cat.id as CategoryId, sub.id);
                             setView('shop');
                           }}
@@ -601,6 +610,7 @@ export const Header: React.FC = () => {
 
             <button
               onClick={() => {
+                setShowOnlyDeals(true);
                 setSelectedCategory('all');
                 setView('shop');
               }}
@@ -639,6 +649,7 @@ export const Header: React.FC = () => {
             <div className="py-4 space-y-1">
               <button
                 onClick={() => {
+                  setShowOnlyDeals(false);
                   setSelectedCategory('all');
                   setView('home');
                   setIsMobileMenuOpen(false);
@@ -653,6 +664,7 @@ export const Header: React.FC = () => {
 
               <button
                 onClick={() => {
+                  setShowOnlyDeals(false);
                   setSelectedCategory('all');
                   setView('shop');
                   setIsMobileMenuOpen(false);

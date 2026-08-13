@@ -25,6 +25,8 @@ interface StoreContextType {
   setSelectedCategory: (cat: CategoryId, subCat?: string | null) => void;
   selectedSubCategory: string | null;
   setSelectedSubCategory: (subCat: string | null) => void;
+  showOnlyDeals: boolean;
+  setShowOnlyDeals: (show: boolean) => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   
@@ -144,6 +146,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [selectedCategoryState, setSelectedCategoryState] = useState<CategoryId>('all');
   const [selectedSubCategoryState, setSelectedSubCategoryState] = useState<string | null>(null);
+  const [showOnlyDeals, setShowOnlyDeals] = useState<boolean>(false);
   const [accountTab, setAccountTabState] = useState<AccountTab>('overview');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -681,6 +684,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setSelectedCategory,
         selectedSubCategory: selectedSubCategoryState,
         setSelectedSubCategory,
+        showOnlyDeals,
+        setShowOnlyDeals,
         searchQuery,
         setSearchQuery,
         cart,

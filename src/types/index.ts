@@ -106,7 +106,7 @@ export interface Order {
   estimatedDelivery: string;
 }
 
-export type ViewMode = 'home' | 'shop' | 'product' | 'cart' | 'checkout' | 'order-success' | 'wishlist' | 'account';
+export type ViewMode = 'home' | 'shop' | 'product' | 'cart' | 'checkout' | 'order-success' | 'wishlist' | 'account' | 'admin';
 
 export type AccountTab = 'overview' | 'orders' | 'reviews' | 'returns';
 

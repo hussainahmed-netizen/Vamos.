@@ -9,9 +9,6 @@ import { CartDrawer } from './components/CartDrawer';
 import { QuickViewModal } from './components/QuickViewModal';
 import { PolicyModal } from './components/PolicyModal';
 import { ReviewModal } from './components/ReviewModal';
-import { AccountModal } from './components/AccountModal';
-import { AuthModal } from './components/AuthModal';
-import { ProfileSetupModal } from './components/ProfileSetupModal';
 import { BottomNav } from './components/BottomNav';
 
 import { HomePage } from './pages/HomePage';
@@ -22,27 +19,21 @@ import { CheckoutPage } from './pages/CheckoutPage';
 import { OrderSuccessPage } from './pages/OrderSuccessPage';
 import { WishlistPage } from './pages/WishlistPage';
 import { AccountPage } from './pages/AccountPage';
+import { AdminPage } from './pages/AdminPage';
 
 const StoreContent: React.FC = () => {
-  const { view, user, setIsAuthModalOpen, setView } = useStore();
-
-  React.useEffect(() => {
-    if (view === 'account' && (!user || user.is_anonymous)) {
-      setView('home');
-      setIsAuthModalOpen(true);
-    }
-  }, [view, user, setView, setIsAuthModalOpen]);
+  const { view } = useStore();
 
   return (
     <div className="min-h-screen bg-[#F9FAFB] text-[#2C3539] flex flex-col font-sans selection:bg-[#2B080C] selection:text-white pb-16 md:pb-0">
       {/* Toast Notifications */}
       <ToastContainer />
 
-      {/* Main Header & Navigation */}
-      <Header />
+      {/* Main Header & Navigation (Only on Storefront) */}
+      {view !== 'admin' && <Header />}
 
-      {/* Sitewide Breadcrumb Navigation Trail */}
-      <Breadcrumbs />
+      {/* Sitewide Breadcrumb Navigation Trail (Only on Storefront) */}
+      {view !== 'admin' && <Breadcrumbs />}
 
       {/* View Switcher Router */}
       <main className="flex-1">
@@ -53,7 +44,8 @@ const StoreContent: React.FC = () => {
         {view === 'checkout' && <CheckoutPage />}
         {view === 'order-success' && <OrderSuccessPage />}
         {view === 'wishlist' && <WishlistPage />}
-        {view === 'account' && user && !user.is_anonymous && <AccountPage />}
+        {view === 'account' && <AccountPage />}
+        {view === 'admin' && <AdminPage />}
       </main>
 
       {/* Drawers & Modals */}
@@ -61,15 +53,12 @@ const StoreContent: React.FC = () => {
       <QuickViewModal />
       <PolicyModal />
       <ReviewModal />
-      <AccountModal />
-      <AuthModal />
-      <ProfileSetupModal />
 
-      {/* Mobile Bottom Navigation Bar */}
-      <BottomNav />
+      {/* Mobile Bottom Navigation Bar (Only on Storefront) */}
+      {view !== 'admin' && <BottomNav />}
 
-      {/* Footer */}
-      <Footer />
+      {/* Footer (Only on Storefront) */}
+      {view !== 'admin' && <Footer />}
     </div>
   );
 };

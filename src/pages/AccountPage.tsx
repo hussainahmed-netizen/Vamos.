@@ -33,12 +33,7 @@ export const AccountPage: React.FC = () => {
     reviewsList,
     wishlist,
     setView,
-    showToast,
-    user,
-    profile,
-    setIsProfileSetupRequired,
-    signInWithGoogle,
-    signOut
+    showToast
   } = useStore();
 
   const [trackInput, setTrackInput] = useState('');
@@ -164,71 +159,44 @@ export const AccountPage: React.FC = () => {
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
                   <div className="flex items-center gap-4">
                     <div className="w-14 h-14 bg-[#2B080C] text-white font-bold rounded-2xl flex items-center justify-center text-xl shadow-md overflow-hidden">
-                      {user?.email ? (
-                        <img src={user.user_metadata?.avatar_url || `https://ui-avatars.com/api/?name=${user.email}`} alt="Avatar" className="w-full h-full object-cover" />
-                      ) : (
-                        '?'
-                      )}
+                      <User className="w-7 h-7 text-white" />
                     </div>
                     <div>
                       <h3 className="text-lg font-bold text-[#2C3539]">
-                        {user?.user_metadata?.full_name || (user?.email ? 'Authenticated User' : 'Guest User')}
+                        Customer Account
                       </h3>
                       <p className="text-xs text-slate-500">
-                        {user?.email ? `Signed in as ${user.email}` : 'Sign in to sync your progress'}
+                        Manage your orders, saved items, and reviews
                       </p>
                     </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setIsProfileSetupRequired(true)}
-                      className="px-4 py-2 bg-[#2B080C] text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all hover:bg-[#380B0F] hover:scale-[1.02] active:scale-[0.98]"
-                    >
-                      <Edit2 className="w-3.5 h-3.5" /> Edit Profile
-                    </button>
-                    {!user?.email ? (
-                      <button
-                        onClick={signInWithGoogle}
-                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
-                      >
-                        Continue with Google
-                      </button>
-                    ) : (
-                      <button
-                        onClick={signOut}
-                        className="px-4 py-2 border border-slate-200 hover:bg-slate-50 rounded-xl text-xs font-semibold text-slate-700 flex items-center gap-1.5 transition-all hover:scale-[1.02] active:scale-[0.98]"
-                      >
-                        Sign Out
-                      </button>
-                    )}
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
                     <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
-                      <Mail className="w-3.5 h-3.5 text-slate-400" /> Email Address
+                      <Mail className="w-3.5 h-3.5 text-slate-400" /> Account Status
                     </div>
                     <p className="text-sm font-semibold text-[#2C3539] truncate">
-                      {user?.email || 'Not provided'}
+                      Active Customer
                     </p>
                   </div>
 
                   <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
                     <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
-                      <Phone className="w-3.5 h-3.5 text-slate-400" /> Phone Number
+                      <Phone className="w-3.5 h-3.5 text-slate-400" /> Member Tier
                     </div>
                     <p className="text-sm font-semibold text-[#2C3539]">
-                      {profile?.phone_number || 'Not provided'}
+                      Standard Member
                     </p>
                   </div>
 
                   <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
                     <div className="flex items-center gap-2 text-xs font-bold text-slate-500 uppercase">
-                      <MapPin className="w-3.5 h-3.5 text-slate-400" /> Default Shipping
+                      <MapPin className="w-3.5 h-3.5 text-slate-400" /> Shipping Region
                     </div>
                     <p className="text-sm font-semibold text-[#2C3539] truncate">
-                      {profile?.shipping_address ? `${profile.shipping_address}, ${profile.city_district}` : 'Not provided'}
+                      Bangladesh
                     </p>
                   </div>
                 </div>

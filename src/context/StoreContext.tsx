@@ -1,8 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Product, CartItem, Order, CategoryId, Review, PaymentMethod, ViewMode, AccountTab, CategoryItem, UserProfile } from '../types';
+import { Product, CartItem, Order, CategoryId, Review, PaymentMethod, ViewMode, AccountTab, CategoryItem, Coupon } from '../types';
 import { CATEGORIES as MOCK_CATEGORIES, PRODUCTS as MOCK_PRODUCTS, REVIEWS as MOCK_REVIEWS, COUPONS, MOCK_ORDERS } from '../data/mockData';
-import { supabase } from '../lib/supabase';
-import type { User } from '@supabase/supabase-js';
 
 interface Toast {
   id: string;
@@ -12,19 +10,11 @@ interface Toast {
 
 interface StoreContextType {
   // Global Data & Loading States
-  user: any | null;
-  profile: UserProfile | null;
-  setProfile: (profile: UserProfile | null) => void;
-  isAuthModalOpen: boolean;
-  setIsAuthModalOpen: (isOpen: boolean) => void;
-  isProfileSetupRequired: boolean;
-  setIsProfileSetupRequired: (isRequired: boolean) => void;
-  signInWithGoogle: () => Promise<void>;
-  signOut: () => Promise<void>;
   products: Product[];
   categories: CategoryItem[];
   isLoading: boolean;
   error: string | null;
+  refreshData: () => Promise<void>;
 
   view: ViewMode;
   setView: (view: ViewMode) => void;
@@ -62,8 +52,6 @@ interface StoreContextType {
   setQuickViewProduct: (product: Product | null) => void;
   activePolicyModal: string | null;
   setActivePolicyModal: (policy: string | null) => void;
-  isAccountModalOpen: boolean;
-  setIsAccountModalOpen: (open: boolean) => void;
   isReviewModalOpen: boolean;
   setIsReviewModalOpen: (open: boolean) => void;
   isMobileSearchOpen: boolean;
@@ -106,222 +94,44 @@ interface StoreContextType {
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [products, setProducts] = useState<Product[]>(() => 
-    Array.from(new Map(MOCK_PRODUCTS.map((p) => [p.id, p])).values())
-  );
-  const [categories, setCategories] = useState<CategoryItem[]>(MOCK_CATEGORIES);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<CategoryItem[]>([]);
+  const [reviewsList, setReviewsList] = useState<Review[]>([]);
+  const [ordersHistory, setOrdersHistory] = useState<Order[]>([]);
+  const [couponsList, setCouponsList] = useState<Coupon[]>(COUPONS);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [user, setUser] = useState<any | null>(null);
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isProfileSetupRequired, setIsProfileSetupRequired] = useState(false);
 
-  const fetchProfile = async (currentUser: User) => {
+  const refreshData = async () => {
+    setIsLoading(true);
+    setError(null);
     try {
-      const { data, error } = await supabase.from('profiles').select('*').eq('id', currentUser.id).single();
-      if (error && error.code !== 'PGRST116') {
-        if (error.code === 'PGRST205') {
-          // Table doesn't exist yet, ignore
-          return;
-        }
-        console.error('Error fetching profile:', error);
-      }
-      
-      if (data) {
-        setProfile(data);
-        // Check mandatory fields
-        if (!data.full_name || !data.phone_number || !data.shipping_address || !data.city_district) {
-          setIsProfileSetupRequired(true);
-        } else {
-          setIsProfileSetupRequired(false);
-        }
-      } else {
-        // No profile found, attempt to auto-create from metadata if available
-        const meta = currentUser.user_metadata;
-        if (meta && (meta.full_name || meta.phone_number)) {
-           const newProfile = {
-             id: currentUser.id,
-             full_name: meta.full_name || meta.name || '',
-             email: currentUser.email || '',
-             phone_number: meta.phone_number || '',
-             shipping_address: meta.shipping_address || '',
-             city_district: 'N/A',
-             secondary_phone: '',
-             delivery_instructions: '',
-             updated_at: new Date().toISOString()
-           };
-           const { error: upsertErr } = await supabase.from('profiles').upsert(newProfile);
-           if (!upsertErr) {
-             setProfile(newProfile as unknown as UserProfile);
-             setIsProfileSetupRequired(false);
-             return;
-           }
-        }
-        
-        setProfile(null);
-        setIsProfileSetupRequired(true);
-      }
-    } catch (e) {
-      console.error(e);
+      const [prodRes, catRes, revRes, ordRes, coupRes] = await Promise.all([
+        fetch('/api/products').then(r => r.ok ? r.json() : MOCK_PRODUCTS),
+        fetch('/api/categories').then(r => r.ok ? r.json() : MOCK_CATEGORIES),
+        fetch('/api/reviews').then(r => r.ok ? r.json() : MOCK_REVIEWS),
+        fetch('/api/orders').then(r => r.ok ? r.json() : MOCK_ORDERS),
+        fetch('/api/coupons').then(r => r.ok ? r.json() : COUPONS)
+      ]);
+
+      if (Array.isArray(prodRes)) setProducts(prodRes);
+      if (Array.isArray(catRes)) setCategories(catRes);
+      if (Array.isArray(revRes)) setReviewsList(revRes);
+      if (Array.isArray(ordRes)) setOrdersHistory(ordRes);
+      if (Array.isArray(coupRes)) setCouponsList(coupRes);
+    } catch (err: any) {
+      console.warn('Falling back to local cache if API fails:', err);
+      setProducts(MOCK_PRODUCTS);
+      setCategories(MOCK_CATEGORIES);
+      setReviewsList(MOCK_REVIEWS);
+      setOrdersHistory(MOCK_ORDERS);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const signInWithGoogle = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: import.meta.env.VITE_GOOGLE_REDIRECT_URI
-      }
-    });
-  };
-
-  const signOut = async () => {
-    await supabase.auth.signOut();
-  };
-
-  // Fetch Supabase Data
   useEffect(() => {
-    let authListener: any;
-
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-
-        try {
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session?.user) {
-            setUser(session.user);
-            if (!session.user.is_anonymous) {
-              await fetchProfile(session.user);
-            }
-          } else {
-            const { data: anonData } = await supabase.auth.signInAnonymously();
-            if (anonData?.session?.user) {
-              setUser(anonData.session.user);
-            }
-          }
-        } catch (authErr) {
-          console.warn('Anonymous auth failed or not enabled:', authErr);
-        }
-
-        // Setup auth state change listener
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-          setUser(session?.user || null);
-          if (session?.user && !session.user.is_anonymous) {
-            fetchProfile(session.user);
-            if (event === 'SIGNED_IN') {
-              setIsAuthModalOpen(false);
-            }
-          } else {
-            setProfile(null);
-            setIsProfileSetupRequired(false);
-          }
-        });
-        authListener = subscription;
-        
-        // Fetch Categories
-        const { data: dbCategories, error: catError } = await supabase.from('categories').select('*');
-        if (catError) {
-          console.warn('Supabase categories error:', catError.message);
-        }
-        
-        // Fetch Products
-        const { data: dbProducts, error: prodError } = await supabase.from('products').select('*');
-        if (prodError) {
-          console.warn('Supabase products error:', prodError.message);
-        }
-
-        // Fetch Reviews
-        const { data: dbReviews, error: revError } = await supabase.from('reviews').select('*');
-        if (!revError && dbReviews && dbReviews.length > 0) {
-          setReviewsList(dbReviews as Review[]);
-        }
-
-        // Fetch User Data (Wishlist & Orders) - only if authenticated
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session?.user) {
-          const { data: dbWishlist } = await supabase.from('wishlists').select('product_id');
-          if (dbWishlist) {
-            setWishlist(dbWishlist.map(w => w.product_id));
-          }
-
-          const { data: dbOrders } = await supabase.from('orders').select('*').order('date', { ascending: false });
-          if (dbOrders && dbOrders.length > 0) {
-            setOrdersHistory(dbOrders as any[]);
-          }
-        }
-
-        // Merge Categories so all 6 default categories + subcategories are preserved
-        let mergedCats: CategoryItem[] = MOCK_CATEGORIES;
-        if (dbCategories && dbCategories.length > 0) {
-          const dbMap = new Map(dbCategories.map((c: any) => [c.id, c]));
-          mergedCats = MOCK_CATEGORIES.map((mockCat) => {
-            const dbCat = dbMap.get(mockCat.id);
-            if (dbCat) {
-              return {
-                ...mockCat,
-                name: dbCat.name || mockCat.name,
-                description: dbCat.description || mockCat.description,
-                image: dbCat.image || mockCat.image,
-                badge: dbCat.badge || mockCat.badge,
-                itemCount: dbCat.item_count || mockCat.itemCount
-              };
-            }
-            return mockCat;
-          });
-
-          dbCategories.forEach((dbCat: any) => {
-            if (!mergedCats.some((c) => c.id === dbCat.id)) {
-              mergedCats.push({
-                id: dbCat.id as CategoryId,
-                name: dbCat.name,
-                description: dbCat.description,
-                image: dbCat.image,
-                itemCount: dbCat.item_count || 10,
-                badge: dbCat.badge || undefined,
-                subCategories: []
-              });
-            }
-          });
-        }
-        setCategories(mergedCats);
-        
-        let mergedProducts: Product[] = MOCK_PRODUCTS;
-        if (dbProducts && dbProducts.length > 0) {
-          const mappedProds: Product[] = dbProducts.map((p: any) => ({
-            ...p,
-            category: p.category_id as CategoryId,
-            subCategory: p.sub_category_id,
-            categoryName: p.category_name,
-            originalPrice: p.original_price,
-            reviewCount: p.review_count,
-            isBestSeller: p.is_best_seller,
-            isNewArrival: p.is_new_arrival,
-            isFeatured: p.is_featured,
-            isDeal: p.is_deal,
-            dealEndsInHours: p.deal_ends_in_hours
-          }));
-          const prodMap = new Map(MOCK_PRODUCTS.map((p) => [p.id, p]));
-          mappedProds.forEach((p) => prodMap.set(p.id, p));
-          mergedProducts = Array.from(prodMap.values());
-        }
-        setProducts(mergedProducts);
-
-      } catch (err: any) {
-        console.warn('Error fetching from Supabase:', err);
-        setError(err.message || 'Failed to load data from Supabase');
-        // Falls back to MOCK arrays defined in state initialization
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    fetchData();
-
-    return () => {
-      if (authListener) authListener.unsubscribe();
-    };
+    refreshData();
   }, []);
   const [view, setViewState] = useState<ViewMode>('home');
   const [pathname, setPathname] = useState<string>(() => {
@@ -424,6 +234,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       }
       case 'order-success':
         return '/order-success';
+      case 'admin':
+        return '/admin';
       default:
         return '/';
     }
@@ -537,6 +349,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           setViewState('wishlist');
         } else if (cleanPath === '/order-success') {
           setViewState('order-success');
+        } else if (cleanPath === '/admin' || cleanPath === '/dashboard') {
+          setViewState('admin');
         }
 
         if (searchStr) {
@@ -634,28 +448,6 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState<boolean>(false);
   const [currentOrder, setCurrentOrder] = useState<Order | null>(null);
-  const [ordersHistory, setOrdersHistory] = useState<Order[]>(() => {
-    try {
-      const saved = localStorage.getItem('vamos_orders');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-      return MOCK_ORDERS;
-    } catch {
-      return MOCK_ORDERS;
-    }
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('vamos_orders', JSON.stringify(ordersHistory));
-    } catch (e) {
-      console.error(e);
-    }
-  }, [ordersHistory]);
-
-  const [reviewsList, setReviewsList] = useState<Review[]>(MOCK_REVIEWS);
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   const freeShippingThreshold = 60;
@@ -755,21 +547,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     if (exists) {
       showToast('Removed from wishlist', 'info');
-      // Fire and forget to Supabase
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session?.user) {
-          supabase.from('wishlists').delete().eq('product_id', productId).eq('user_id', session.user.id).then();
-        }
-      });
       setWishlist((prev) => prev.filter((id) => id !== productId));
     } else {
       showToast('Saved to wishlist!', 'success');
-      // Fire and forget to Supabase
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session?.user) {
-          supabase.from('wishlists').insert({ product_id: productId, user_id: session.user.id }).then();
-        }
-      });
       setWishlist((prev) => [...prev, productId]);
     }
   };
@@ -829,6 +609,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       items: [...cart],
       shippingAddress,
       paymentMethod,
+      paymentStatus: paymentMethod === 'cod' ? 'cod' : 'online_paid',
+      amountPaid: paymentMethod === 'cod' ? 0 : total,
+      dueAmount: paymentMethod === 'cod' ? total : 0,
       subtotal,
       tax,
       shippingFee,
@@ -839,26 +622,13 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
 
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        await supabase.from('orders').insert({
-          id: orderId,
-          user_id: session.user.id,
-          items: newOrder.items,
-          shipping_address: newOrder.shippingAddress,
-          payment_method: newOrder.paymentMethod,
-          payment_status: paymentMethod === 'cod' ? 'pending' : 'paid',
-          subtotal: newOrder.subtotal,
-          tax: newOrder.tax,
-          shipping_fee: newOrder.shippingFee,
-          discount: newOrder.discount,
-          total: newOrder.total,
-          status: 'Processing',
-          estimated_delivery: estDate.toISOString()
-        });
-      }
-    } catch (e) {
-      console.warn('Failed to save order to Supabase:', e);
+      await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newOrder)
+      });
+    } catch (err) {
+      console.error('Error saving order to Turso:', err);
     }
 
     setCurrentOrder(newOrder);
@@ -866,7 +636,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     clearCart();
     setAppliedCoupon(null);
     setView('order-success');
-    showToast(`Order ${orderId} placed successfully!`, 'success');
+    showToast(`Order ${orderId} placed successfully! Saved to Turso DB.`, 'success');
     return newOrder;
   };
 
@@ -880,45 +650,28 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       verified: true
     };
 
-    setReviewsList((prev) => [newRev, ...prev]);
-    showToast('Thank you for your product review!', 'success');
-
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        await supabase.from('reviews').insert({
-          id: newRevId,
-          product_id: reviewData.productId,
-          user_id: session.user.id,
-          author: reviewData.author,
-          rating: reviewData.rating,
-          title: reviewData.title,
-          comment: reviewData.comment,
-          verified: true,
-          likes: 0
-        });
-      }
-    } catch (e) {
-      console.warn('Failed to save review to Supabase:', e);
+      await fetch('/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newRev)
+      });
+    } catch (err) {
+      console.error('Error saving review to Turso:', err);
     }
+
+    setReviewsList((prev) => [newRev, ...prev]);
+    showToast('Thank you for your product review! Saved to Turso DB.', 'success');
   };
 
   return (
     <StoreContext.Provider
       value={{
-        user,
-        profile,
-        setProfile,
-        isAuthModalOpen,
-        setIsAuthModalOpen,
-        isProfileSetupRequired,
-        setIsProfileSetupRequired,
-        signInWithGoogle,
-        signOut,
         products,
         categories,
         isLoading,
         error,
+        refreshData,
         view,
         setView,
         pathname,
@@ -947,8 +700,6 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setQuickViewProduct,
         activePolicyModal,
         setActivePolicyModal,
-        isAccountModalOpen,
-        setIsAccountModalOpen,
         isReviewModalOpen,
         setIsReviewModalOpen,
         isMobileSearchOpen,

@@ -3,7 +3,7 @@ import { useStore } from '../context/StoreContext';
 import { CheckCircle2, Truck, Calendar, Printer, ArrowRight, PackageCheck, Banknote, ShieldCheck } from 'lucide-react';
 
 export const OrderSuccessPage: React.FC = () => {
-  const { currentOrder, setView, setIsAccountModalOpen } = useStore();
+  const { currentOrder, setView } = useStore();
 
   if (!currentOrder) {
     return (
@@ -40,7 +40,7 @@ export const OrderSuccessPage: React.FC = () => {
 
         <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
           <button
-            onClick={() => setIsAccountModalOpen(true)}
+            onClick={() => setView('account')}
             className="px-5 py-2.5 bg-emerald-500 text-[#2C3539] font-bold text-xs rounded-xl shadow-md hover:bg-emerald-400 transition-colors"
           >
             Track Live Shipment

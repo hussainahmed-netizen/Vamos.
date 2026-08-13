@@ -3,7 +3,7 @@ import { Home, Grid, ShoppingBag, Heart, User } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 
 export const BottomNav: React.FC = () => {
-  const { view, setView, cart, wishlist, user, setIsAuthModalOpen, setIsCartDrawerOpen } = useStore();
+  const { view, setView, cart, wishlist } = useStore();
 
   const navItems = [
     {
@@ -40,13 +40,7 @@ export const BottomNav: React.FC = () => {
       id: 'account',
       label: 'Account',
       icon: User,
-      action: () => {
-        if (!user || user.is_anonymous) {
-          setIsAuthModalOpen(true);
-        } else {
-          setView('account');
-        }
-      },
+      action: () => setView('account'),
       isActive: view === 'account',
     },
   ];

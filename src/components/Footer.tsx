@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 
 export const Footer: React.FC = () => {
-  const { categories, setView, setSelectedCategory, navigateToCategory, setActivePolicyModal, setIsAccountModalOpen, view } = useStore();
+  const { categories, setView, setSelectedCategory, navigateToCategory, setActivePolicyModal, view } = useStore();
   const { brandConfig } = useBrand();
 
   return (
@@ -113,8 +113,13 @@ export const Footer: React.FC = () => {
                 </button>
               </li>
               <li>
-                <button onClick={() => setIsAccountModalOpen(true)} className="hover:text-white transition-colors">
+                <button onClick={() => setView('account')} className="hover:text-white transition-colors">
                   Account & Order Tracker
+                </button>
+              </li>
+              <li>
+                <button onClick={() => setView('admin')} className="text-amber-400 hover:text-amber-300 font-bold transition-colors">
+                  🔒 Admin Portal
                 </button>
               </li>
             </ul>
